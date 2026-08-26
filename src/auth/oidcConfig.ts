@@ -1,7 +1,7 @@
 import type { AuthProviderProps } from "react-oidc-context";
 
 export const oidcConfig: AuthProviderProps = {
-	authority: import.meta.env.VITE_KEYCLOAK_AUTHORITY ?? "http://localhost:8081/realms/flowkeeper",
+	authority: import.meta.env.VITE_KEYCLOAK_AUTHORITY ?? "http://localhost:8082/realms/flowkeeper",
 	client_id: import.meta.env.VITE_KEYCLOAK_CLIENT_ID ?? "flowkeeper-web",
 	redirect_uri: window.location.origin,
 	scope: "openid profile email",

@@ -17,8 +17,10 @@ npm run dev
 
 Run the test suite with `npm run test` (Vitest + React Testing Library).
 
-Defaults to `http://localhost:8080` for the API and `http://localhost:8081/realms/flowkeeper`
-for Keycloak — see `.env.example` if either needs to point somewhere else.
+Defaults to `http://localhost:8080` for the API and `http://localhost:8082/realms/flowkeeper`
+for Keycloak — see `.env.example` if either needs to point somewhere else. (8082, not
+Keycloak's more obvious 8081 — that's Expo's Metro dev server default port, which
+`flowkeeper-mobile` will also be running locally.)
 
 ## Pages
 
@@ -42,6 +44,19 @@ Hand-written, typed to match `flowkeeper-api`'s DTOs exactly (`src/api/types.ts`
 Generating this from the live OpenAPI spec (`/v3/api-docs`) is the intended long-term
 approach — not wired up yet since it needs a running API instance to generate
 against. Keep `types.ts` in sync by hand until then.
+
+## Docker
+
+`Dockerfile` builds the production image: a Vite build served by nginx
+(`nginx.conf` handles SPA client-side routing — any unmatched path falls back to
+`index.html`). Used by `flowkeeper-infra`'s production Compose file via `${WEB_IMAGE}`.
+
+## CI/CD
+
+`.github/workflows/ci.yml`: every PR runs the build and test suite. Every merge to
+`main` additionally builds and pushes the image to `ghcr.io/adez90/flowkeeper-web`
+and deploys it to the staging server over SSH. See `flowkeeper-infra`'s
+`DEPLOYMENT.md` for the server setup and required secrets.
 
 ## What's here vs. what's next
 
