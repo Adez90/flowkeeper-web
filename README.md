@@ -15,6 +15,8 @@ npm install
 npm run dev
 ```
 
+Run the test suite with `npm run test` (Vitest + React Testing Library).
+
 Defaults to `http://localhost:8080` for the API and `http://localhost:8081/realms/flowkeeper`
 for Keycloak — see `.env.example` if either needs to point somewhere else.
 
@@ -45,6 +47,10 @@ against. Keep `types.ts` in sync by hand until then.
 
 - [x] Login/registration via Keycloak (PKCE), landing page, profile editing,
       event creation + completion, personal statistics
+- [x] Test coverage (Vitest + React Testing Library) for every page/component
+      with real logic — form submission, error states, list rendering, the
+      route guard, period switching. Dialogs' API calls are mocked; nothing
+      here exercises a real backend
 - [ ] A direct "Register" deep link on the start page (currently both buttons
       go to Keycloak's login page, which itself offers registration) — Keycloak
       supports this via its `/registrations` endpoint, not wired up without a
