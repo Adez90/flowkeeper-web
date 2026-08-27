@@ -3,7 +3,7 @@ import type { FormEvent } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
 import { useQueryClient } from "@tanstack/react-query";
-import { updateProfile } from "../api/me";
+import { updateNotificationPreferences, updateProfile } from "../api/me";
 import type { MeResponse } from "../api/types";
 
 export function ProfilePage() {
@@ -11,6 +11,15 @@ export function ProfilePage() {
 	const auth = useAuth();
 	const queryClient = useQueryClient();
 	const token = auth.user?.access_token ?? "";
+
+	async function toggleNotificationChannel(channel: "notifyInApp" | "notifyPush" | "notifyEmail", enabled: boolean) {
+		await updateNotificationPreferences(token, {
+			notifyInApp: channel === "notifyInApp" ? enabled : me.notifyInApp,
+			notifyPush: channel === "notifyPush" ? enabled : me.notifyPush,
+			notifyEmail: channel === "notifyEmail" ? enabled : me.notifyEmail,
+		});
+		await queryClient.invalidateQueries({ queryKey: ["me"] });
+	}
 
 	const [displayName, setDisplayName] = useState(me.displayName);
 	const [timezone, setTimezone] = useState(me.timezone);
@@ -81,6 +90,38 @@ export function ProfilePage() {
 			</form>
 
 			<p className="profile-page__email">Signed in as {me.email}</p>
+
+			<h2>Reminders</h2>
+			<p className="dialog__hint">
+				A nudge if you leave an activity open, or haven't logged anything yet today. Pick whichever channel(s) work
+				for you — none are on by default.
+			</p>
+			<div className="notification-preferences">
+				<label className="sharing-toggle">
+					<input
+						type="checkbox"
+						checked={me.notifyInApp}
+						onChange={(e) => void toggleNotificationChannel("notifyInApp", e.target.checked)}
+					/>
+					In-app
+				</label>
+				<label className="sharing-toggle">
+					<input
+						type="checkbox"
+						checked={me.notifyPush}
+						onChange={(e) => void toggleNotificationChannel("notifyPush", e.target.checked)}
+					/>
+					Push notification
+				</label>
+				<label className="sharing-toggle">
+					<input
+						type="checkbox"
+						checked={me.notifyEmail}
+						onChange={(e) => void toggleNotificationChannel("notifyEmail", e.target.checked)}
+					/>
+					Email
+				</label>
+			</div>
 		</div>
 	);
 }

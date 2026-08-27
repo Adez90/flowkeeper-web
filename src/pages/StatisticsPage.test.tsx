@@ -32,6 +32,9 @@ const ME: MeResponse = {
 	timezone: "UTC",
 	locale: null,
 	avatarUrl: null,
+	notifyInApp: false,
+	notifyPush: false,
+	notifyEmail: false,
 	accounts: [ACCOUNT],
 };
 

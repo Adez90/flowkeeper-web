@@ -27,6 +27,9 @@ const ME: MeResponse = {
 	timezone: "UTC",
 	locale: null,
 	avatarUrl: null,
+	notifyInApp: false,
+	notifyPush: false,
+	notifyEmail: false,
 	accounts: [],
 };
 
@@ -75,6 +78,31 @@ describe("ProfilePage", () => {
 			expect(
 				screen.getByText("Couldn't save — check the timezone is a real one (e.g. Europe/Stockholm) and try again."),
 			).toBeInTheDocument(),
+		);
+	});
+
+	it("shows the current reminder-channel preferences", () => {
+		renderWithProviders(<ProfilePage />);
+
+		expect(screen.getByLabelText("In-app")).not.toBeChecked();
+		expect(screen.getByLabelText("Push notification")).not.toBeChecked();
+		expect(screen.getByLabelText("Email")).not.toBeChecked();
+	});
+
+	it("toggling a reminder channel saves only that channel", async () => {
+		mockedMeApi.updateNotificationPreferences.mockResolvedValue({ ...ME, notifyInApp: true });
+		const user = userEvent.setup();
+
+		renderWithProviders(<ProfilePage />);
+
+		await user.click(screen.getByLabelText("In-app"));
+
+		await waitFor(() =>
+			expect(mockedMeApi.updateNotificationPreferences).toHaveBeenCalledWith("test-token", {
+				notifyInApp: true,
+				notifyPush: false,
+				notifyEmail: false,
+			}),
 		);
 	});
 });

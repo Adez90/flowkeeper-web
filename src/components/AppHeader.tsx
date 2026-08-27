@@ -1,6 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import { BrandMark } from "./BrandMark";
 import { AccountSwitcher } from "./AccountSwitcher";
+import { NotificationBell } from "./NotificationBell";
 import type { MeResponse } from "../api/types";
 
 interface AppHeaderProps {
@@ -38,6 +39,7 @@ export function AppHeader({ me, activeAccountRole, activeAccountType }: AppHeade
 			</nav>
 
 			{me && me.accounts.length > 1 && <AccountSwitcher />}
+			{me && <NotificationBell />}
 
 			<Link to="/app/profile" className="app-header__account" aria-label="Your information">
 				<svg className="app-header__gear" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">

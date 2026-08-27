@@ -1,0 +1,63 @@
+import { useState } from "react";
+import { useAuth } from "react-oidc-context";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchNotifications, markNotificationRead } from "../api/notifications";
+
+/** Polls rather than pushing — simple and good enough for a low-frequency reminder inbox, no websocket infrastructure needed. */
+const POLL_INTERVAL_MS = 60_000;
+
+export function NotificationBell() {
+	const auth = useAuth();
+	const queryClient = useQueryClient();
+	const token = auth.user?.access_token ?? "";
+	const [open, setOpen] = useState(false);
+
+	const notificationsQuery = useQuery({
+		queryKey: ["notifications"],
+		queryFn: () => fetchNotifications(token),
+		refetchInterval: POLL_INTERVAL_MS,
+	});
+
+	const notifications = notificationsQuery.data ?? [];
+	const unreadCount = notifications.filter((n) => !n.readAt).length;
+
+	async function handleMarkRead(notificationId: string) {
+		await markNotificationRead(token, notificationId);
+		await queryClient.invalidateQueries({ queryKey: ["notifications"] });
+	}
+
+	return (
+		<div className="notification-bell">
+			<button
+				type="button"
+				className="notification-bell__button"
+				onClick={() => setOpen((o) => !o)}
+				aria-label={unreadCount > 0 ? `Notifications (${unreadCount} unread)` : "Notifications"}
+			>
+				🔔
+				{unreadCount > 0 && <span className="notification-bell__badge">{unreadCount}</span>}
+			</button>
+
+			{open && (
+				<div className="notification-bell__panel">
+					{notifications.length === 0 && <p className="empty-state">Nothing yet.</p>}
+					<ul className="notification-bell__list">
+						{notifications.map((notification) => (
+							<li
+								key={notification.id}
+								className={notification.readAt ? "notification-bell__item" : "notification-bell__item notification-bell__item--unread"}
+							>
+								<p>{notification.message}</p>
+								{!notification.readAt && (
+									<button type="button" className="button" onClick={() => void handleMarkRead(notification.id)}>
+										Mark read
+									</button>
+								)}
+							</li>
+						))}
+					</ul>
+				</div>
+			)}
+		</div>
+	);
+}

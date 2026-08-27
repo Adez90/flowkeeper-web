@@ -23,6 +23,9 @@ export interface MeResponse {
 	timezone: string;
 	locale: string | null;
 	avatarUrl: string | null;
+	notifyInApp: boolean;
+	notifyPush: boolean;
+	notifyEmail: boolean;
 	accounts: AccountSummary[];
 }
 
@@ -31,6 +34,24 @@ export interface UpdateProfileRequest {
 	timezone: string;
 	locale: string | null;
 	avatarUrl: string | null;
+}
+
+export interface UpdateNotificationPreferencesRequest {
+	notifyInApp: boolean;
+	notifyPush: boolean;
+	notifyEmail: boolean;
+}
+
+export interface UpdatePushTokenRequest {
+	expoPushToken: string;
+}
+
+export interface NotificationResponse {
+	id: string;
+	type: string;
+	message: string;
+	createdAt: string;
+	readAt: string | null;
 }
 
 export interface RegistrationResponse {

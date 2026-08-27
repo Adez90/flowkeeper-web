@@ -1,9 +1,13 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { AppHeader } from "./AppHeader";
 import { ActiveAccountProvider } from "../context/ActiveAccountContext";
 import type { AccountSummary, MeResponse } from "../api/types";
+
+// NotificationBell needs its own auth/query-client context — irrelevant to
+// what AppHeader itself is responsible for, so it's stubbed out here.
+vi.mock("./NotificationBell", () => ({ NotificationBell: () => null }));
 
 function baseMe(overrides: Partial<MeResponse> = {}): MeResponse {
 	return {
@@ -13,6 +17,9 @@ function baseMe(overrides: Partial<MeResponse> = {}): MeResponse {
 		timezone: "UTC",
 		locale: null,
 		avatarUrl: null,
+		notifyInApp: false,
+		notifyPush: false,
+		notifyEmail: false,
 		accounts: [],
 		...overrides,
 	};
