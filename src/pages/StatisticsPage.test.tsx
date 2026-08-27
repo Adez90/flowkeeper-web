@@ -73,7 +73,12 @@ describe("StatisticsPage", () => {
 		renderWithProviders(<StatisticsPage />);
 
 		await screen.findByText("5");
-		expect(mockedStatisticsApi.fetchPersonalStatistics).toHaveBeenCalledWith("test-token", "account-1", "WEEK");
+		expect(mockedStatisticsApi.fetchPersonalStatistics).toHaveBeenCalledWith(
+			"test-token",
+			"account-1",
+			"WEEK",
+			toIsoDate(new Date()),
+		);
 	});
 
 	it("re-fetches with DAY when that period is selected", async () => {
@@ -86,7 +91,46 @@ describe("StatisticsPage", () => {
 		await user.click(screen.getByRole("button", { name: "Day" }));
 
 		await waitFor(() =>
-			expect(mockedStatisticsApi.fetchPersonalStatistics).toHaveBeenCalledWith("test-token", "account-1", "DAY"),
+			expect(mockedStatisticsApi.fetchPersonalStatistics).toHaveBeenCalledWith(
+				"test-token",
+				"account-1",
+				"DAY",
+				toIsoDate(new Date()),
+			),
+		);
+	});
+
+	it("re-fetches for a past reference date chosen via the date picker, and offers a jump back to today", async () => {
+		mockedStatisticsApi.fetchPersonalStatistics.mockResolvedValue(statsFor());
+
+		renderWithProviders(<StatisticsPage />);
+		await screen.findByText("5");
+
+		expect(screen.queryByRole("button", { name: "Today" })).not.toBeInTheDocument();
+
+		const pastDate = addDaysIso(toIsoDate(new Date()), -10);
+		fireEvent.change(screen.getByLabelText(/week containing/i), { target: { value: pastDate } });
+
+		await waitFor(() =>
+			expect(mockedStatisticsApi.fetchPersonalStatistics).toHaveBeenCalledWith(
+				"test-token",
+				"account-1",
+				"WEEK",
+				pastDate,
+			),
+		);
+		const todayButton = await screen.findByRole("button", { name: "Today" });
+
+		const user = userEvent.setup();
+		await user.click(todayButton);
+
+		await waitFor(() =>
+			expect(mockedStatisticsApi.fetchPersonalStatistics).toHaveBeenLastCalledWith(
+				"test-token",
+				"account-1",
+				"WEEK",
+				toIsoDate(new Date()),
+			),
 		);
 	});
 

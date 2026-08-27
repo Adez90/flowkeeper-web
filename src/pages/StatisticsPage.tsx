@@ -22,13 +22,14 @@ export function StatisticsPage() {
 	const auth = useAuth();
 	const token = auth.user?.access_token ?? "";
 	const [period, setPeriod] = useState<StatisticsPeriod>("WEEK");
+	const [referenceDate, setReferenceDate] = useState(TODAY);
 	const [trendFrom, setTrendFrom] = useState(DEFAULT_TREND_FROM);
 	const [trendTo, setTrendTo] = useState(TODAY);
 	const trendRangeEndExclusive = addDaysIso(trendTo, 1);
 
 	const statsQuery = useQuery({
-		queryKey: ["statistics", accountId, period],
-		queryFn: () => fetchPersonalStatistics(token, accountId, period),
+		queryKey: ["statistics", accountId, period, referenceDate],
+		queryFn: () => fetchPersonalStatistics(token, accountId, period, referenceDate),
 		enabled: Boolean(accountId),
 	});
 	const trendQuery = useQuery({
@@ -53,6 +54,17 @@ export function StatisticsPage() {
 						</button>
 					))}
 				</div>
+			</div>
+			<div className="date-range-picker statistics-page__date-picker">
+				<label>
+					{period === "DAY" ? "Day" : period === "WEEK" ? "Week containing" : "Month containing"}
+					<input type="date" value={referenceDate} max={TODAY} onChange={(e) => setReferenceDate(e.target.value)} />
+				</label>
+				{referenceDate !== TODAY && (
+					<button type="button" className="button" onClick={() => setReferenceDate(TODAY)}>
+						Today
+					</button>
+				)}
 			</div>
 
 			{statsQuery.isLoading && <p className="page-loading">Loading…</p>}
