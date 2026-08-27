@@ -87,4 +87,104 @@ describe("CreateEventDialog", () => {
 		expect(onClose).toHaveBeenCalled();
 		expect(mockedEventsApi.createEvent).not.toHaveBeenCalled();
 	});
+
+	it("logs a backdated but still-open activity when only 'this already happened' is checked", async () => {
+		mockedEventsApi.listEventTypes.mockResolvedValue(TYPES);
+		mockedEventsApi.createEvent.mockResolvedValue({
+			id: "event-2",
+			accountId: "account-1",
+			eventTypeId: "type-1",
+			eventTypeLabel: "Meeting",
+			status: "OPEN",
+			ingoingEnergy: 3,
+			ingoingNote: null,
+			outgoingEnergy: null,
+			outgoingNote: null,
+			shareAnonymously: false,
+			startedAt: "2026-01-01T09:00:00Z",
+			completedAt: null,
+		});
+
+		const onCreated = vi.fn();
+		const user = userEvent.setup();
+
+		renderWithProviders(
+			<CreateEventDialog accountId="account-1" token="test-token" onClose={vi.fn()} onCreated={onCreated} />,
+		);
+
+		await screen.findByText("Meeting");
+		await user.click(screen.getByLabelText("This already happened"));
+
+		const startedAtInput = screen.getByLabelText("Started at");
+		await user.clear(startedAtInput);
+		await user.type(startedAtInput, "2026-01-01T09:00");
+
+		expect(screen.queryByLabelText("Already finished — log the outcome too")).not.toBeChecked();
+		expect(screen.queryByText("Completed at")).not.toBeInTheDocument();
+
+		await user.click(screen.getByRole("button", { name: "Log activity" }));
+
+		await waitFor(() => expect(onCreated).toHaveBeenCalled());
+		expect(mockedEventsApi.createEvent).toHaveBeenCalledWith("test-token", {
+			accountId: "account-1",
+			eventTypeId: "type-1",
+			ingoingEnergy: 3,
+			ingoingNote: null,
+			startedAt: new Date("2026-01-01T09:00").toISOString(),
+		});
+	});
+
+	it("logs a fully historical, already-completed activity in one step", async () => {
+		mockedEventsApi.listEventTypes.mockResolvedValue(TYPES);
+		mockedEventsApi.createEvent.mockResolvedValue({
+			id: "event-3",
+			accountId: "account-1",
+			eventTypeId: "type-1",
+			eventTypeLabel: "Meeting",
+			status: "COMPLETED",
+			ingoingEnergy: 3,
+			ingoingNote: "felt rushed",
+			outgoingEnergy: 4,
+			outgoingNote: "better after",
+			shareAnonymously: false,
+			startedAt: "2026-01-01T08:00:00Z",
+			completedAt: "2026-01-01T09:00:00Z",
+		});
+
+		const onCreated = vi.fn();
+		const user = userEvent.setup();
+
+		renderWithProviders(
+			<CreateEventDialog accountId="account-1" token="test-token" onClose={vi.fn()} onCreated={onCreated} />,
+		);
+
+		await screen.findByText("Meeting");
+		await user.type(screen.getByLabelText("Note (optional)"), "felt rushed");
+		await user.click(screen.getByLabelText("This already happened"));
+
+		const startedAtInput = screen.getByLabelText("Started at");
+		await user.clear(startedAtInput);
+		await user.type(startedAtInput, "2026-01-01T08:00");
+
+		await user.click(screen.getByLabelText("Already finished — log the outcome too"));
+
+		const completedAtInput = screen.getByLabelText("Completed at");
+		await user.clear(completedAtInput);
+		await user.type(completedAtInput, "2026-01-01T09:00");
+		await user.type(screen.getByLabelText("Outcome note (optional)"), "better after");
+
+		await user.click(screen.getByRole("button", { name: "Log activity" }));
+
+		await waitFor(() => expect(onCreated).toHaveBeenCalled());
+		expect(mockedEventsApi.createEvent).toHaveBeenCalledWith("test-token", {
+			accountId: "account-1",
+			eventTypeId: "type-1",
+			ingoingEnergy: 3,
+			ingoingNote: "felt rushed",
+			startedAt: new Date("2026-01-01T08:00").toISOString(),
+			outgoingEnergy: 3,
+			outgoingNote: "better after",
+			completedAt: new Date("2026-01-01T09:00").toISOString(),
+		});
+	});
 });

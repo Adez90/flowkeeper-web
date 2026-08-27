@@ -89,6 +89,13 @@ export interface CreateEventRequest {
 	eventTypeId: string;
 	ingoingEnergy: number;
 	ingoingNote: string | null;
+	/** Omit to start now — set to log something that already happened (rejected if it's in the future). */
+	startedAt?: string;
+	/** Set alongside startedAt to log a fully-finished historical activity, already completed, in one call. */
+	outgoingEnergy?: number | null;
+	outgoingNote?: string | null;
+	/** Omit (with outgoingEnergy set) to complete now; only meaningful alongside outgoingEnergy. */
+	completedAt?: string;
 }
 
 export interface CompleteEventRequest {
