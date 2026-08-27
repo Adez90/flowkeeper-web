@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { createEvent, listEventTypes } from "../api/events";
+import { energyColor } from "../lib/energy";
 
 interface CreateEventDialogProps {
 	accountId: string;
@@ -62,14 +63,20 @@ export function CreateEventDialog({ accountId, token, onClose, onCreated }: Crea
 					</select>
 				</label>
 
-				<label className="field">
-					<span>Ingoing energy: {ingoingEnergy}/5</span>
+				<label className="field field--energy">
+					<span>
+						Ingoing energy
+						<span className="energy-badge" style={{ background: energyColor(ingoingEnergy) }} aria-hidden="true">
+							{ingoingEnergy}
+						</span>
+					</span>
 					<input
 						type="range"
 						min={1}
 						max={5}
 						value={ingoingEnergy}
 						onChange={(e) => setIngoingEnergy(Number(e.target.value))}
+						aria-label={`Ingoing energy: ${ingoingEnergy}/5`}
 					/>
 				</label>
 

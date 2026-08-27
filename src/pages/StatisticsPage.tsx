@@ -3,6 +3,7 @@ import { useOutletContext } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPersonalStatistics } from "../api/statistics";
+import { energyDeltaColor } from "../lib/energy";
 import type { MeResponse, StatisticsPeriod } from "../api/types";
 
 const PERIODS: StatisticsPeriod[] = ["DAY", "WEEK", "MONTH"];
@@ -56,7 +57,10 @@ export function StatisticsPage() {
 							<span className="stat-tile__label">ongoing</span>
 						</div>
 						<div className="stat-tile">
-							<span className="stat-tile__value">
+							<span
+								className="stat-tile__value"
+								style={{ color: energyDeltaColor(statsQuery.data.averageEnergyDelta) }}
+							>
 								{statsQuery.data.averageEnergyDelta != null ? statsQuery.data.averageEnergyDelta.toFixed(1) : "—"}
 							</span>
 							<span className="stat-tile__label">avg energy delta</span>
@@ -72,7 +76,12 @@ export function StatisticsPage() {
 								<li key={type.eventTypeId}>
 									<span>{type.label}</span>
 									<span>{type.count}×</span>
-									<span>{type.averageEnergyDelta != null ? type.averageEnergyDelta.toFixed(1) : "—"}</span>
+									<span
+										className="type-breakdown__delta"
+										style={{ color: energyDeltaColor(type.averageEnergyDelta) }}
+									>
+										{type.averageEnergyDelta != null ? type.averageEnergyDelta.toFixed(1) : "—"}
+									</span>
 								</li>
 							))}
 						</ul>

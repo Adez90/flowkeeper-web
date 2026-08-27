@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { BrandMark } from "./BrandMark";
 import type { MeResponse } from "../api/types";
 
 interface AppHeaderProps {
@@ -11,12 +12,17 @@ export function AppHeader({ me }: AppHeaderProps) {
 	return (
 		<header className="app-header">
 			<Link to="/app" className="app-header__brand">
+				<BrandMark size={24} />
 				FlowKeeper
 			</Link>
 
 			<nav className="app-header__nav">
-				<Link to="/app">Ongoing</Link>
-				<Link to="/app/statistics">Statistics</Link>
+				<NavLink to="/app" end className={({ isActive }) => (isActive ? "active" : undefined)}>
+					Ongoing
+				</NavLink>
+				<NavLink to="/app/statistics" className={({ isActive }) => (isActive ? "active" : undefined)}>
+					Statistics
+				</NavLink>
 			</nav>
 
 			<Link to="/app/profile" className="app-header__account" aria-label="Your information">

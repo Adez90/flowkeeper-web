@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { completeEvent } from "../api/events";
+import { energyColor } from "../lib/energy";
 import type { EventResponse } from "../api/types";
 
 interface CompleteEventDialogProps {
@@ -39,14 +40,20 @@ export function CompleteEventDialog({ event, token, onClose, onCompleted }: Comp
 				<h2>Complete &ldquo;{event.eventTypeLabel}&rdquo;</h2>
 				<p className="dialog__hint">Ingoing energy was {event.ingoingEnergy}/5.</p>
 
-				<label className="field">
-					<span>Outgoing energy: {outgoingEnergy}/5</span>
+				<label className="field field--energy">
+					<span>
+						Outgoing energy
+						<span className="energy-badge" style={{ background: energyColor(outgoingEnergy) }} aria-hidden="true">
+							{outgoingEnergy}
+						</span>
+					</span>
 					<input
 						type="range"
 						min={1}
 						max={5}
 						value={outgoingEnergy}
 						onChange={(e) => setOutgoingEnergy(Number(e.target.value))}
+						aria-label={`Outgoing energy: ${outgoingEnergy}/5`}
 					/>
 				</label>
 

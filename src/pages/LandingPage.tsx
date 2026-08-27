@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { listEvents } from "../api/events";
 import { CreateEventDialog } from "../components/CreateEventDialog";
 import { CompleteEventDialog } from "../components/CompleteEventDialog";
+import { energyColor } from "../lib/energy";
 import type { EventResponse, MeResponse } from "../api/types";
 
 export function LandingPage() {
@@ -53,7 +54,14 @@ export function LandingPage() {
 					<li key={event.id} className="event-list__item">
 						<div>
 							<strong>{event.eventTypeLabel}</strong>
-							<span className="event-list__meta">ingoing energy {event.ingoingEnergy}/5</span>
+							<span className="event-list__meta">
+								<span
+									className="energy-dot"
+									style={{ background: energyColor(event.ingoingEnergy) }}
+									aria-hidden="true"
+								/>
+								ingoing energy {event.ingoingEnergy}/5
+							</span>
 						</div>
 						<button type="button" className="button" onClick={() => setCompletingEvent(event)}>
 							Complete

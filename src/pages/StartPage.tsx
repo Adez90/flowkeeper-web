@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
+import { BrandMark } from "../components/BrandMark";
 
 export function StartPage() {
 	const auth = useAuth();
@@ -11,7 +12,10 @@ export function StartPage() {
 	return (
 		<div className="start-page">
 			<div className="start-page__card">
-				<h1>FlowKeeper</h1>
+				<h1 className="start-page__heading">
+					<BrandMark size={30} />
+					FlowKeeper
+				</h1>
 				<p>Log what you do, how you felt going in, and how it actually went — then see your day, week, or month.</p>
 				<button
 					type="button"

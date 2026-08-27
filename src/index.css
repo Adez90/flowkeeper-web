@@ -1,16 +1,26 @@
 :root {
-	--brand: #2b5fa8;
-	--brand-dark: #1f477f;
-	--text: #1f2328;
-	--text-muted: #5b6470;
-	--bg: #f4f6f8;
+	/* Ink + neutrals: a deep navy rather than a plain grey-black, with every
+	   neutral biased toward it rather than pure grey. */
+	--ink: #152a42;
+	--text: #1b2c3d;
+	--text-muted: #5b6b85;
+	--bg: #f4f6fa;
 	--surface: #ffffff;
-	--border: #dfe3e8;
-	--danger: #b3261e;
-	--success: #1e7a34;
+	--surface-2: #eef1f7;
+	--border: #dde3ee;
+
+	/* The two-tone accent: magenta carries primary actions, blue carries
+	   navigation/secondary emphasis. */
+	--accent-magenta: #d50e62;
+	--accent-magenta-dark: #a80a4e;
+	--accent-blue: #1a66b4;
+	--accent-blue-dark: #144f8c;
+
+	--danger: #c81e3a;
+	--success: #1f8a4c;
 
 	color-scheme: light;
-	font: 16px/1.5 system-ui, "Segoe UI", Roboto, sans-serif;
+	font: 16px/1.55 "Manrope", system-ui, "Segoe UI", Roboto, sans-serif;
 	color: var(--text);
 	background: var(--bg);
 }
@@ -24,12 +34,19 @@ body {
 	min-height: 100vh;
 }
 
+h1,
+h2 {
+	font-family: "Manrope", system-ui, sans-serif;
+	font-weight: 700;
+	letter-spacing: -0.01em;
+	color: var(--ink);
+}
 h1 {
-	font-size: 1.5rem;
+	font-size: 1.6rem;
 	margin: 0;
 }
 h2 {
-	font-size: 1.1rem;
+	font-size: 1.05rem;
 	margin: 24px 0 8px;
 }
 
@@ -42,21 +59,31 @@ button {
 	border: 1px solid var(--border);
 	background: var(--surface);
 	color: var(--text);
-	padding: 8px 16px;
-	border-radius: 6px;
+	padding: 9px 18px;
+	border-radius: 8px;
 	cursor: pointer;
+	font-weight: 600;
+	font-size: 0.92rem;
+	transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+}
+.button:hover:not(:disabled) {
+	border-color: var(--accent-blue);
+}
+.button:active:not(:disabled) {
+	transform: translateY(1px);
 }
 .button:disabled {
-	opacity: 0.6;
+	opacity: 0.55;
 	cursor: default;
 }
 .button--primary {
-	background: var(--brand);
-	border-color: var(--brand);
+	background: var(--accent-magenta);
+	border-color: var(--accent-magenta);
 	color: white;
 }
 .button--primary:hover:not(:disabled) {
-	background: var(--brand-dark);
+	background: var(--accent-magenta-dark);
+	border-color: var(--accent-magenta-dark);
 }
 
 .error-text {
@@ -79,18 +106,38 @@ button {
 	align-items: center;
 	justify-content: center;
 	padding: 24px;
+	position: relative;
+	overflow: hidden;
+	background: var(--ink);
+	background-image:
+		radial-gradient(circle at 18% 20%, rgba(213, 14, 98, 0.55), transparent 42%),
+		radial-gradient(circle at 82% 12%, rgba(26, 102, 180, 0.5), transparent 46%),
+		radial-gradient(circle at 50% 100%, rgba(232, 200, 30, 0.28), transparent 55%),
+		linear-gradient(160deg, #0f2036 0%, var(--ink) 55%, #1c3a5c 100%);
 }
 .start-page__card {
+	position: relative;
 	max-width: 420px;
 	text-align: center;
 	background: var(--surface);
-	border: 1px solid var(--border);
-	border-radius: 12px;
-	padding: 40px 32px;
+	border-radius: 16px;
+	padding: 44px 36px;
+	box-shadow: 0 24px 60px -20px rgba(9, 20, 34, 0.55);
+}
+.start-page__heading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	font-size: 1.7rem;
 }
 .start-page__card p {
 	color: var(--text-muted);
-	margin: 12px 0 24px;
+	margin: 14px 0 26px;
+}
+.start-page__card .button--primary {
+	padding: 11px 24px;
+	font-size: 0.96rem;
 }
 
 /* ---------- App shell / header ---------- */
@@ -100,32 +147,45 @@ button {
 	flex-direction: column;
 }
 .app-header {
-	background: var(--brand);
+	background: var(--ink);
 	color: white;
 	display: flex;
 	align-items: center;
-	gap: 24px;
+	gap: 28px;
 	padding: 0 24px;
-	height: 56px;
+	height: 60px;
+	border-bottom: 3px solid var(--accent-magenta);
 }
 .app-header__brand {
+	display: flex;
+	align-items: center;
+	gap: 10px;
 	color: white;
 	text-decoration: none;
-	font-weight: 600;
-	font-size: 1.1rem;
+	font-weight: 700;
+	font-size: 1.08rem;
+	font-family: "Manrope", system-ui, sans-serif;
+	letter-spacing: -0.01em;
 }
 .app-header__nav {
 	display: flex;
-	gap: 16px;
+	gap: 20px;
 	flex: 1;
 }
 .app-header__nav a {
-	color: rgba(255, 255, 255, 0.85);
+	color: rgba(255, 255, 255, 0.72);
 	text-decoration: none;
-	font-size: 0.92rem;
+	font-size: 0.9rem;
+	font-weight: 600;
+	padding: 4px 2px;
+	border-bottom: 2px solid transparent;
 }
 .app-header__nav a:hover {
 	color: white;
+}
+.app-header__nav a.active {
+	color: white;
+	border-bottom-color: var(--accent-blue);
 }
 .app-header__account {
 	display: flex;
@@ -135,21 +195,22 @@ button {
 	color: white;
 }
 .app-header__gear {
-	opacity: 0.85;
+	opacity: 0.8;
 }
 .app-header__avatar {
 	width: 32px;
 	height: 32px;
 	border-radius: 50%;
 	object-fit: cover;
-	background: rgba(255, 255, 255, 0.25);
+	background: rgba(255, 255, 255, 0.22);
 }
 .app-header__avatar--fallback {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-size: 0.85rem;
-	font-weight: 600;
+	font-weight: 700;
+	background: var(--accent-blue);
 }
 
 .app-shell__content {
@@ -181,20 +242,31 @@ button {
 	justify-content: space-between;
 	background: var(--surface);
 	border: 1px solid var(--border);
+	border-left: 3px solid var(--border);
 	border-radius: 8px;
 	padding: 12px 16px;
 }
 .event-list__meta {
-	display: block;
+	display: flex;
+	align-items: center;
+	gap: 6px;
 	color: var(--text-muted);
 	font-size: 0.85rem;
+	margin-top: 2px;
+}
+.energy-dot {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	flex-shrink: 0;
 }
 
 /* ---------- Dialogs ---------- */
 .dialog-backdrop {
 	position: fixed;
 	inset: 0;
-	background: rgba(0, 0, 0, 0.35);
+	background: rgba(15, 27, 42, 0.55);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -202,13 +274,14 @@ button {
 }
 .dialog {
 	background: var(--surface);
-	border-radius: 10px;
-	padding: 24px;
+	border-radius: 12px;
+	padding: 26px;
 	width: 100%;
 	max-width: 380px;
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
+	box-shadow: 0 30px 70px -24px rgba(9, 20, 34, 0.5);
 }
 .dialog__hint {
 	color: var(--text-muted);
@@ -226,22 +299,84 @@ button {
 .field {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 6px;
 	font-size: 0.9rem;
 }
 .field span {
 	color: var(--text-muted);
+	font-weight: 600;
 }
 .field input,
 .field select,
 .field textarea {
 	font: inherit;
-	padding: 8px 10px;
+	padding: 9px 11px;
 	border: 1px solid var(--border);
-	border-radius: 6px;
+	border-radius: 8px;
 	background: var(--surface);
 	color: var(--text);
 }
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+	outline: 2px solid var(--accent-blue);
+	outline-offset: 1px;
+}
+
+/* Energy sliders get the 5-step red->green track everywhere they appear,
+   the same scale the app's own domain model (ingoing/outgoing energy,
+   energy delta) is built around. */
+.field--energy span {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+.field--energy .energy-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 22px;
+	height: 22px;
+	padding: 0 6px;
+	border-radius: 999px;
+	color: white;
+	font-size: 0.78rem;
+	font-weight: 700;
+}
+.field input[type="range"] {
+	-webkit-appearance: none;
+	appearance: none;
+	height: 8px;
+	border-radius: 999px;
+	background: linear-gradient(90deg, #e5202b, #ef7b2d, #e8c81e, #8fb93a, #20a751);
+	padding: 0;
+	border: none;
+}
+.field input[type="range"]::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: white;
+	border: 3px solid var(--ink);
+	cursor: pointer;
+	margin-top: -6px;
+}
+.field input[type="range"]::-moz-range-thumb {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: white;
+	border: 3px solid var(--ink);
+	cursor: pointer;
+}
+.field input[type="range"]::-moz-range-track {
+	height: 8px;
+	border-radius: 999px;
+	background: linear-gradient(90deg, #e5202b, #ef7b2d, #e8c81e, #8fb93a, #20a751);
+}
+
 .profile-form {
 	display: flex;
 	flex-direction: column;
@@ -278,7 +413,7 @@ button {
 .stat-tile {
 	background: var(--surface);
 	border: 1px solid var(--border);
-	border-radius: 8px;
+	border-radius: 10px;
 	padding: 16px;
 	display: flex;
 	flex-direction: column;
@@ -286,8 +421,10 @@ button {
 	gap: 4px;
 }
 .stat-tile__value {
-	font-size: 1.6rem;
-	font-weight: 600;
+	font-size: 1.7rem;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+	color: var(--ink);
 }
 .stat-tile__label {
 	color: var(--text-muted);
@@ -303,10 +440,15 @@ button {
 }
 .type-breakdown li {
 	display: flex;
+	align-items: center;
 	justify-content: space-between;
 	background: var(--surface);
 	border: 1px solid var(--border);
-	border-radius: 6px;
+	border-radius: 8px;
 	padding: 8px 12px;
 	font-size: 0.9rem;
+}
+.type-breakdown__delta {
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
 }
