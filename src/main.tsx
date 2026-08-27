@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "react-oidc-context";
 import { oidcConfig } from "./auth/oidcConfig";
 import { router } from "./router";
+import "./i18n";
 import "./index.css";
 
 const queryClient = new QueryClient();

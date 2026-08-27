@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { TrendPoint } from "../api/types";
 
 const WIDTH = 480;
@@ -6,8 +7,9 @@ const PADDING = 8;
 
 /** A minimal day-by-day Flow % line chart — no charting library, just an SVG polyline over 0-100%. */
 export function FlowTrendChart({ points }: { points: TrendPoint[] }) {
+	const { t } = useTranslation();
 	if (points.length === 0) {
-		return <p className="empty-state">No days in this range.</p>;
+		return <p className="empty-state">{t("statistics.noDaysInRange")}</p>;
 	}
 
 	const plotWidth = WIDTH - PADDING * 2;
@@ -25,7 +27,7 @@ export function FlowTrendChart({ points }: { points: TrendPoint[] }) {
 	return (
 		<div className="flow-trend-chart">
 			{totalEvents === 0 ? (
-				<p className="empty-state">No activity logged in this range yet.</p>
+				<p className="empty-state">{t("statistics.noActivityInRange")}</p>
 			) : (
 				<svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="flow-trend-chart__svg" role="img" aria-label="Flow percentage trend">
 					<line x1={PADDING} y1={PADDING} x2={WIDTH - PADDING} y2={PADDING} className="flow-trend-chart__gridline" />

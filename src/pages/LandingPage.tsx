@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
+import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { listEvents } from "../api/events";
 import { CreateEventDialog } from "../components/CreateEventDialog";
@@ -12,6 +13,7 @@ export function LandingPage() {
 	const { account, accountId } = useActiveAccount();
 	const auth = useAuth();
 	const queryClient = useQueryClient();
+	const { t } = useTranslation();
 	const token = auth.user?.access_token ?? "";
 
 	const [creating, setCreating] = useState(false);
@@ -28,22 +30,22 @@ export function LandingPage() {
 	}
 
 	if (!accountId) {
-		return <p className="page-loading">Setting up your account…</p>;
+		return <p className="page-loading">{t("common.settingUpAccount")}</p>;
 	}
 
 	return (
 		<div className="landing-page">
 			<div className="landing-page__toolbar">
-				<h1>Ongoing</h1>
+				<h1>{t("landing.title")}</h1>
 				<button type="button" className="button button--primary" onClick={() => setCreating(true)}>
-					+ Log activity
+					{t("landing.logActivity")}
 				</button>
 			</div>
 
-			{eventsQuery.isLoading && <p className="page-loading">Loading…</p>}
-			{eventsQuery.isError && <p className="error-text">Couldn't load your events.</p>}
+			{eventsQuery.isLoading && <p className="page-loading">{t("landing.loading")}</p>}
+			{eventsQuery.isError && <p className="error-text">{t("landing.couldntLoadEvents")}</p>}
 			{eventsQuery.data && eventsQuery.data.length === 0 && (
-				<p className="empty-state">Nothing ongoing right now — log an activity to get started.</p>
+				<p className="empty-state">{t("landing.emptyState")}</p>
 			)}
 
 			<ul className="event-list">
@@ -57,11 +59,11 @@ export function LandingPage() {
 									style={{ background: energyColor(event.ingoingEnergy) }}
 									aria-hidden="true"
 								/>
-								ingoing energy {event.ingoingEnergy}/5
+								{t("landing.ingoingEnergy", { value: event.ingoingEnergy })}
 							</span>
 						</div>
 						<button type="button" className="button" onClick={() => setCompletingEvent(event)}>
-							Complete
+							{t("landing.complete")}
 						</button>
 					</li>
 				))}

@@ -1,4 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { BrandMark } from "./BrandMark";
 import { AccountSwitcher } from "./AccountSwitcher";
 import { NotificationBell } from "./NotificationBell";
@@ -12,6 +13,7 @@ interface AppHeaderProps {
 }
 
 export function AppHeader({ me, activeAccountRole, activeAccountType }: AppHeaderProps) {
+	const { t } = useTranslation();
 	const initial = me?.displayName.trim().charAt(0).toUpperCase() || "?";
 
 	return (
@@ -23,17 +25,17 @@ export function AppHeader({ me, activeAccountRole, activeAccountType }: AppHeade
 
 			<nav className="app-header__nav">
 				<NavLink to="/app" end className={({ isActive }) => (isActive ? "active" : undefined)}>
-					Ongoing
+					{t("nav.ongoing")}
 				</NavLink>
 				<NavLink to="/app/statistics" className={({ isActive }) => (isActive ? "active" : undefined)}>
-					Statistics
+					{t("nav.statistics")}
 				</NavLink>
 				<NavLink to="/app/organisation" className={({ isActive }) => (isActive ? "active" : undefined)}>
-					Organisation
+					{t("nav.organisation")}
 				</NavLink>
 				{activeAccountType === "ORGANISATION" && activeAccountRole === "OWNER" && (
 					<NavLink to="/app/feedback" className={({ isActive }) => (isActive ? "active" : undefined)}>
-						Feedback
+						{t("nav.feedback")}
 					</NavLink>
 				)}
 			</nav>
@@ -41,7 +43,7 @@ export function AppHeader({ me, activeAccountRole, activeAccountType }: AppHeade
 			{me && me.accounts.length > 1 && <AccountSwitcher />}
 			{me && <NotificationBell />}
 
-			<Link to="/app/profile" className="app-header__account" aria-label="Your information">
+			<Link to="/app/profile" className="app-header__account" aria-label={t("nav.yourInformation")}>
 				<svg className="app-header__gear" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
 					<path
 						fill="currentColor"

@@ -1,9 +1,11 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
+import { useTranslation } from "react-i18next";
 import { BrandMark } from "../components/BrandMark";
 
 export function StartPage() {
 	const auth = useAuth();
+	const { t } = useTranslation();
 
 	if (auth.isAuthenticated) {
 		return <Navigate to="/app" replace />;
@@ -16,14 +18,14 @@ export function StartPage() {
 					<BrandMark size={30} />
 					FlowKeeper
 				</h1>
-				<p>Log what you do, how you felt going in, and how it actually went — then see your day, week, or month.</p>
+				<p>{t("start.tagline")}</p>
 				<button
 					type="button"
 					className="button button--primary"
 					onClick={() => auth.signinRedirect()}
 					disabled={auth.isLoading}
 				>
-					Log in or create an account
+					{t("start.logIn")}
 				</button>
 				{/* Keycloak's own login page offers "Register" from here — a
 				    direct deep link to the registration form is possible via

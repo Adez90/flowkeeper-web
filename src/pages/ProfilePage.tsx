@@ -2,9 +2,12 @@ import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
+import { useTranslation } from "react-i18next";
 import { useQueryClient } from "@tanstack/react-query";
 import { updateNotificationPreferences, updateProfile, uploadAvatar } from "../api/me";
 import { listTimezones, timezoneLabel } from "../lib/timezones";
+import { LOCALE_LABELS, SUPPORTED_LOCALES, isSupportedLocale } from "../i18n";
+import type { SupportedLocale } from "../i18n";
 import type { MeResponse } from "../api/types";
 
 const TIMEZONES = listTimezones();
@@ -13,6 +16,7 @@ export function ProfilePage() {
 	const me = useOutletContext<MeResponse>();
 	const auth = useAuth();
 	const queryClient = useQueryClient();
+	const { t, i18n } = useTranslation();
 	const token = auth.user?.access_token ?? "";
 
 	async function toggleNotificationChannel(channel: "notifyInApp" | "notifyPush" | "notifyEmail", enabled: boolean) {
@@ -26,13 +30,18 @@ export function ProfilePage() {
 
 	const [displayName, setDisplayName] = useState(me.displayName);
 	const [timezone, setTimezone] = useState(me.timezone);
-	const [locale, setLocale] = useState(me.locale ?? "");
+	const [locale, setLocale] = useState<SupportedLocale>(isSupportedLocale(me.locale) ? me.locale : "en");
 	const [submitting, setSubmitting] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [saved, setSaved] = useState(false);
 
 	const [avatarUploading, setAvatarUploading] = useState(false);
 	const [avatarError, setAvatarError] = useState<string | null>(null);
+
+	function handleLocaleChange(next: SupportedLocale) {
+		setLocale(next);
+		void i18n.changeLanguage(next);
+	}
 
 	async function handleSubmit(event: FormEvent) {
 		event.preventDefault();
@@ -43,13 +52,13 @@ export function ProfilePage() {
 			await updateProfile(token, {
 				displayName,
 				timezone,
-				locale: locale.trim() || null,
+				locale,
 				avatarUrl: me.avatarUrl,
 			});
 			await queryClient.invalidateQueries({ queryKey: ["me"] });
 			setSaved(true);
 		} catch {
-			setError("Couldn't save — try again.");
+			setError(t("profile.couldntSave"));
 		} finally {
 			setSubmitting(false);
 		}
@@ -65,7 +74,7 @@ export function ProfilePage() {
 			await uploadAvatar(token, file);
 			await queryClient.invalidateQueries({ queryKey: ["me"] });
 		} catch {
-			setAvatarError("Couldn't upload that image — try again.");
+			setAvatarError(t("profile.couldntUploadAvatar"));
 		} finally {
 			setAvatarUploading(false);
 		}
@@ -73,26 +82,31 @@ export function ProfilePage() {
 
 	return (
 		<div className="profile-page">
-			<h1>Your information</h1>
+			<h1>{t("profile.title")}</h1>
 
 			<div className="profile-page__avatar">
-				{me.avatarUrl && <img className="profile-page__preview" src={me.avatarUrl} alt="Your avatar" />}
+				{me.avatarUrl && <img className="profile-page__preview" src={me.avatarUrl} alt={t("profile.yourAvatar")} />}
 				<label className="field">
-					<span>Avatar image (optional)</span>
-					<input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => void handleAvatarSelected(e)} disabled={avatarUploading} />
+					<span>{t("profile.avatarOptional", { optional: t("common.optional") })}</span>
+					<input
+						type="file"
+						accept="image/jpeg,image/png,image/webp"
+						onChange={(e) => void handleAvatarSelected(e)}
+						disabled={avatarUploading}
+					/>
 				</label>
-				{avatarUploading && <p className="dialog__hint">Uploading…</p>}
+				{avatarUploading && <p className="dialog__hint">{t("profile.uploading")}</p>}
 				{avatarError && <p className="error-text">{avatarError}</p>}
 			</div>
 
 			<form onSubmit={handleSubmit} className="profile-form">
 				<label className="field">
-					<span>Display name</span>
+					<span>{t("profile.displayName")}</span>
 					<input value={displayName} onChange={(e) => setDisplayName(e.target.value)} required />
 				</label>
 
 				<label className="field">
-					<span>Timezone</span>
+					<span>{t("profile.timezone")}</span>
 					<select value={timezone} onChange={(e) => setTimezone(e.target.value)} required>
 						{!TIMEZONES.includes(timezone) && <option value={timezone}>{timezone}</option>}
 						{TIMEZONES.map((zone) => (
@@ -104,25 +118,28 @@ export function ProfilePage() {
 				</label>
 
 				<label className="field">
-					<span>Language (optional)</span>
-					<input value={locale} onChange={(e) => setLocale(e.target.value)} placeholder="en" />
+					<span>{t("profile.language")}</span>
+					<select value={locale} onChange={(e) => handleLocaleChange(e.target.value as SupportedLocale)} required>
+						{SUPPORTED_LOCALES.map((code) => (
+							<option key={code} value={code}>
+								{LOCALE_LABELS[code]}
+							</option>
+						))}
+					</select>
 				</label>
 
 				{error && <p className="error-text">{error}</p>}
-				{saved && <p className="success-text">Saved.</p>}
+				{saved && <p className="success-text">{t("profile.saved")}</p>}
 
 				<button type="submit" className="button button--primary" disabled={submitting}>
-					{submitting ? "Saving…" : "Save changes"}
+					{submitting ? t("profile.saving") : t("profile.save")}
 				</button>
 			</form>
 
-			<p className="profile-page__email">Signed in as {me.email}</p>
+			<p className="profile-page__email">{t("profile.signedInAs", { email: me.email })}</p>
 
-			<h2>Reminders</h2>
-			<p className="dialog__hint">
-				A nudge if you leave an activity open, or haven't logged anything yet today. Pick whichever channel(s) work
-				for you — none are on by default.
-			</p>
+			<h2>{t("profile.reminders")}</h2>
+			<p className="dialog__hint">{t("profile.remindersHint")}</p>
 			<div className="notification-preferences">
 				<label className="sharing-toggle">
 					<input
@@ -130,7 +147,7 @@ export function ProfilePage() {
 						checked={me.notifyInApp}
 						onChange={(e) => void toggleNotificationChannel("notifyInApp", e.target.checked)}
 					/>
-					In-app
+					{t("profile.inApp")}
 				</label>
 				<label className="sharing-toggle">
 					<input
@@ -138,7 +155,7 @@ export function ProfilePage() {
 						checked={me.notifyPush}
 						onChange={(e) => void toggleNotificationChannel("notifyPush", e.target.checked)}
 					/>
-					Push notification
+					{t("profile.push")}
 				</label>
 				<label className="sharing-toggle">
 					<input
@@ -146,7 +163,7 @@ export function ProfilePage() {
 						checked={me.notifyEmail}
 						onChange={(e) => void toggleNotificationChannel("notifyEmail", e.target.checked)}
 					/>
-					Email
+					{t("profile.email")}
 				</label>
 			</div>
 		</div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createMemberFeedback, fetchMemberEvents, fetchMemberFeedback } from "../api/coachFeedback";
 
@@ -15,6 +16,7 @@ interface MemberFeedbackDialogProps {
 
 export function MemberFeedbackDialog({ accountId, token, memberId, memberDisplayName, canWrite, onClose }: MemberFeedbackDialogProps) {
 	const queryClient = useQueryClient();
+	const { t } = useTranslation();
 	const [note, setNote] = useState("");
 	const [eventId, setEventId] = useState("");
 	const [submitting, setSubmitting] = useState(false);
@@ -40,7 +42,7 @@ export function MemberFeedbackDialog({ accountId, token, memberId, memberDisplay
 			setEventId("");
 			await queryClient.invalidateQueries({ queryKey: ["member-feedback", accountId, memberId] });
 		} catch {
-			setError("Couldn't save that feedback — try again.");
+			setError(t("memberFeedbackDialog.couldntSubmit"));
 		} finally {
 			setSubmitting(false);
 		}
@@ -52,10 +54,10 @@ export function MemberFeedbackDialog({ accountId, token, memberId, memberDisplay
 	return (
 		<div className="dialog-backdrop" role="dialog" aria-modal="true">
 			<div className="dialog dialog--wide">
-				<h2>Feedback for {memberDisplayName}</h2>
+				<h2>{t("memberFeedbackDialog.titleFor", { displayName: memberDisplayName })}</h2>
 
-				{feedbackQuery.isLoading && <p className="page-loading">Loading…</p>}
-				{feedback.length === 0 && !feedbackQuery.isLoading && <p className="empty-state">No feedback yet.</p>}
+				{feedbackQuery.isLoading && <p className="page-loading">{t("memberFeedbackDialog.loading")}</p>}
+				{feedback.length === 0 && !feedbackQuery.isLoading && <p className="empty-state">{t("memberFeedbackDialog.noFeedbackYet")}</p>}
 				<ul className="feedback-thread">
 					{feedback.map((item) => (
 						<li key={item.id} className="feedback-thread__item">
@@ -63,7 +65,7 @@ export function MemberFeedbackDialog({ accountId, token, memberId, memberDisplay
 								<span>{item.coachDisplayName}</span>
 								<span>{new Date(item.createdAt).toLocaleDateString()}</span>
 							</div>
-							{item.eventTypeLabel && <p className="feedback-thread__event">On: {item.eventTypeLabel}</p>}
+							{item.eventTypeLabel && <p className="feedback-thread__event">{t("memberFeedbackDialog.onEvent", { eventType: item.eventTypeLabel })}</p>}
 							<p>{item.note}</p>
 						</li>
 					))}
@@ -72,13 +74,13 @@ export function MemberFeedbackDialog({ accountId, token, memberId, memberDisplay
 				{canWrite && (
 					<form onSubmit={handleSubmit} className="profile-form">
 						<label className="field">
-							<span>New feedback</span>
+							<span>{t("memberFeedbackDialog.newFeedback")}</span>
 							<textarea value={note} onChange={(e) => setNote(e.target.value)} rows={3} required />
 						</label>
 						<label className="field">
-							<span>Attach to an event (optional)</span>
+							<span>{t("memberFeedbackDialog.attachToEvent", { optional: t("common.optional") })}</span>
 							<select value={eventId} onChange={(e) => setEventId(e.target.value)}>
-								<option value="">Freeform — not attached to a specific activity</option>
+								<option value="">{t("memberFeedbackDialog.freeform")}</option>
 								{events.map((event) => (
 									<option key={event.id} value={event.id}>
 										{event.eventTypeLabel} — {new Date(event.startedAt).toLocaleDateString()}
@@ -88,14 +90,14 @@ export function MemberFeedbackDialog({ accountId, token, memberId, memberDisplay
 						</label>
 						{error && <p className="error-text">{error}</p>}
 						<button type="submit" className="button button--primary" disabled={submitting || !note.trim()}>
-							{submitting ? "Saving…" : "Add feedback"}
+							{submitting ? t("memberFeedbackDialog.submitting") : t("memberFeedbackDialog.submit")}
 						</button>
 					</form>
 				)}
 
 				<div className="dialog__actions">
 					<button type="button" className="button" onClick={onClose}>
-						Close
+						{t("common.close")}
 					</button>
 				</div>
 			</div>

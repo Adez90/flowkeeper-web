@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
+import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchNotifications, markNotificationRead } from "../api/notifications";
 
@@ -9,6 +10,7 @@ const POLL_INTERVAL_MS = 60_000;
 export function NotificationBell() {
 	const auth = useAuth();
 	const queryClient = useQueryClient();
+	const { t } = useTranslation();
 	const token = auth.user?.access_token ?? "";
 	const [open, setOpen] = useState(false);
 
@@ -32,7 +34,7 @@ export function NotificationBell() {
 				type="button"
 				className="notification-bell__button"
 				onClick={() => setOpen((o) => !o)}
-				aria-label={unreadCount > 0 ? `Notifications (${unreadCount} unread)` : "Notifications"}
+				aria-label={unreadCount > 0 ? t("notifications.labelWithUnread", { count: unreadCount }) : t("notifications.label")}
 			>
 				🔔
 				{unreadCount > 0 && <span className="notification-bell__badge">{unreadCount}</span>}
@@ -40,7 +42,7 @@ export function NotificationBell() {
 
 			{open && (
 				<div className="notification-bell__panel">
-					{notifications.length === 0 && <p className="empty-state">Nothing yet.</p>}
+					{notifications.length === 0 && <p className="empty-state">{t("notifications.nothingYet")}</p>}
 					<ul className="notification-bell__list">
 						{notifications.map((notification) => (
 							<li
@@ -50,7 +52,7 @@ export function NotificationBell() {
 								<p>{notification.message}</p>
 								{!notification.readAt && (
 									<button type="button" className="button" onClick={() => void handleMarkRead(notification.id)}>
-										Mark read
+										{t("notifications.markRead")}
 									</button>
 								)}
 							</li>

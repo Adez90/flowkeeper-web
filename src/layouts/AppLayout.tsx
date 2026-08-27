@@ -1,11 +1,14 @@
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
+import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { AppHeader } from "../components/AppHeader";
 import { fetchMe } from "../api/me";
 import { register } from "../api/registration";
 import { ApiError } from "../api/client";
 import { ActiveAccountProvider, useActiveAccount } from "../context/ActiveAccountContext";
+import { isSupportedLocale } from "../i18n";
 import type { MeResponse } from "../api/types";
 
 /** The AppHeader needs the active account's role/type for the Feedback nav link — pulled from context once inside the provider. */
@@ -39,13 +42,20 @@ export function AppLayout() {
 		enabled: Boolean(token),
 	});
 
+	const { i18n, t } = useTranslation();
+	useEffect(() => {
+		if (isSupportedLocale(meQuery.data?.locale)) {
+			void i18n.changeLanguage(meQuery.data.locale);
+		}
+	}, [meQuery.data?.locale, i18n]);
+
 	if (!meQuery.data) {
 		return (
 			<div className="app-shell">
 				<AppHeader />
 				<main className="app-shell__content">
-					{meQuery.isLoading && <p className="page-loading">Setting up your account…</p>}
-					{meQuery.isError && <p className="error-text">Couldn't load your account. Try refreshing.</p>}
+					{meQuery.isLoading && <p className="page-loading">{t("common.settingUpAccount")}</p>}
+					{meQuery.isError && <p className="error-text">{t("common.couldntLoadAccount")}</p>}
 				</main>
 			</div>
 		);

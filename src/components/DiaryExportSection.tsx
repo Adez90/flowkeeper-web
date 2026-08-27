@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQueryClient } from "@tanstack/react-query";
 import { listEvents } from "../api/events";
 import { exportDiaryPdf } from "../lib/exportDiaryPdf";
@@ -15,6 +16,7 @@ interface DiaryExportSectionProps {
 /** On-demand, client-side PDF export of the caller's own event diary — mirrors the old FlowKeeper client's pdfmake export. Personal accounts only: the events endpoint this reads from is account-wide, which only means "my own events" when the account has exactly one member. */
 export function DiaryExportSection({ accountId, token, displayName }: DiaryExportSectionProps) {
 	const queryClient = useQueryClient();
+	const { t } = useTranslation();
 	const [from, setFrom] = useState(TODAY);
 	const [to, setTo] = useState(TODAY);
 	const [exporting, setExporting] = useState(false);
@@ -34,7 +36,7 @@ export function DiaryExportSection({ accountId, token, displayName }: DiaryExpor
 			});
 			await exportDiaryPdf(inRange, displayName, from, to);
 		} catch {
-			setError("Couldn't generate that PDF — try again.");
+			setError(t("statistics.couldntExport"));
 		} finally {
 			setExporting(false);
 		}
@@ -42,20 +44,20 @@ export function DiaryExportSection({ accountId, token, displayName }: DiaryExpor
 
 	return (
 		<section className="trend-section">
-			<h2>Export your diary</h2>
+			<h2>{t("statistics.exportDiary")}</h2>
 			<div className="date-range-picker">
 				<label>
-					Export from
+					{t("statistics.exportFrom")}
 					<input type="date" value={from} max={to} onChange={(e) => setFrom(e.target.value)} />
 				</label>
 				<label>
-					Export to
+					{t("statistics.exportTo")}
 					<input type="date" value={to} min={from} max={TODAY} onChange={(e) => setTo(e.target.value)} />
 				</label>
 			</div>
 			{error && <p className="error-text">{error}</p>}
 			<button type="button" className="button button--primary" onClick={() => void handleExport()} disabled={exporting}>
-				{exporting ? "Generating…" : "Download PDF"}
+				{exporting ? t("statistics.generatingPdf") : t("statistics.downloadPdf")}
 			</button>
 		</section>
 	);

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useAuth } from "react-oidc-context";
@@ -7,6 +7,7 @@ import * as reactRouterDom from "react-router-dom";
 import { renderWithProviders } from "../test/testUtils";
 import { ProfilePage } from "./ProfilePage";
 import * as meApi from "../api/me";
+import i18n from "../i18n";
 import type { MeResponse } from "../api/types";
 
 vi.mock("react-oidc-context", () => ({ useAuth: vi.fn() }));
@@ -39,6 +40,10 @@ describe("ProfilePage", () => {
 		mockedUseOutletContext.mockReturnValue(ME);
 	});
 
+	afterEach(() => {
+		void i18n.changeLanguage("en");
+	});
+
 	it("pre-fills the form from the current profile", () => {
 		renderWithProviders(<ProfilePage />);
 
@@ -59,7 +64,7 @@ describe("ProfilePage", () => {
 		expect(mockedMeApi.updateProfile).toHaveBeenCalledWith("test-token", {
 			displayName: "Anders Johansson",
 			timezone: "Europe/Stockholm",
-			locale: null,
+			locale: "en",
 			avatarUrl: null,
 		});
 	});
@@ -142,5 +147,41 @@ describe("ProfilePage", () => {
 		await user.upload(screen.getByLabelText("Avatar image (optional)"), file);
 
 		await screen.findByText("Couldn't upload that image — try again.");
+	});
+
+	it("offers all five supported languages, defaulting to English", () => {
+		renderWithProviders(<ProfilePage />);
+
+		const select = screen.getByLabelText("Language") as HTMLSelectElement;
+		expect(select).toHaveValue("en");
+		const values = Array.from(select.options).map((option) => option.value);
+		expect(values).toEqual(["en", "sv", "es", "de", "fr"]);
+	});
+
+	it("switches the UI language immediately on selection, and saves the new locale", async () => {
+		mockedMeApi.updateProfile.mockResolvedValue({ ...ME, locale: "sv" });
+		const user = userEvent.setup();
+
+		renderWithProviders(<ProfilePage />);
+
+		await user.selectOptions(screen.getByLabelText("Language"), "sv");
+
+		await screen.findByText("Spara ändringar");
+		await user.click(screen.getByRole("button", { name: "Spara ändringar" }));
+
+		expect(mockedMeApi.updateProfile).toHaveBeenCalledWith("test-token", {
+			displayName: "Anders Johansson",
+			timezone: "UTC",
+			locale: "sv",
+			avatarUrl: null,
+		});
+	});
+
+	it("pre-selects the language dropdown from an already-set supported locale", () => {
+		mockedUseOutletContext.mockReturnValue({ ...ME, locale: "de" });
+
+		renderWithProviders(<ProfilePage />);
+
+		expect(screen.getByLabelText("Language")).toHaveValue("de");
 	});
 });

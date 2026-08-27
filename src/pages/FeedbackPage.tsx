@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "react-oidc-context";
+import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { fetchOrganisationFeedback, fetchOrganisationTypeStatistics } from "../api/statistics";
 import { useActiveAccount } from "../context/ActiveAccountContext";
@@ -18,6 +19,7 @@ const PERIODS: StatisticsPeriod[] = ["DAY", "WEEK", "MONTH"];
 export function FeedbackPage() {
 	const { account, accountId } = useActiveAccount();
 	const auth = useAuth();
+	const { t } = useTranslation();
 	const token = auth.user?.access_token ?? "";
 	const [period, setPeriod] = useState<StatisticsPeriod>("WEEK");
 
@@ -32,14 +34,20 @@ export function FeedbackPage() {
 		enabled: account.role === "OWNER",
 	});
 
+	const periodLabels: Record<StatisticsPeriod, string> = {
+		DAY: t("statistics.day"),
+		WEEK: t("statistics.week"),
+		MONTH: t("statistics.month"),
+	};
+
 	if (account.role !== "OWNER") {
-		return <p className="empty-state">Only the organisation owner can see this.</p>;
+		return <p className="empty-state">{t("feedback.onlyOwnerCanSee")}</p>;
 	}
 
 	return (
 		<div className="feedback-page">
 			<div className="landing-page__toolbar">
-				<h1>Feedback</h1>
+				<h1>{t("feedback.title")}</h1>
 				<div className="period-switch">
 					{PERIODS.map((p) => (
 						<button
@@ -48,18 +56,18 @@ export function FeedbackPage() {
 							className={`button ${period === p ? "button--primary" : ""}`}
 							onClick={() => setPeriod(p)}
 						>
-							{p.charAt(0) + p.slice(1).toLowerCase()}
+							{periodLabels[p]}
 						</button>
 					))}
 				</div>
 			</div>
 
-			<h2>By type</h2>
+			<h2>{t("feedback.byType")}</h2>
 			{byTypeQuery.data?.belowMinimumSize && (
-				<p className="empty-state">Not enough members yet ({byTypeQuery.data.memberCount}) to show this anonymously.</p>
+				<p className="empty-state">{t("feedback.notEnoughMembers", { count: byTypeQuery.data.memberCount })}</p>
 			)}
 			{byTypeQuery.data && !byTypeQuery.data.belowMinimumSize && byTypeQuery.data.byType.length === 0 && (
-				<p className="empty-state">Nothing in this range yet.</p>
+				<p className="empty-state">{t("feedback.nothingInRange")}</p>
 			)}
 			{byTypeQuery.data && !byTypeQuery.data.belowMinimumSize && byTypeQuery.data.byType.length > 0 && (
 				<ul className="type-breakdown">
@@ -75,12 +83,12 @@ export function FeedbackPage() {
 				</ul>
 			)}
 
-			<h2>Anonymous notes</h2>
+			<h2>{t("feedback.anonymousNotes")}</h2>
 			{feedbackQuery.data?.belowMinimumSize && (
-				<p className="empty-state">Not enough members yet ({feedbackQuery.data.memberCount}) to show this anonymously.</p>
+				<p className="empty-state">{t("feedback.notEnoughMembers", { count: feedbackQuery.data.memberCount })}</p>
 			)}
 			{feedbackQuery.data && !feedbackQuery.data.belowMinimumSize && feedbackQuery.data.items.length === 0 && (
-				<p className="empty-state">Nobody's shared a note yet.</p>
+				<p className="empty-state">{t("feedback.nobodySharedYet")}</p>
 			)}
 			{feedbackQuery.data && !feedbackQuery.data.belowMinimumSize && feedbackQuery.data.items.length > 0 && (
 				<ul className="feedback-list">

@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
+import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
 	createDepartment,
@@ -33,6 +34,7 @@ export function OrganisationPage() {
 
 function CreateOrganisationForm({ me, setAccountId }: { me: MeResponse; setAccountId: (id: string) => void }) {
 	const auth = useAuth();
+	const { t } = useTranslation();
 	const token = auth.user?.access_token ?? "";
 	const queryClient = useQueryClient();
 	const [name, setName] = useState("");
@@ -48,26 +50,23 @@ function CreateOrganisationForm({ me, setAccountId }: { me: MeResponse; setAccou
 			await queryClient.invalidateQueries({ queryKey: ["me"] });
 			setAccountId(organisation.accountId);
 		} catch {
-			setError("Couldn't create that organisation — try again.");
+			setError(t("organisation.couldntCreate"));
 			setSubmitting(false);
 		}
 	}
 
 	return (
 		<div className="organisation-page">
-			<h1>Organisation</h1>
-			<p className="empty-state">
-				{me.displayName}, you're not part of an organisation yet. Create one to invite your team, see rolled-up
-				Flow % at the group/department/organisation level, and gather anonymous feedback.
-			</p>
+			<h1>{t("organisation.title")}</h1>
+			<p className="empty-state">{t("organisation.notPartOfOrg", { displayName: me.displayName })}</p>
 			<form onSubmit={handleSubmit} className="profile-form">
 				<label className="field">
-					<span>Organisation name</span>
+					<span>{t("organisation.organisationName")}</span>
 					<input value={name} onChange={(e) => setName(e.target.value)} required />
 				</label>
 				{error && <p className="error-text">{error}</p>}
 				<button type="submit" className="button button--primary" disabled={submitting || !name.trim()}>
-					{submitting ? "Creating…" : "Create organisation"}
+					{submitting ? t("organisation.creating") : t("organisation.createOrganisation")}
 				</button>
 			</form>
 		</div>
@@ -76,6 +75,7 @@ function CreateOrganisationForm({ me, setAccountId }: { me: MeResponse; setAccou
 
 function OrganisationStructure({ accountId, role, meUserId }: { accountId: string; role: string; meUserId: string }) {
 	const auth = useAuth();
+	const { t } = useTranslation();
 	const token = auth.user?.access_token ?? "";
 	const queryClient = useQueryClient();
 	const isManager = MANAGER_ROLES.includes(role);
@@ -153,16 +153,16 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 	return (
 		<div className="organisation-page">
 			<div className="landing-page__toolbar">
-				<h1>Organisation</h1>
+				<h1>{t("organisation.title")}</h1>
 				{isManager && (
 					<button type="button" className="button button--primary" onClick={() => setAddingMember(true)}>
-						+ Add member
+						{t("organisation.addMember")}
 					</button>
 				)}
 			</div>
 
-			<h2>Departments</h2>
-			{departments.length === 0 && <p className="empty-state">No departments yet.</p>}
+			<h2>{t("organisation.departments")}</h2>
+			{departments.length === 0 && <p className="empty-state">{t("organisation.noDepartmentsYet")}</p>}
 			<ul className="org-structure-list">
 				{departments.map((department) => (
 					<li key={department.id} className="org-structure-list__item">
@@ -179,7 +179,7 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 										refresh();
 									}}
 								/>
-								Share our average with other departments
+								{t("organisation.shareDepartmentAverage")}
 							</label>
 						)}
 					</li>
@@ -191,17 +191,17 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 						className="quick-add__input"
 						value={departmentName}
 						onChange={(e) => setDepartmentName(e.target.value)}
-						placeholder="New department name"
+						placeholder={t("organisation.newDepartmentName")}
 						required
 					/>
 					<button type="submit" className="button" disabled={!departmentName.trim()}>
-						+ Add department
+						{t("organisation.addDepartment")}
 					</button>
 				</form>
 			)}
 
-			<h2>Groups</h2>
-			{groups.length === 0 && <p className="empty-state">No groups yet.</p>}
+			<h2>{t("organisation.groups")}</h2>
+			{groups.length === 0 && <p className="empty-state">{t("organisation.noGroupsYet")}</p>}
 			<ul className="org-structure-list">
 				{groups.map((group) => (
 					<li key={group.id} className="org-structure-list__item">
@@ -219,7 +219,7 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 										refresh();
 									}}
 								/>
-								Share our average with other groups
+								{t("organisation.shareGroupAverage")}
 							</label>
 						)}
 					</li>
@@ -231,11 +231,11 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 						className="quick-add__input"
 						value={groupName}
 						onChange={(e) => setGroupName(e.target.value)}
-						placeholder="New group name"
+						placeholder={t("organisation.newGroupName")}
 						required
 					/>
 					<select value={groupDepartmentId} onChange={(e) => setGroupDepartmentId(e.target.value)}>
-						<option value="">No department</option>
+						<option value="">{t("organisation.noDepartment")}</option>
 						{departments.map((department) => (
 							<option key={department.id} value={department.id}>
 								{department.name}
@@ -243,12 +243,12 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 						))}
 					</select>
 					<button type="submit" className="button" disabled={!groupName.trim()}>
-						+ Add group
+						{t("organisation.addGroup")}
 					</button>
 				</form>
 			)}
 
-			<h2>Members</h2>
+			<h2>{t("organisation.members")}</h2>
 			<ul className="org-structure-list">
 				{members.map((member) => (
 					<li key={member.userId} className="org-structure-list__item">
@@ -271,12 +271,12 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 										refresh();
 									}}
 								/>
-								Share my Flow % with my group
+								{t("organisation.shareMyFlow")}
 							</label>
 						)}
 						{canViewFeedbackFor(member) && (
 							<button type="button" className="button" onClick={() => setFeedbackForMember(member)}>
-								Feedback
+								{t("organisation.feedback")}
 							</button>
 						)}
 					</li>

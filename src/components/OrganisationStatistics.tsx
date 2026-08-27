@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMembers } from "../api/organisations";
 import {
@@ -82,31 +83,32 @@ export function OrganisationStatistics({
 		enabled: role === "OWNER",
 	});
 
+	const { t } = useTranslation();
+
 	if (!groupId && !departmentId && role !== "OWNER") {
 		return null;
 	}
 
 	return (
 		<>
-			{groupId && <AggregateSection title="Your group" data={groupQuery.data} />}
-			{groupId && <AggregateTrendSection title="Your group's trend" data={groupTrendQuery.data} />}
-			{departmentId && <AggregateSection title="Your department" data={departmentQuery.data} />}
-			{departmentId && <AggregateTrendSection title="Your department's trend" data={departmentTrendQuery.data} />}
-			{role === "OWNER" && <AggregateSection title="Your organisation" data={organisationQuery.data} />}
-			{role === "OWNER" && <AggregateTrendSection title="Your organisation's trend" data={organisationTrendQuery.data} />}
+			{groupId && <AggregateSection title={t("statistics.yourGroup")} data={groupQuery.data} />}
+			{groupId && <AggregateTrendSection title={t("statistics.yourGroupTrend")} data={groupTrendQuery.data} />}
+			{departmentId && <AggregateSection title={t("statistics.yourDepartment")} data={departmentQuery.data} />}
+			{departmentId && <AggregateTrendSection title={t("statistics.yourDepartmentTrend")} data={departmentTrendQuery.data} />}
+			{role === "OWNER" && <AggregateSection title={t("statistics.yourOrganisation")} data={organisationQuery.data} />}
+			{role === "OWNER" && <AggregateTrendSection title={t("statistics.yourOrganisationTrend")} data={organisationTrendQuery.data} />}
 		</>
 	);
 }
 
 function AggregateTrendSection({ title, data }: { title: string; data?: AggregateTrendResponse }) {
+	const { t } = useTranslation();
 	return (
 		<section className="trend-section">
 			<h2>{title}</h2>
-			{!data && <p className="page-loading">Loading…</p>}
+			{!data && <p className="page-loading">{t("statistics.loading")}</p>}
 			{data?.belowMinimumSize && (
-				<p className="empty-state">
-					Not enough members yet ({data.memberCount}) to show a trend without singling anyone out.
-				</p>
+				<p className="empty-state">{t("statistics.notEnoughMembersForTrend", { count: data.memberCount })}</p>
 			)}
 			{data && !data.belowMinimumSize && data.points && <FlowTrendChart points={data.points} />}
 		</section>
@@ -114,30 +116,29 @@ function AggregateTrendSection({ title, data }: { title: string; data?: Aggregat
 }
 
 function AggregateSection({ title, data }: { title: string; data?: AggregateStatisticsResponse }) {
+	const { t } = useTranslation();
 	return (
 		<section className="aggregate-section">
 			<h2>{title}</h2>
-			{!data && <p className="page-loading">Loading…</p>}
+			{!data && <p className="page-loading">{t("statistics.loading")}</p>}
 			{data?.belowMinimumSize && (
-				<p className="empty-state">
-					Not enough members yet ({data.memberCount}) to show a total without singling anyone out.
-				</p>
+				<p className="empty-state">{t("statistics.notEnoughMembersForTotal", { count: data.memberCount })}</p>
 			)}
 			{data && !data.belowMinimumSize && (
 				<div className="stat-tiles">
 					<div className="stat-tile">
 						<span className="stat-tile__value">{data.memberCount}</span>
-						<span className="stat-tile__label">members</span>
+						<span className="stat-tile__label">{t("statistics.members")}</span>
 					</div>
 					<div className="stat-tile">
 						<span className="stat-tile__value">{data.flowPercentage != null ? `${data.flowPercentage.toFixed(0)}%` : "—"}</span>
-						<span className="stat-tile__label">in flow</span>
+						<span className="stat-tile__label">{t("statistics.inFlow")}</span>
 					</div>
 					<div className="stat-tile">
 						<span className="stat-tile__value" style={{ color: energyDeltaColor(data.averageEnergyDelta) }}>
 							{data.averageEnergyDelta != null ? data.averageEnergyDelta.toFixed(1) : "—"}
 						</span>
-						<span className="stat-tile__label">avg energy delta</span>
+						<span className="stat-tile__label">{t("statistics.avgEnergyDelta")}</span>
 					</div>
 				</div>
 			)}

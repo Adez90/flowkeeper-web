@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, vi } from "vitest";
 import { cleanup } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
+import "../i18n";
 
 // Without Vitest's `globals: true`, @testing-library/react's automatic
 // afterEach(cleanup) never registers, so the DOM from one test leaks into
