@@ -131,6 +131,29 @@ export interface AggregateStatisticsResponse {
 	averageEnergyDelta: number | null;
 }
 
+/** One day's counts within a trend — every day in the requested range gets a point, even one with zero events. */
+export interface TrendPoint {
+	date: string;
+	totalEvents: number;
+	completedEvents: number;
+	flowPercentage: number;
+}
+
+export interface PersonalTrendResponse {
+	rangeStart: string;
+	rangeEndExclusive: string;
+	points: TrendPoint[];
+}
+
+/** A group/department/organisation's day-by-day trend — never one individual's numbers. points is null when belowMinimumSize. */
+export interface AggregateTrendResponse {
+	rangeStart: string;
+	rangeEndExclusive: string;
+	memberCount: number;
+	belowMinimumSize: boolean;
+	points: TrendPoint[] | null;
+}
+
 export interface OrganisationTypeStatisticsResponse {
 	period: StatisticsPeriod;
 	rangeStart: string;

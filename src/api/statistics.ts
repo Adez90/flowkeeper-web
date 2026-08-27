@@ -1,9 +1,11 @@
 import { apiFetchJson } from "./client";
 import type {
 	AggregateStatisticsResponse,
+	AggregateTrendResponse,
 	OrganisationFeedbackResponse,
 	OrganisationTypeStatisticsResponse,
 	PersonalStatisticsResponse,
+	PersonalTrendResponse,
 	StatisticsPeriod,
 } from "./types";
 
@@ -74,6 +76,48 @@ export function fetchOrganisationTypeStatistics(
 	return apiFetchJson<OrganisationTypeStatisticsResponse>(`/api/v1/statistics/organisation/by-type?${params.toString()}`, {
 		token,
 	});
+}
+
+export function fetchPersonalTrend(
+	token: string,
+	accountId: string,
+	rangeStart: string,
+	rangeEndExclusive: string,
+): Promise<PersonalTrendResponse> {
+	const params = new URLSearchParams({ accountId, rangeStart, rangeEndExclusive });
+	return apiFetchJson<PersonalTrendResponse>(`/api/v1/statistics/personal/trend?${params.toString()}`, { token });
+}
+
+export function fetchGroupTrend(
+	token: string,
+	accountId: string,
+	groupId: string,
+	rangeStart: string,
+	rangeEndExclusive: string,
+): Promise<AggregateTrendResponse> {
+	const params = new URLSearchParams({ accountId, groupId, rangeStart, rangeEndExclusive });
+	return apiFetchJson<AggregateTrendResponse>(`/api/v1/statistics/group/trend?${params.toString()}`, { token });
+}
+
+export function fetchDepartmentTrend(
+	token: string,
+	accountId: string,
+	departmentId: string,
+	rangeStart: string,
+	rangeEndExclusive: string,
+): Promise<AggregateTrendResponse> {
+	const params = new URLSearchParams({ accountId, departmentId, rangeStart, rangeEndExclusive });
+	return apiFetchJson<AggregateTrendResponse>(`/api/v1/statistics/department/trend?${params.toString()}`, { token });
+}
+
+export function fetchOrganisationTrend(
+	token: string,
+	accountId: string,
+	rangeStart: string,
+	rangeEndExclusive: string,
+): Promise<AggregateTrendResponse> {
+	const params = new URLSearchParams({ accountId, rangeStart, rangeEndExclusive });
+	return apiFetchJson<AggregateTrendResponse>(`/api/v1/statistics/organisation/trend?${params.toString()}`, { token });
 }
 
 export function fetchOrganisationFeedback(token: string, accountId: string): Promise<OrganisationFeedbackResponse> {

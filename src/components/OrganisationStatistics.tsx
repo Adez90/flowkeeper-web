@@ -1,8 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchMembers } from "../api/organisations";
-import { fetchDepartmentStatistics, fetchGroupStatistics, fetchOrganisationStatistics } from "../api/statistics";
+import {
+	fetchDepartmentStatistics,
+	fetchDepartmentTrend,
+	fetchGroupStatistics,
+	fetchGroupTrend,
+	fetchOrganisationStatistics,
+	fetchOrganisationTrend,
+} from "../api/statistics";
 import { energyDeltaColor } from "../lib/energy";
-import type { AggregateStatisticsResponse, MemberRole, StatisticsPeriod } from "../api/types";
+import { FlowTrendChart } from "./FlowTrendChart";
+import type { AggregateStatisticsResponse, AggregateTrendResponse, MemberRole, StatisticsPeriod } from "../api/types";
 
 interface OrganisationStatisticsProps {
 	accountId: string;
@@ -10,6 +18,8 @@ interface OrganisationStatisticsProps {
 	role: MemberRole;
 	token: string;
 	period: StatisticsPeriod;
+	trendFrom: string;
+	trendRangeEndExclusive: string;
 }
 
 /**
@@ -22,7 +32,15 @@ interface OrganisationStatisticsProps {
  * scope to show automatically here — browsing those is a follow-up on top
  * of the Organisation page's structure view.
  */
-export function OrganisationStatistics({ accountId, meUserId, role, token, period }: OrganisationStatisticsProps) {
+export function OrganisationStatistics({
+	accountId,
+	meUserId,
+	role,
+	token,
+	period,
+	trendFrom,
+	trendRangeEndExclusive,
+}: OrganisationStatisticsProps) {
 	const membersQuery = useQuery({
 		queryKey: ["organisation-members", accountId],
 		queryFn: () => fetchMembers(token, accountId),
@@ -48,6 +66,22 @@ export function OrganisationStatistics({ accountId, meUserId, role, token, perio
 		enabled: role === "OWNER",
 	});
 
+	const groupTrendQuery = useQuery({
+		queryKey: ["group-trend", accountId, groupId, trendFrom, trendRangeEndExclusive],
+		queryFn: () => fetchGroupTrend(token, accountId, groupId as string, trendFrom, trendRangeEndExclusive),
+		enabled: Boolean(groupId),
+	});
+	const departmentTrendQuery = useQuery({
+		queryKey: ["department-trend", accountId, departmentId, trendFrom, trendRangeEndExclusive],
+		queryFn: () => fetchDepartmentTrend(token, accountId, departmentId as string, trendFrom, trendRangeEndExclusive),
+		enabled: Boolean(departmentId),
+	});
+	const organisationTrendQuery = useQuery({
+		queryKey: ["organisation-trend", accountId, trendFrom, trendRangeEndExclusive],
+		queryFn: () => fetchOrganisationTrend(token, accountId, trendFrom, trendRangeEndExclusive),
+		enabled: role === "OWNER",
+	});
+
 	if (!groupId && !departmentId && role !== "OWNER") {
 		return null;
 	}
@@ -55,9 +89,27 @@ export function OrganisationStatistics({ accountId, meUserId, role, token, perio
 	return (
 		<>
 			{groupId && <AggregateSection title="Your group" data={groupQuery.data} />}
+			{groupId && <AggregateTrendSection title="Your group's trend" data={groupTrendQuery.data} />}
 			{departmentId && <AggregateSection title="Your department" data={departmentQuery.data} />}
+			{departmentId && <AggregateTrendSection title="Your department's trend" data={departmentTrendQuery.data} />}
 			{role === "OWNER" && <AggregateSection title="Your organisation" data={organisationQuery.data} />}
+			{role === "OWNER" && <AggregateTrendSection title="Your organisation's trend" data={organisationTrendQuery.data} />}
 		</>
+	);
+}
+
+function AggregateTrendSection({ title, data }: { title: string; data?: AggregateTrendResponse }) {
+	return (
+		<section className="trend-section">
+			<h2>{title}</h2>
+			{!data && <p className="page-loading">Loading…</p>}
+			{data?.belowMinimumSize && (
+				<p className="empty-state">
+					Not enough members yet ({data.memberCount}) to show a trend without singling anyone out.
+				</p>
+			)}
+			{data && !data.belowMinimumSize && data.points && <FlowTrendChart points={data.points} />}
+		</section>
 	);
 }
 

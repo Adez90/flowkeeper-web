@@ -2,13 +2,18 @@ import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPersonalStatistics } from "../api/statistics";
+import { fetchPersonalStatistics, fetchPersonalTrend } from "../api/statistics";
 import { useActiveAccount } from "../context/ActiveAccountContext";
 import { energyDeltaColor } from "../lib/energy";
+import { addDaysIso, toIsoDate } from "../lib/dates";
 import { OrganisationStatistics } from "../components/OrganisationStatistics";
+import { FlowTrendChart } from "../components/FlowTrendChart";
 import type { MeResponse, StatisticsPeriod } from "../api/types";
 
 const PERIODS: StatisticsPeriod[] = ["DAY", "WEEK", "MONTH"];
+
+const TODAY = toIsoDate(new Date());
+const DEFAULT_TREND_FROM = addDaysIso(TODAY, -29);
 
 export function StatisticsPage() {
 	const me = useOutletContext<MeResponse>();
@@ -16,11 +21,19 @@ export function StatisticsPage() {
 	const auth = useAuth();
 	const token = auth.user?.access_token ?? "";
 	const [period, setPeriod] = useState<StatisticsPeriod>("WEEK");
+	const [trendFrom, setTrendFrom] = useState(DEFAULT_TREND_FROM);
+	const [trendTo, setTrendTo] = useState(TODAY);
+	const trendRangeEndExclusive = addDaysIso(trendTo, 1);
 
 	const statsQuery = useQuery({
 		queryKey: ["statistics", accountId, period],
 		queryFn: () => fetchPersonalStatistics(token, accountId, period),
 		enabled: Boolean(accountId),
+	});
+	const trendQuery = useQuery({
+		queryKey: ["personal-trend", accountId, trendFrom, trendRangeEndExclusive],
+		queryFn: () => fetchPersonalTrend(token, accountId, trendFrom, trendRangeEndExclusive),
+		enabled: Boolean(accountId) && trendFrom < trendRangeEndExclusive,
 	});
 
 	return (
@@ -95,8 +108,45 @@ export function StatisticsPage() {
 				</>
 			)}
 
+			<section className="trend-section">
+				<div className="landing-page__toolbar">
+					<h2>Flow % trend</h2>
+					<div className="date-range-picker">
+						<label>
+							From
+							<input
+								type="date"
+								value={trendFrom}
+								max={trendTo}
+								onChange={(event) => setTrendFrom(event.target.value)}
+							/>
+						</label>
+						<label>
+							To
+							<input
+								type="date"
+								value={trendTo}
+								min={trendFrom}
+								max={TODAY}
+								onChange={(event) => setTrendTo(event.target.value)}
+							/>
+						</label>
+					</div>
+				</div>
+				{trendQuery.isLoading && <p className="page-loading">Loading…</p>}
+				{trendQuery.data && <FlowTrendChart points={trendQuery.data.points} />}
+			</section>
+
 			{account.type === "ORGANISATION" && (
-				<OrganisationStatistics accountId={accountId} meUserId={me.userId} role={account.role} token={token} period={period} />
+				<OrganisationStatistics
+					accountId={accountId}
+					meUserId={me.userId}
+					role={account.role}
+					token={token}
+					period={period}
+					trendFrom={trendFrom}
+					trendRangeEndExclusive={trendRangeEndExclusive}
+				/>
 			)}
 		</div>
 	);

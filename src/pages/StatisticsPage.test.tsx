@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { screen, waitFor } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useAuth } from "react-oidc-context";
 import type { AuthContextProps } from "react-oidc-context";
@@ -8,6 +8,7 @@ import { renderWithProviders } from "../test/testUtils";
 import { StatisticsPage } from "./StatisticsPage";
 import * as statisticsApi from "../api/statistics";
 import { useActiveAccount } from "../context/ActiveAccountContext";
+import { addDaysIso, toIsoDate } from "../lib/dates";
 import type { AccountSummary, MeResponse, PersonalStatisticsResponse } from "../api/types";
 
 vi.mock("react-oidc-context", () => ({ useAuth: vi.fn() }));
@@ -95,5 +96,50 @@ describe("StatisticsPage", () => {
 		renderWithProviders(<StatisticsPage />);
 
 		await screen.findByText("Nothing in this range yet.");
+	});
+
+	it("fetches and renders the personal Flow % trend for the default 30-day range", async () => {
+		mockedStatisticsApi.fetchPersonalStatistics.mockResolvedValue(statsFor());
+		mockedStatisticsApi.fetchPersonalTrend.mockResolvedValue({
+			rangeStart: "2026-02-15",
+			rangeEndExclusive: "2026-03-17",
+			points: [
+				{ date: "2026-03-15", totalEvents: 2, completedEvents: 2, flowPercentage: 50 },
+				{ date: "2026-03-16", totalEvents: 1, completedEvents: 1, flowPercentage: 100 },
+			],
+		});
+
+		renderWithProviders(<StatisticsPage />);
+
+		await screen.findByText("Flow % trend");
+		await waitFor(() => expect(mockedStatisticsApi.fetchPersonalTrend).toHaveBeenCalled());
+		expect(screen.getByRole("img", { name: "Flow percentage trend" })).toBeTruthy();
+	});
+
+	it("changing the trend 'to' date re-fetches with the new range", async () => {
+		mockedStatisticsApi.fetchPersonalStatistics.mockResolvedValue(statsFor());
+		mockedStatisticsApi.fetchPersonalTrend.mockResolvedValue({
+			rangeStart: "2026-02-15",
+			rangeEndExclusive: "2026-03-17",
+			points: [],
+		});
+
+		renderWithProviders(<StatisticsPage />);
+		await waitFor(() => expect(mockedStatisticsApi.fetchPersonalTrend).toHaveBeenCalled());
+
+		// A day still within the default 30-day window but earlier than today,
+		// so the range stays valid (trendFrom < new "to") regardless of what
+		// today happens to be when this test runs.
+		const newTo = addDaysIso(toIsoDate(new Date()), -3);
+		fireEvent.change(screen.getByLabelText("To"), { target: { value: newTo } });
+
+		await waitFor(() =>
+			expect(mockedStatisticsApi.fetchPersonalTrend).toHaveBeenLastCalledWith(
+				"test-token",
+				"account-1",
+				expect.any(String),
+				addDaysIso(newTo, 1),
+			),
+		);
 	});
 });
