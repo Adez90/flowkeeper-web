@@ -28,6 +28,7 @@ describe("CreateEventDialog", () => {
 			ingoingNote: "quick run",
 			outgoingEnergy: null,
 			outgoingNote: null,
+			shareAnonymously: false,
 			startedAt: "2026-01-01T10:00:00Z",
 			completedAt: null,
 		});

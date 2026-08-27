@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { AppHeader } from "./AppHeader";
-import type { MeResponse } from "../api/types";
+import { ActiveAccountProvider } from "../context/ActiveAccountContext";
+import type { AccountSummary, MeResponse } from "../api/types";
 
 function baseMe(overrides: Partial<MeResponse> = {}): MeResponse {
 	return {
@@ -16,6 +17,9 @@ function baseMe(overrides: Partial<MeResponse> = {}): MeResponse {
 		...overrides,
 	};
 }
+
+const PERSONAL: AccountSummary = { accountId: "personal-1", name: "Anders Johansson", type: "PERSONAL", role: "OWNER" };
+const ORG: AccountSummary = { accountId: "org-1", name: "Acme AB", type: "ORGANISATION", role: "OWNER" };
 
 describe("AppHeader", () => {
 	it("shows the first letter of the display name when there's no avatar", () => {
@@ -61,5 +65,48 @@ describe("AppHeader", () => {
 		);
 
 		expect(screen.getByLabelText("Your information")).toHaveAttribute("href", "/app/profile");
+	});
+
+	it("doesn't show an account switcher with only one account", () => {
+		render(
+			<MemoryRouter>
+				<AppHeader me={baseMe({ accounts: [PERSONAL] })} />
+			</MemoryRouter>,
+		);
+
+		expect(screen.queryByLabelText("Active account")).not.toBeInTheDocument();
+	});
+
+	it("shows an account switcher once there's more than one account", () => {
+		const me = baseMe({ accounts: [PERSONAL, ORG] });
+		render(
+			<MemoryRouter>
+				<ActiveAccountProvider me={me}>
+					<AppHeader me={me} />
+				</ActiveAccountProvider>
+			</MemoryRouter>,
+		);
+
+		expect(screen.getByLabelText("Active account")).toBeInTheDocument();
+	});
+
+	it("only shows the Feedback link for an organisation owner", () => {
+		render(
+			<MemoryRouter>
+				<AppHeader me={baseMe()} activeAccountType="ORGANISATION" activeAccountRole="OWNER" />
+			</MemoryRouter>,
+		);
+
+		expect(screen.getByRole("link", { name: "Feedback" })).toBeInTheDocument();
+	});
+
+	it("hides the Feedback link for a plain organisation member", () => {
+		render(
+			<MemoryRouter>
+				<AppHeader me={baseMe()} activeAccountType="ORGANISATION" activeAccountRole="MEMBER" />
+			</MemoryRouter>,
+		);
+
+		expect(screen.queryByRole("link", { name: "Feedback" })).not.toBeInTheDocument();
 	});
 });

@@ -7,10 +7,12 @@ import * as reactRouterDom from "react-router-dom";
 import { renderWithProviders } from "../test/testUtils";
 import { StatisticsPage } from "./StatisticsPage";
 import * as statisticsApi from "../api/statistics";
-import type { MeResponse, PersonalStatisticsResponse } from "../api/types";
+import { useActiveAccount } from "../context/ActiveAccountContext";
+import type { AccountSummary, MeResponse, PersonalStatisticsResponse } from "../api/types";
 
 vi.mock("react-oidc-context", () => ({ useAuth: vi.fn() }));
 vi.mock("../api/statistics");
+vi.mock("../context/ActiveAccountContext", () => ({ useActiveAccount: vi.fn() }));
 vi.mock("react-router-dom", async (importOriginal) => {
 	const actual = await importOriginal<typeof reactRouterDom>();
 	return { ...actual, useOutletContext: vi.fn() };
@@ -18,7 +20,10 @@ vi.mock("react-router-dom", async (importOriginal) => {
 
 const mockedUseAuth = vi.mocked(useAuth);
 const mockedUseOutletContext = vi.mocked(reactRouterDom.useOutletContext);
+const mockedUseActiveAccount = vi.mocked(useActiveAccount);
 const mockedStatisticsApi = vi.mocked(statisticsApi);
+
+const ACCOUNT: AccountSummary = { accountId: "account-1", name: "Anders Johansson", type: "PERSONAL", role: "OWNER" };
 
 const ME: MeResponse = {
 	userId: "u1",
@@ -27,7 +32,7 @@ const ME: MeResponse = {
 	timezone: "UTC",
 	locale: null,
 	avatarUrl: null,
-	accounts: [{ accountId: "account-1", name: "Anders Johansson", type: "PERSONAL", role: "OWNER" }],
+	accounts: [ACCOUNT],
 };
 
 function statsFor(overrides: Partial<PersonalStatisticsResponse> = {}): PersonalStatisticsResponse {
@@ -40,6 +45,7 @@ function statsFor(overrides: Partial<PersonalStatisticsResponse> = {}): Personal
 		openEvents: 2,
 		averageIngoingEnergy: 3.4,
 		averageEnergyDelta: -0.5,
+		flowPercentage: 66.67,
 		byType: [{ eventTypeId: "type-1", label: "Meeting", count: 2, averageEnergyDelta: -1 }],
 		...overrides,
 	};
@@ -49,6 +55,12 @@ describe("StatisticsPage", () => {
 	beforeEach(() => {
 		mockedUseAuth.mockReturnValue({ user: { access_token: "test-token" } } as AuthContextProps);
 		mockedUseOutletContext.mockReturnValue(ME);
+		mockedUseActiveAccount.mockReturnValue({
+			account: ACCOUNT,
+			accountId: ACCOUNT.accountId,
+			accounts: [ACCOUNT],
+			setAccountId: vi.fn(),
+		});
 	});
 
 	it("defaults to the WEEK period and shows the totals", async () => {

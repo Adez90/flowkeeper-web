@@ -406,7 +406,7 @@ button {
 }
 .stat-tiles {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 	gap: 12px;
 	margin-bottom: 8px;
 }
@@ -451,4 +451,102 @@ button {
 .type-breakdown__delta {
 	font-weight: 700;
 	font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Account switcher ---------- */
+.account-switcher {
+	font: inherit;
+	font-size: 0.85rem;
+	font-weight: 600;
+	padding: 6px 10px;
+	border-radius: 8px;
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	background: rgba(255, 255, 255, 0.08);
+	color: white;
+}
+.account-switcher option {
+	color: var(--text);
+}
+
+/* ---------- Organisation structure ---------- */
+.org-structure-list {
+	list-style: none;
+	margin: 0 0 12px;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+.org-structure-list__item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	padding: 10px 14px;
+	font-size: 0.92rem;
+}
+.org-structure-list__meta {
+	color: var(--text-muted);
+	font-size: 0.82rem;
+}
+.sharing-toggle {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	color: var(--text-muted);
+	font-size: 0.82rem;
+	white-space: nowrap;
+	cursor: pointer;
+}
+.quick-add {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 24px;
+}
+.quick-add__input {
+	flex: 1;
+	font: inherit;
+	padding: 9px 11px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	background: var(--surface);
+	color: var(--text);
+}
+.quick-add select {
+	font: inherit;
+	padding: 9px 11px;
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	background: var(--surface);
+	color: var(--text);
+}
+
+/* ---------- Aggregate statistics (group/department/organisation) ---------- */
+.aggregate-section {
+	margin-top: 8px;
+}
+
+/* ---------- Anonymous feedback ---------- */
+.feedback-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+.feedback-list__item {
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-left: 3px solid var(--accent-blue);
+	border-radius: 8px;
+	padding: 10px 14px;
+	font-size: 0.9rem;
+}
+.feedback-list__item p {
+	margin: 4px 0 0;
+	color: var(--text-muted);
 }

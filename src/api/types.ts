@@ -58,6 +58,7 @@ export interface EventResponse {
 	ingoingNote: string | null;
 	outgoingEnergy: number | null;
 	outgoingNote: string | null;
+	shareAnonymously: boolean;
 	startedAt: string;
 	completedAt: string | null;
 }
@@ -90,5 +91,106 @@ export interface PersonalStatisticsResponse {
 	openEvents: number;
 	averageIngoingEnergy: number | null;
 	averageEnergyDelta: number | null;
+	/** Share of completed events "in flow" (ingoing+outgoing energy summing to 4-6) — 0 if none completed. */
+	flowPercentage: number;
 	byType: TypeBreakdown[];
+}
+
+/** A group/department/organisation's rolled-up Flow % — never one individual's number. */
+export interface AggregateStatisticsResponse {
+	period: StatisticsPeriod;
+	rangeStart: string;
+	rangeEndExclusive: string;
+	memberCount: number;
+	/** True when memberCount is below the privacy minimum — the numeric fields are all null in that case. */
+	belowMinimumSize: boolean;
+	totalEvents: number | null;
+	completedEvents: number | null;
+	flowPercentage: number | null;
+	averageEnergyDelta: number | null;
+}
+
+export interface OrganisationTypeStatisticsResponse {
+	period: StatisticsPeriod;
+	rangeStart: string;
+	rangeEndExclusive: string;
+	memberCount: number;
+	belowMinimumSize: boolean;
+	byType: TypeBreakdown[];
+}
+
+export interface AnonymousFeedbackItem {
+	eventTypeLabel: string;
+	ingoingNote: string | null;
+	outgoingNote: string | null;
+	startedAt: string;
+}
+
+export interface OrganisationFeedbackResponse {
+	memberCount: number;
+	belowMinimumSize: boolean;
+	items: AnonymousFeedbackItem[];
+}
+
+export interface OrganisationResponse {
+	accountId: string;
+	name: string;
+	role: MemberRole;
+}
+
+export interface CreateOrganisationRequest {
+	name: string;
+}
+
+export interface DepartmentResponse {
+	id: string;
+	name: string;
+	shareFlowWithPeers: boolean;
+}
+
+export interface CreateDepartmentRequest {
+	name: string;
+}
+
+export interface GroupResponse {
+	id: string;
+	name: string;
+	departmentId: string | null;
+	shareFlowWithPeers: boolean;
+}
+
+export interface CreateGroupRequest {
+	name: string;
+	/** Omit for a Group directly under the Organisation, no Department layer. */
+	departmentId?: string | null;
+}
+
+export interface OrganisationStructureResponse {
+	departments: DepartmentResponse[];
+	groups: GroupResponse[];
+}
+
+export interface MemberResponse {
+	userId: string;
+	displayName: string;
+	email: string;
+	role: MemberRole;
+	departmentId: string | null;
+	groupId: string | null;
+	shareFlowWithPeers: boolean;
+}
+
+export interface AddMemberRequest {
+	email: string;
+	role: MemberRole;
+	departmentId?: string | null;
+	groupId?: string | null;
+}
+
+export interface UpdateSharingRequest {
+	shareFlowWithPeers: boolean;
+}
+
+export interface UpdateEventSharingRequest {
+	shareAnonymously: boolean;
 }

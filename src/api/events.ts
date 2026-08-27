@@ -1,5 +1,12 @@
 import { apiFetchJson } from "./client";
-import type { CompleteEventRequest, CreateEventRequest, EventResponse, EventStatus, EventTypeResponse } from "./types";
+import type {
+	CompleteEventRequest,
+	CreateEventRequest,
+	EventResponse,
+	EventStatus,
+	EventTypeResponse,
+	UpdateEventSharingRequest,
+} from "./types";
 
 export function listEvents(token: string, accountId: string, status?: EventStatus): Promise<EventResponse[]> {
 	const params = new URLSearchParams({ accountId });
@@ -25,6 +32,14 @@ export function createEvent(token: string, body: CreateEventRequest): Promise<Ev
 export function completeEvent(token: string, eventId: string, body: CompleteEventRequest): Promise<EventResponse> {
 	return apiFetchJson<EventResponse>(`/api/v1/events/${eventId}/complete`, {
 		method: "POST",
+		token,
+		body: JSON.stringify(body),
+	});
+}
+
+export function updateEventSharing(token: string, eventId: string, body: UpdateEventSharingRequest): Promise<EventResponse> {
+	return apiFetchJson<EventResponse>(`/api/v1/events/${eventId}/sharing`, {
+		method: "PATCH",
 		token,
 		body: JSON.stringify(body),
 	});

@@ -3,32 +3,21 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useAuth } from "react-oidc-context";
 import type { AuthContextProps } from "react-oidc-context";
-import * as reactRouterDom from "react-router-dom";
 import { renderWithProviders } from "../test/testUtils";
 import { LandingPage } from "./LandingPage";
 import * as eventsApi from "../api/events";
-import type { EventResponse, MeResponse } from "../api/types";
+import { useActiveAccount } from "../context/ActiveAccountContext";
+import type { AccountSummary, EventResponse } from "../api/types";
 
 vi.mock("react-oidc-context", () => ({ useAuth: vi.fn() }));
 vi.mock("../api/events");
-vi.mock("react-router-dom", async (importOriginal) => {
-	const actual = await importOriginal<typeof reactRouterDom>();
-	return { ...actual, useOutletContext: vi.fn() };
-});
+vi.mock("../context/ActiveAccountContext", () => ({ useActiveAccount: vi.fn() }));
 
 const mockedUseAuth = vi.mocked(useAuth);
-const mockedUseOutletContext = vi.mocked(reactRouterDom.useOutletContext);
+const mockedUseActiveAccount = vi.mocked(useActiveAccount);
 const mockedEventsApi = vi.mocked(eventsApi);
 
-const ME: MeResponse = {
-	userId: "u1",
-	displayName: "Anders Johansson",
-	email: "anders@example.com",
-	timezone: "UTC",
-	locale: null,
-	avatarUrl: null,
-	accounts: [{ accountId: "account-1", name: "Anders Johansson", type: "PERSONAL", role: "OWNER" }],
-};
+const ACCOUNT: AccountSummary = { accountId: "account-1", name: "Anders Johansson", type: "PERSONAL", role: "OWNER" };
 
 const OPEN_EVENT: EventResponse = {
 	id: "event-1",
@@ -40,6 +29,7 @@ const OPEN_EVENT: EventResponse = {
 	ingoingNote: null,
 	outgoingEnergy: null,
 	outgoingNote: null,
+	shareAnonymously: false,
 	startedAt: "2026-01-01T10:00:00Z",
 	completedAt: null,
 };
@@ -47,7 +37,12 @@ const OPEN_EVENT: EventResponse = {
 describe("LandingPage", () => {
 	beforeEach(() => {
 		mockedUseAuth.mockReturnValue({ user: { access_token: "test-token" } } as AuthContextProps);
-		mockedUseOutletContext.mockReturnValue(ME);
+		mockedUseActiveAccount.mockReturnValue({
+			account: ACCOUNT,
+			accountId: ACCOUNT.accountId,
+			accounts: [ACCOUNT],
+			setAccountId: vi.fn(),
+		});
 	});
 
 	it("shows an empty state when there are no ongoing events", async () => {

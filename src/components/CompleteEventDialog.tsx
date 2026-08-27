@@ -1,19 +1,28 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { completeEvent } from "../api/events";
+import { completeEvent, updateEventSharing } from "../api/events";
 import { energyColor } from "../lib/energy";
 import type { EventResponse } from "../api/types";
 
 interface CompleteEventDialogProps {
 	event: EventResponse;
 	token: string;
+	/** Only meaningful for an Organisation account — the anonymous-feedback endpoint is organisation-scoped. */
+	showAnonymousSharing?: boolean;
 	onClose: () => void;
 	onCompleted: () => void;
 }
 
-export function CompleteEventDialog({ event, token, onClose, onCompleted }: CompleteEventDialogProps) {
+export function CompleteEventDialog({
+	event,
+	token,
+	showAnonymousSharing = false,
+	onClose,
+	onCompleted,
+}: CompleteEventDialogProps) {
 	const [outgoingEnergy, setOutgoingEnergy] = useState(3);
 	const [outgoingNote, setOutgoingNote] = useState("");
+	const [shareAnonymously, setShareAnonymously] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
@@ -26,6 +35,9 @@ export function CompleteEventDialog({ event, token, onClose, onCompleted }: Comp
 				outgoingEnergy,
 				outgoingNote: outgoingNote.trim() || null,
 			});
+			if (shareAnonymously) {
+				await updateEventSharing(token, event.id, { shareAnonymously: true });
+			}
 			onCompleted();
 		} catch {
 			setError("Couldn't complete that activity — try again.");
@@ -61,6 +73,13 @@ export function CompleteEventDialog({ event, token, onClose, onCompleted }: Comp
 					<span>Note (optional)</span>
 					<textarea value={outgoingNote} onChange={(e) => setOutgoingNote(e.target.value)} rows={2} />
 				</label>
+
+				{showAnonymousSharing && (
+					<label className="sharing-toggle">
+						<input type="checkbox" checked={shareAnonymously} onChange={(e) => setShareAnonymously(e.target.checked)} />
+						Share this note anonymously as organisation feedback
+					</label>
+				)}
 
 				{error && <p className="error-text">{error}</p>}
 

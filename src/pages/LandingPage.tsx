@@ -1,28 +1,25 @@
 import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { listEvents } from "../api/events";
 import { CreateEventDialog } from "../components/CreateEventDialog";
 import { CompleteEventDialog } from "../components/CompleteEventDialog";
+import { useActiveAccount } from "../context/ActiveAccountContext";
 import { energyColor } from "../lib/energy";
-import type { EventResponse, MeResponse } from "../api/types";
+import type { EventResponse } from "../api/types";
 
 export function LandingPage() {
-	const me = useOutletContext<MeResponse>();
+	const { account, accountId } = useActiveAccount();
 	const auth = useAuth();
 	const queryClient = useQueryClient();
 	const token = auth.user?.access_token ?? "";
-	// Every user has a Personal account from registration; Organisation
-	// membership (and picking between multiple accounts) isn't built yet.
-	const accountId = me.accounts[0]?.accountId;
 
 	const [creating, setCreating] = useState(false);
 	const [completingEvent, setCompletingEvent] = useState<EventResponse | null>(null);
 
 	const eventsQuery = useQuery({
 		queryKey: ["events", accountId, "OPEN"],
-		queryFn: () => listEvents(token, accountId ?? "", "OPEN"),
+		queryFn: () => listEvents(token, accountId, "OPEN"),
 		enabled: Boolean(accountId),
 	});
 
@@ -85,6 +82,7 @@ export function LandingPage() {
 				<CompleteEventDialog
 					event={completingEvent}
 					token={token}
+					showAnonymousSharing={account.type === "ORGANISATION"}
 					onClose={() => setCompletingEvent(null)}
 					onCompleted={() => {
 						setCompletingEvent(null);

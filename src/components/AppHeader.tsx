@@ -1,12 +1,16 @@
 import { Link, NavLink } from "react-router-dom";
 import { BrandMark } from "./BrandMark";
+import { AccountSwitcher } from "./AccountSwitcher";
 import type { MeResponse } from "../api/types";
 
 interface AppHeaderProps {
 	me?: MeResponse;
+	/** The active account's role — used only to show/hide the OWNER-only Feedback link. Omit when there's nothing organisation-specific to show yet. */
+	activeAccountRole?: string;
+	activeAccountType?: string;
 }
 
-export function AppHeader({ me }: AppHeaderProps) {
+export function AppHeader({ me, activeAccountRole, activeAccountType }: AppHeaderProps) {
 	const initial = me?.displayName.trim().charAt(0).toUpperCase() || "?";
 
 	return (
@@ -23,7 +27,17 @@ export function AppHeader({ me }: AppHeaderProps) {
 				<NavLink to="/app/statistics" className={({ isActive }) => (isActive ? "active" : undefined)}>
 					Statistics
 				</NavLink>
+				<NavLink to="/app/organisation" className={({ isActive }) => (isActive ? "active" : undefined)}>
+					Organisation
+				</NavLink>
+				{activeAccountType === "ORGANISATION" && activeAccountRole === "OWNER" && (
+					<NavLink to="/app/feedback" className={({ isActive }) => (isActive ? "active" : undefined)}>
+						Feedback
+					</NavLink>
+				)}
 			</nav>
+
+			{me && me.accounts.length > 1 && <AccountSwitcher />}
 
 			<Link to="/app/profile" className="app-header__account" aria-label="Your information">
 				<svg className="app-header__gear" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">

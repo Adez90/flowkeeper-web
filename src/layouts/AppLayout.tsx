@@ -5,7 +5,14 @@ import { AppHeader } from "../components/AppHeader";
 import { fetchMe } from "../api/me";
 import { register } from "../api/registration";
 import { ApiError } from "../api/client";
+import { ActiveAccountProvider, useActiveAccount } from "../context/ActiveAccountContext";
 import type { MeResponse } from "../api/types";
+
+/** The AppHeader needs the active account's role/type for the Feedback nav link — pulled from context once inside the provider. */
+function AppHeaderWithActiveAccount({ me }: { me: MeResponse }) {
+	const { account } = useActiveAccount();
+	return <AppHeader me={me} activeAccountRole={account.role} activeAccountType={account.type} />;
+}
 
 /**
  * Fetches the current profile exactly once per session. A 404 means this
@@ -32,14 +39,26 @@ export function AppLayout() {
 		enabled: Boolean(token),
 	});
 
+	if (!meQuery.data) {
+		return (
+			<div className="app-shell">
+				<AppHeader />
+				<main className="app-shell__content">
+					{meQuery.isLoading && <p className="page-loading">Setting up your account…</p>}
+					{meQuery.isError && <p className="error-text">Couldn't load your account. Try refreshing.</p>}
+				</main>
+			</div>
+		);
+	}
+
 	return (
-		<div className="app-shell">
-			<AppHeader me={meQuery.data} />
-			<main className="app-shell__content">
-				{meQuery.isLoading && <p className="page-loading">Setting up your account…</p>}
-				{meQuery.isError && <p className="error-text">Couldn't load your account. Try refreshing.</p>}
-				{meQuery.data && <Outlet context={meQuery.data} />}
-			</main>
-		</div>
+		<ActiveAccountProvider me={meQuery.data}>
+			<div className="app-shell">
+				<AppHeaderWithActiveAccount me={meQuery.data} />
+				<main className="app-shell__content">
+					<Outlet context={meQuery.data} />
+				</main>
+			</div>
+		</ActiveAccountProvider>
 	);
 }

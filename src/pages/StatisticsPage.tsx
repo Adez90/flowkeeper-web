@@ -3,21 +3,23 @@ import { useOutletContext } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPersonalStatistics } from "../api/statistics";
+import { useActiveAccount } from "../context/ActiveAccountContext";
 import { energyDeltaColor } from "../lib/energy";
+import { OrganisationStatistics } from "../components/OrganisationStatistics";
 import type { MeResponse, StatisticsPeriod } from "../api/types";
 
 const PERIODS: StatisticsPeriod[] = ["DAY", "WEEK", "MONTH"];
 
 export function StatisticsPage() {
 	const me = useOutletContext<MeResponse>();
+	const { account, accountId } = useActiveAccount();
 	const auth = useAuth();
 	const token = auth.user?.access_token ?? "";
-	const accountId = me.accounts[0]?.accountId;
 	const [period, setPeriod] = useState<StatisticsPeriod>("WEEK");
 
 	const statsQuery = useQuery({
 		queryKey: ["statistics", accountId, period],
-		queryFn: () => fetchPersonalStatistics(token, accountId ?? "", period),
+		queryFn: () => fetchPersonalStatistics(token, accountId, period),
 		enabled: Boolean(accountId),
 	});
 
@@ -57,6 +59,10 @@ export function StatisticsPage() {
 							<span className="stat-tile__label">ongoing</span>
 						</div>
 						<div className="stat-tile">
+							<span className="stat-tile__value">{statsQuery.data.flowPercentage.toFixed(0)}%</span>
+							<span className="stat-tile__label">in flow</span>
+						</div>
+						<div className="stat-tile">
 							<span
 								className="stat-tile__value"
 								style={{ color: energyDeltaColor(statsQuery.data.averageEnergyDelta) }}
@@ -87,6 +93,10 @@ export function StatisticsPage() {
 						</ul>
 					)}
 				</>
+			)}
+
+			{account.type === "ORGANISATION" && (
+				<OrganisationStatistics accountId={accountId} meUserId={me.userId} role={account.role} token={token} period={period} />
 			)}
 		</div>
 	);
