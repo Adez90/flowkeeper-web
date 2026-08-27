@@ -58,6 +58,8 @@ against. Keep `types.ts` in sync by hand until then.
 and deploys it to the staging server over SSH. See `flowkeeper-infra`'s
 `DEPLOYMENT.md` for the server setup and required secrets.
 
+Staging: `https://staging.flowkeeper.se`.
+
 ## What's here vs. what's next
 
 - [x] Login/registration via Keycloak (PKCE), landing page, profile editing,
