@@ -238,3 +238,20 @@ export interface UpdateSharingRequest {
 export interface UpdateEventSharingRequest {
 	shareAnonymously: boolean;
 }
+
+export interface CoachFeedbackResponse {
+	id: string;
+	coachId: string;
+	coachDisplayName: string;
+	/** Null for a freeform note not attached to any specific event. */
+	eventId: string | null;
+	eventTypeLabel: string | null;
+	note: string;
+	createdAt: string;
+}
+
+export interface CreateCoachFeedbackRequest {
+	note: string;
+	/** Omit for a freeform note not attached to any specific event. */
+	eventId?: string | null;
+}

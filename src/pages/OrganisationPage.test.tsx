@@ -127,6 +127,45 @@ describe("OrganisationPage", () => {
 			expect(screen.queryByPlaceholderText("New department name")).not.toBeInTheDocument();
 		});
 
+		it("shows the Feedback button to an OWNER for every member", async () => {
+			const peer: MemberResponse = {
+				userId: "u2",
+				displayName: "Someone Else",
+				email: "someone@example.com",
+				role: "MEMBER",
+				departmentId: null,
+				groupId: null,
+				shareFlowWithPeers: false,
+			};
+			mockedOrganisationsApi.fetchMembers.mockResolvedValue([...members, peer]);
+
+			renderWithProviders(<OrganisationPage />);
+
+			await screen.findByText("Someone Else", { exact: false });
+			expect(screen.getAllByRole("button", { name: "Feedback" })).toHaveLength(2);
+		});
+
+		it("hides the Feedback button from a plain member for a peer they don't supervise", async () => {
+			setActiveAccount({ ...ORG, role: "MEMBER" });
+			const self: MemberResponse = { ...members[0], role: "MEMBER" };
+			const peer: MemberResponse = {
+				userId: "u2",
+				displayName: "Someone Else",
+				email: "someone@example.com",
+				role: "MEMBER",
+				departmentId: null,
+				groupId: null,
+				shareFlowWithPeers: false,
+			};
+			mockedOrganisationsApi.fetchMembers.mockResolvedValue([self, peer]);
+
+			renderWithProviders(<OrganisationPage />);
+
+			await screen.findByText("Someone Else", { exact: false });
+			// Only the caller's own row gets a Feedback button (self-view), not the peer's.
+			expect(screen.getAllByRole("button", { name: "Feedback" })).toHaveLength(1);
+		});
+
 		it("lets the current user toggle sharing their own Flow % with peers", async () => {
 			mockedOrganisationsApi.updateMemberSharing.mockResolvedValue({ ...members[0], shareFlowWithPeers: true });
 			const user = userEvent.setup();

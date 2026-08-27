@@ -15,7 +15,8 @@ import {
 } from "../api/organisations";
 import { useActiveAccount } from "../context/ActiveAccountContext";
 import { AddMemberDialog } from "../components/AddMemberDialog";
-import type { MeResponse } from "../api/types";
+import { MemberFeedbackDialog } from "../components/MemberFeedbackDialog";
+import type { MemberResponse, MeResponse } from "../api/types";
 
 const MANAGER_ROLES = ["OWNER", "ADMIN"];
 
@@ -83,6 +84,7 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 	const [groupName, setGroupName] = useState("");
 	const [groupDepartmentId, setGroupDepartmentId] = useState("");
 	const [addingMember, setAddingMember] = useState(false);
+	const [feedbackForMember, setFeedbackForMember] = useState<MemberResponse | null>(null);
 
 	const structureQuery = useQuery({
 		queryKey: ["organisation-structure", accountId],
@@ -122,6 +124,30 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 	}
 	function groupName_(id: string | null) {
 		return id ? (groups.find((g) => g.id === id)?.name ?? "—") : "—";
+	}
+
+	const me = members.find((m) => m.userId === meUserId);
+
+	/** Best-effort mirror of the API's own supervisory-ladder check — just for whether to show a "Feedback" button, the API still enforces the real rule. */
+	function supervises(member: MemberResponse): boolean {
+		if (role === "OWNER") {
+			return true;
+		}
+		if (role === "ADMIN") {
+			if (!me?.departmentId) {
+				return true; // org-wide ADMIN, no department scope of their own
+			}
+			const memberDepartmentId = member.departmentId ?? groups.find((g) => g.id === member.groupId)?.departmentId ?? null;
+			return memberDepartmentId === me.departmentId;
+		}
+		if (role === "COACH") {
+			return Boolean(me?.groupId) && member.groupId === me?.groupId;
+		}
+		return false;
+	}
+
+	function canViewFeedbackFor(member: MemberResponse): boolean {
+		return member.userId === meUserId || supervises(member);
 	}
 
 	return (
@@ -248,9 +274,25 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 								Share my Flow % with my group
 							</label>
 						)}
+						{canViewFeedbackFor(member) && (
+							<button type="button" className="button" onClick={() => setFeedbackForMember(member)}>
+								Feedback
+							</button>
+						)}
 					</li>
 				))}
 			</ul>
+
+			{feedbackForMember && (
+				<MemberFeedbackDialog
+					accountId={accountId}
+					token={token}
+					memberId={feedbackForMember.userId}
+					memberDisplayName={feedbackForMember.displayName}
+					canWrite={feedbackForMember.userId !== meUserId && supervises(feedbackForMember)}
+					onClose={() => setFeedbackForMember(null)}
+				/>
+			)}
 
 			{addingMember && (
 				<AddMemberDialog

@@ -294,6 +294,42 @@ button {
 	gap: 8px;
 	margin-top: 8px;
 }
+.dialog--wide {
+	max-width: 520px;
+	max-height: 85vh;
+	overflow-y: auto;
+}
+
+/* ---------- Coach feedback ---------- */
+.feedback-thread {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	max-height: 240px;
+	overflow-y: auto;
+}
+.feedback-thread__item {
+	background: var(--surface-2);
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	padding: 10px 12px;
+}
+.feedback-thread__meta {
+	display: flex;
+	justify-content: space-between;
+	color: var(--text-muted);
+	font-size: 0.78rem;
+	margin-bottom: 4px;
+}
+.feedback-thread__event {
+	color: var(--text-muted);
+	font-size: 0.82rem;
+	font-style: italic;
+	margin: 0 0 4px;
+}
 
 /* ---------- Forms ---------- */
 .field {
