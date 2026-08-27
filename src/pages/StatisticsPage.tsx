@@ -8,6 +8,7 @@ import { energyDeltaColor } from "../lib/energy";
 import { addDaysIso, toIsoDate } from "../lib/dates";
 import { OrganisationStatistics } from "../components/OrganisationStatistics";
 import { FlowTrendChart } from "../components/FlowTrendChart";
+import { DiaryExportSection } from "../components/DiaryExportSection";
 import type { MeResponse, StatisticsPeriod } from "../api/types";
 
 const PERIODS: StatisticsPeriod[] = ["DAY", "WEEK", "MONTH"];
@@ -136,6 +137,8 @@ export function StatisticsPage() {
 				{trendQuery.isLoading && <p className="page-loading">Loading…</p>}
 				{trendQuery.data && <FlowTrendChart points={trendQuery.data.points} />}
 			</section>
+
+			{account.type === "PERSONAL" && <DiaryExportSection accountId={accountId} token={token} displayName={me.displayName} />}
 
 			{account.type === "ORGANISATION" && (
 				<OrganisationStatistics
