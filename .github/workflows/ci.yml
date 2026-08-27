@@ -39,6 +39,15 @@ jobs:
         with:
           context: .
           push: true
+          # These become import.meta.env.VITE_* in the built JS bundle — not
+          # secrets, just the one staging environment's public URLs (any
+          # browser can see them regardless). There's only one deploy target
+          # right now, so hardcoding it here matches how the other repos'
+          # pipelines already work; revisit if a second environment shows up.
+          build-args: |
+            VITE_API_BASE_URL=https://api.staging.flowkeeper.se
+            VITE_KEYCLOAK_AUTHORITY=https://auth.staging.flowkeeper.se/realms/flowkeeper
+            VITE_KEYCLOAK_CLIENT_ID=flowkeeper-web
           tags: |
             ghcr.io/adez90/flowkeeper-web:latest
             ghcr.io/adez90/flowkeeper-web:${{ github.sha }}
