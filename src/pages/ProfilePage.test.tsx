@@ -52,9 +52,7 @@ describe("ProfilePage", () => {
 
 		renderWithProviders(<ProfilePage />);
 
-		const timezoneInput = screen.getByLabelText("Timezone");
-		await user.clear(timezoneInput);
-		await user.type(timezoneInput, "Europe/Stockholm");
+		await user.selectOptions(screen.getByLabelText("Timezone"), "Europe/Stockholm");
 		await user.click(screen.getByRole("button", { name: "Save changes" }));
 
 		await screen.findByText("Saved.");
@@ -74,11 +72,17 @@ describe("ProfilePage", () => {
 
 		await user.click(screen.getByRole("button", { name: "Save changes" }));
 
-		await waitFor(() =>
-			expect(
-				screen.getByText("Couldn't save — check the timezone is a real one (e.g. Europe/Stockholm) and try again."),
-			).toBeInTheDocument(),
-		);
+		await screen.findByText("Couldn't save — try again.");
+	});
+
+	it("offers a real IANA timezone dropdown, not free text", () => {
+		renderWithProviders(<ProfilePage />);
+
+		const select = screen.getByLabelText("Timezone") as HTMLSelectElement;
+		expect(select.tagName).toBe("SELECT");
+		const values = Array.from(select.options).map((option) => option.value);
+		expect(values).toContain("Europe/Stockholm");
+		expect(values).toContain("America/New_York");
 	});
 
 	it("shows the current reminder-channel preferences", () => {

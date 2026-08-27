@@ -4,7 +4,10 @@ import { useOutletContext } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
 import { useQueryClient } from "@tanstack/react-query";
 import { updateNotificationPreferences, updateProfile } from "../api/me";
+import { listTimezones, timezoneLabel } from "../lib/timezones";
 import type { MeResponse } from "../api/types";
+
+const TIMEZONES = listTimezones();
 
 export function ProfilePage() {
 	const me = useOutletContext<MeResponse>();
@@ -44,7 +47,7 @@ export function ProfilePage() {
 			await queryClient.invalidateQueries({ queryKey: ["me"] });
 			setSaved(true);
 		} catch {
-			setError("Couldn't save — check the timezone is a real one (e.g. Europe/Stockholm) and try again.");
+			setError("Couldn't save — try again.");
 		} finally {
 			setSubmitting(false);
 		}
@@ -61,12 +64,14 @@ export function ProfilePage() {
 
 				<label className="field">
 					<span>Timezone</span>
-					<input
-						value={timezone}
-						onChange={(e) => setTimezone(e.target.value)}
-						placeholder="Europe/Stockholm"
-						required
-					/>
+					<select value={timezone} onChange={(e) => setTimezone(e.target.value)} required>
+						{!TIMEZONES.includes(timezone) && <option value={timezone}>{timezone}</option>}
+						{TIMEZONES.map((zone) => (
+							<option key={zone} value={zone}>
+								{timezoneLabel(zone)}
+							</option>
+						))}
+					</select>
 				</label>
 
 				<label className="field">
