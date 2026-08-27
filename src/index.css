@@ -419,6 +419,13 @@ button {
 	gap: 14px;
 	max-width: 360px;
 }
+.profile-page__avatar {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	max-width: 360px;
+	margin-bottom: 20px;
+}
 .profile-page__preview {
 	width: 64px;
 	height: 64px;

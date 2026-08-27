@@ -1,9 +1,9 @@
 import { useState } from "react";
-import type { FormEvent } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import { useOutletContext } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
 import { useQueryClient } from "@tanstack/react-query";
-import { updateNotificationPreferences, updateProfile } from "../api/me";
+import { updateNotificationPreferences, updateProfile, uploadAvatar } from "../api/me";
 import { listTimezones, timezoneLabel } from "../lib/timezones";
 import type { MeResponse } from "../api/types";
 
@@ -27,10 +27,12 @@ export function ProfilePage() {
 	const [displayName, setDisplayName] = useState(me.displayName);
 	const [timezone, setTimezone] = useState(me.timezone);
 	const [locale, setLocale] = useState(me.locale ?? "");
-	const [avatarUrl, setAvatarUrl] = useState(me.avatarUrl ?? "");
 	const [submitting, setSubmitting] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [saved, setSaved] = useState(false);
+
+	const [avatarUploading, setAvatarUploading] = useState(false);
+	const [avatarError, setAvatarError] = useState<string | null>(null);
 
 	async function handleSubmit(event: FormEvent) {
 		event.preventDefault();
@@ -42,7 +44,7 @@ export function ProfilePage() {
 				displayName,
 				timezone,
 				locale: locale.trim() || null,
-				avatarUrl: avatarUrl.trim() || null,
+				avatarUrl: me.avatarUrl,
 			});
 			await queryClient.invalidateQueries({ queryKey: ["me"] });
 			setSaved(true);
@@ -53,9 +55,36 @@ export function ProfilePage() {
 		}
 	}
 
+	async function handleAvatarSelected(event: ChangeEvent<HTMLInputElement>) {
+		const file = event.target.files?.[0];
+		event.target.value = "";
+		if (!file) return;
+		setAvatarUploading(true);
+		setAvatarError(null);
+		try {
+			await uploadAvatar(token, file);
+			await queryClient.invalidateQueries({ queryKey: ["me"] });
+		} catch {
+			setAvatarError("Couldn't upload that image — try again.");
+		} finally {
+			setAvatarUploading(false);
+		}
+	}
+
 	return (
 		<div className="profile-page">
 			<h1>Your information</h1>
+
+			<div className="profile-page__avatar">
+				{me.avatarUrl && <img className="profile-page__preview" src={me.avatarUrl} alt="Your avatar" />}
+				<label className="field">
+					<span>Avatar image (optional)</span>
+					<input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => void handleAvatarSelected(e)} disabled={avatarUploading} />
+				</label>
+				{avatarUploading && <p className="dialog__hint">Uploading…</p>}
+				{avatarError && <p className="error-text">{avatarError}</p>}
+			</div>
+
 			<form onSubmit={handleSubmit} className="profile-form">
 				<label className="field">
 					<span>Display name</span>
@@ -78,13 +107,6 @@ export function ProfilePage() {
 					<span>Language (optional)</span>
 					<input value={locale} onChange={(e) => setLocale(e.target.value)} placeholder="en" />
 				</label>
-
-				<label className="field">
-					<span>Avatar image URL (optional)</span>
-					<input value={avatarUrl} onChange={(e) => setAvatarUrl(e.target.value)} placeholder="https://…" />
-				</label>
-
-				{avatarUrl && <img className="profile-page__preview" src={avatarUrl} alt="Avatar preview" />}
 
 				{error && <p className="error-text">{error}</p>}
 				{saved && <p className="success-text">Saved.</p>}

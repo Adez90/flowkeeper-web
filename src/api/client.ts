@@ -35,3 +35,19 @@ export async function apiFetchJson<T>(path: string, options: ApiFetchOptions = {
 	const text = await res.text();
 	return text ? (JSON.parse(text) as T) : (undefined as T);
 }
+
+/** For multipart uploads — the browser must set Content-Type itself (with the multipart boundary), so this can't go through apiFetch's fixed "application/json" header. */
+export async function apiUploadFile<T>(path: string, token: string, file: File): Promise<T> {
+	const formData = new FormData();
+	formData.append("file", file);
+	const res = await fetch(`${API_BASE_URL}${path}`, {
+		method: "POST",
+		headers: { Authorization: `Bearer ${token}` },
+		body: formData,
+	});
+	if (!res.ok) {
+		const body = await res.text();
+		throw new ApiError(res.status, body || res.statusText);
+	}
+	return (await res.json()) as T;
+}

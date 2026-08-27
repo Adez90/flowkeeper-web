@@ -109,4 +109,38 @@ describe("ProfilePage", () => {
 			}),
 		);
 	});
+
+	it("has no avatar preview when no avatar is set, and uploads a selected file", async () => {
+		mockedMeApi.uploadAvatar.mockResolvedValue({ ...ME, avatarUrl: "https://api.example.com/api/v1/avatars/abc.jpg" });
+		const user = userEvent.setup();
+
+		renderWithProviders(<ProfilePage />);
+
+		expect(screen.queryByAltText("Your avatar")).not.toBeInTheDocument();
+
+		const file = new File(["fake-bytes"], "me.jpg", { type: "image/jpeg" });
+		await user.upload(screen.getByLabelText("Avatar image (optional)"), file);
+
+		await waitFor(() => expect(mockedMeApi.uploadAvatar).toHaveBeenCalledWith("test-token", file));
+	});
+
+	it("shows the current avatar as a preview when one is set", () => {
+		mockedUseOutletContext.mockReturnValue({ ...ME, avatarUrl: "https://api.example.com/api/v1/avatars/abc.jpg" });
+
+		renderWithProviders(<ProfilePage />);
+
+		expect(screen.getByAltText("Your avatar")).toHaveAttribute("src", "https://api.example.com/api/v1/avatars/abc.jpg");
+	});
+
+	it("shows an error when the avatar upload fails", async () => {
+		mockedMeApi.uploadAvatar.mockRejectedValue(new Error("too big"));
+		const user = userEvent.setup();
+
+		renderWithProviders(<ProfilePage />);
+
+		const file = new File(["fake-bytes"], "me.jpg", { type: "image/jpeg" });
+		await user.upload(screen.getByLabelText("Avatar image (optional)"), file);
+
+		await screen.findByText("Couldn't upload that image — try again.");
+	});
 });

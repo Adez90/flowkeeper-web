@@ -1,4 +1,4 @@
-import { apiFetchJson } from "./client";
+import { apiFetchJson, apiUploadFile } from "./client";
 import type { MeResponse, UpdateNotificationPreferencesRequest, UpdateProfileRequest, UpdatePushTokenRequest } from "./types";
 
 export function fetchMe(token: string): Promise<MeResponse> {
@@ -27,4 +27,8 @@ export function updatePushToken(token: string, body: UpdatePushTokenRequest): Pr
 		token,
 		body: JSON.stringify(body),
 	});
+}
+
+export function uploadAvatar(token: string, file: File): Promise<MeResponse> {
+	return apiUploadFile<MeResponse>("/api/v1/me/avatar", token, file);
 }
