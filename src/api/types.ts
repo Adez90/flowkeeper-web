@@ -273,3 +273,65 @@ export interface CreateCoachFeedbackRequest {
 	/** Omit for a freeform note not attached to any specific event. */
 	eventId?: string | null;
 }
+
+export type PlanScope = "PERSONAL" | "BUSINESS";
+export type BillingPeriod = "ONE_MONTH" | "THREE_MONTHS" | "SIX_MONTHS" | "TWELVE_MONTHS" | "TWO_YEARS" | "THREE_YEARS" | "FOUR_YEARS" | "FIVE_YEARS";
+export type BillingType = "ONE_TIME" | "RECURRING";
+export type SubscriptionStatus = "INCOMPLETE" | "ACTIVE" | "PAST_DUE" | "CANCELED" | "EXPIRED";
+
+export interface PriceResponse {
+	id: string;
+	period: BillingPeriod;
+	billingType: BillingType;
+	perSeat: boolean;
+	amountMinorUnits: number;
+	currency: string;
+}
+
+export interface PlanResponse {
+	id: string;
+	code: string;
+	scope: PlanScope;
+	name: string;
+	prices: PriceResponse[];
+}
+
+export interface SubscriptionResponse {
+	accountId: string;
+	/** Null for a promo-code-granted trial — it isn't tied to any specific paid price. */
+	priceId: string | null;
+	planScope: PlanScope | null;
+	planCode: string | null;
+	period: BillingPeriod | null;
+	billingType: BillingType | null;
+	seatCount: number | null;
+	status: SubscriptionStatus;
+	currentPeriodEnd: string | null;
+	provider: string;
+}
+
+export interface RedeemPromoCodeRequest {
+	accountId: string;
+	code: string;
+}
+
+export interface GeneratePromoCodeRequest {
+	durationDays: number;
+	maxRedemptions: number;
+	/** Omit for no redeem-by deadline. */
+	expiresAt?: string | null;
+	note?: string | null;
+}
+
+export interface PromoCodeResponse {
+	id: string;
+	code: string;
+	durationDays: number;
+	maxRedemptions: number;
+	redemptionCount: number;
+	expiresAt: string | null;
+	note: string | null;
+	createdByEmail: string;
+	createdAt: string;
+	revokedAt: string | null;
+}

@@ -15,7 +15,8 @@
     "statistics": "Statistiques",
     "organisation": "Organisation",
     "feedback": "Retours",
-    "yourInformation": "Vos informations"
+    "yourInformation": "Vos informations",
+    "billing": "Facturation"
   },
   "accountSwitcher": {
     "label": "Compte actif"
@@ -191,5 +192,48 @@
     "submit": "Enregistrer les modifications",
     "submitting": "Enregistrement…",
     "couldntSubmit": "Impossible d'enregistrer cette activité — veuillez réessayer."
+  },
+  "billing": {
+    "title": "Facturation",
+    "noSubscription": "Aucun forfait actif pour le moment.",
+    "statusLine": "{{status}} jusqu'au {{until}}",
+    "status": {
+      "INCOMPLETE": "Incomplet",
+      "ACTIVE": "Actif",
+      "PAST_DUE": "Impayé",
+      "CANCELED": "Annulé",
+      "EXPIRED": "Expiré"
+    },
+    "redeemCode": "Vous avez un code promo ?",
+    "redeemCodePlaceholder": "ex. ABCD-1234",
+    "redeem": "Utiliser",
+    "redeeming": "Utilisation…",
+    "redeemed": "Code utilisé ! Votre forfait a été mis à jour.",
+    "couldntRedeem": "Impossible d'utiliser ce code — vérifiez-le et réessayez."
+  },
+  "adminPromoCodes": {
+    "title": "Codes d'essai",
+    "durationDays": "Durée (jours)",
+    "maxRedemptions": "Utilisations max",
+    "note": "Note ({{optional}})",
+    "notePlaceholder": "ex. pilote Acme AB",
+    "generate": "Générer un code",
+    "generating": "Génération…",
+    "generated": "Généré :",
+    "couldntGenerate": "Impossible de générer un code — veuillez réessayer.",
+    "existingCodes": "Codes existants",
+    "noneYet": "Aucun code généré pour l'instant.",
+    "code": "Code",
+    "redemptions": "Utilisations",
+    "revoke": "Révoquer",
+    "couldntRevoke": "Impossible de révoquer ce code — veuillez réessayer.",
+    "notAnAdmin": "Vous n'avez pas accès à cette page.",
+    "status": {
+      "label": "Statut",
+      "active": "Actif",
+      "revoked": "Révoqué",
+      "expired": "Expiré",
+      "exhausted": "Entièrement utilisé"
+    }
   }
 }

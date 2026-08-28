@@ -15,7 +15,8 @@
     "statistics": "Statistics",
     "organisation": "Organisation",
     "feedback": "Feedback",
-    "yourInformation": "Your information"
+    "yourInformation": "Your information",
+    "billing": "Billing"
   },
   "accountSwitcher": {
     "label": "Active account"
@@ -191,5 +192,48 @@
     "submit": "Save changes",
     "submitting": "Saving…",
     "couldntSubmit": "Couldn't save that activity — try again."
+  },
+  "billing": {
+    "title": "Billing",
+    "noSubscription": "No active plan yet.",
+    "statusLine": "{{status}} until {{until}}",
+    "status": {
+      "INCOMPLETE": "Incomplete",
+      "ACTIVE": "Active",
+      "PAST_DUE": "Past due",
+      "CANCELED": "Canceled",
+      "EXPIRED": "Expired"
+    },
+    "redeemCode": "Have a promo code?",
+    "redeemCodePlaceholder": "e.g. ABCD-1234",
+    "redeem": "Redeem",
+    "redeeming": "Redeeming…",
+    "redeemed": "Redeemed! Your plan has been updated.",
+    "couldntRedeem": "Couldn't redeem that code — check it and try again."
+  },
+  "adminPromoCodes": {
+    "title": "Trial codes",
+    "durationDays": "Duration (days)",
+    "maxRedemptions": "Max redemptions",
+    "note": "Note ({{optional}})",
+    "notePlaceholder": "e.g. Acme AB pilot",
+    "generate": "Generate code",
+    "generating": "Generating…",
+    "generated": "Generated:",
+    "couldntGenerate": "Couldn't generate a code — try again.",
+    "existingCodes": "Existing codes",
+    "noneYet": "No codes generated yet.",
+    "code": "Code",
+    "redemptions": "Redemptions",
+    "revoke": "Revoke",
+    "couldntRevoke": "Couldn't revoke that code — try again.",
+    "notAnAdmin": "You don't have access to this page.",
+    "status": {
+      "label": "Status",
+      "active": "Active",
+      "revoked": "Revoked",
+      "expired": "Expired",
+      "exhausted": "Fully redeemed"
+    }
   }
 }

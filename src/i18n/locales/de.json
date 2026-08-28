@@ -15,7 +15,8 @@
     "statistics": "Statistik",
     "organisation": "Organisation",
     "feedback": "Feedback",
-    "yourInformation": "Deine Angaben"
+    "yourInformation": "Deine Angaben",
+    "billing": "Abrechnung"
   },
   "accountSwitcher": {
     "label": "Aktives Konto"
@@ -191,5 +192,48 @@
     "submit": "Änderungen speichern",
     "submitting": "Wird gespeichert…",
     "couldntSubmit": "Diese Aktivität konnte nicht gespeichert werden — bitte erneut versuchen."
+  },
+  "billing": {
+    "title": "Abrechnung",
+    "noSubscription": "Noch kein aktiver Plan.",
+    "statusLine": "{{status}} bis {{until}}",
+    "status": {
+      "INCOMPLETE": "Unvollständig",
+      "ACTIVE": "Aktiv",
+      "PAST_DUE": "Überfällig",
+      "CANCELED": "Gekündigt",
+      "EXPIRED": "Abgelaufen"
+    },
+    "redeemCode": "Hast du einen Aktionscode?",
+    "redeemCodePlaceholder": "z. B. ABCD-1234",
+    "redeem": "Einlösen",
+    "redeeming": "Wird eingelöst…",
+    "redeemed": "Eingelöst! Dein Plan wurde aktualisiert.",
+    "couldntRedeem": "Der Code konnte nicht eingelöst werden — bitte prüfen und erneut versuchen."
+  },
+  "adminPromoCodes": {
+    "title": "Testcodes",
+    "durationDays": "Dauer (Tage)",
+    "maxRedemptions": "Max. Einlösungen",
+    "note": "Notiz ({{optional}})",
+    "notePlaceholder": "z. B. Acme AB Pilotprojekt",
+    "generate": "Code erstellen",
+    "generating": "Wird erstellt…",
+    "generated": "Erstellt:",
+    "couldntGenerate": "Code konnte nicht erstellt werden — bitte erneut versuchen.",
+    "existingCodes": "Vorhandene Codes",
+    "noneYet": "Noch keine Codes erstellt.",
+    "code": "Code",
+    "redemptions": "Einlösungen",
+    "revoke": "Widerrufen",
+    "couldntRevoke": "Der Code konnte nicht widerrufen werden — bitte erneut versuchen.",
+    "notAnAdmin": "Du hast keinen Zugriff auf diese Seite.",
+    "status": {
+      "label": "Status",
+      "active": "Aktiv",
+      "revoked": "Widerrufen",
+      "expired": "Abgelaufen",
+      "exhausted": "Vollständig eingelöst"
+    }
   }
 }

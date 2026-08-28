@@ -15,7 +15,8 @@
     "statistics": "Estadísticas",
     "organisation": "Organización",
     "feedback": "Comentarios",
-    "yourInformation": "Tu información"
+    "yourInformation": "Tu información",
+    "billing": "Facturación"
   },
   "accountSwitcher": {
     "label": "Cuenta activa"
@@ -191,5 +192,48 @@
     "submit": "Guardar cambios",
     "submitting": "Guardando…",
     "couldntSubmit": "No se pudo guardar esa actividad — inténtalo de nuevo."
+  },
+  "billing": {
+    "title": "Facturación",
+    "noSubscription": "Todavía no hay un plan activo.",
+    "statusLine": "{{status}} hasta {{until}}",
+    "status": {
+      "INCOMPLETE": "Incompleta",
+      "ACTIVE": "Activa",
+      "PAST_DUE": "Pago pendiente",
+      "CANCELED": "Cancelada",
+      "EXPIRED": "Caducada"
+    },
+    "redeemCode": "¿Tienes un código promocional?",
+    "redeemCodePlaceholder": "p. ej. ABCD-1234",
+    "redeem": "Canjear",
+    "redeeming": "Canjeando…",
+    "redeemed": "¡Canjeado! Tu plan se ha actualizado.",
+    "couldntRedeem": "No se pudo canjear ese código — compruébalo e inténtalo de nuevo."
+  },
+  "adminPromoCodes": {
+    "title": "Códigos de prueba",
+    "durationDays": "Duración (días)",
+    "maxRedemptions": "Canjes máximos",
+    "note": "Nota ({{optional}})",
+    "notePlaceholder": "p. ej. piloto de Acme AB",
+    "generate": "Generar código",
+    "generating": "Generando…",
+    "generated": "Generado:",
+    "couldntGenerate": "No se pudo generar un código — inténtalo de nuevo.",
+    "existingCodes": "Códigos existentes",
+    "noneYet": "Todavía no se ha generado ningún código.",
+    "code": "Código",
+    "redemptions": "Canjes",
+    "revoke": "Revocar",
+    "couldntRevoke": "No se pudo revocar ese código — inténtalo de nuevo.",
+    "notAnAdmin": "No tienes acceso a esta página.",
+    "status": {
+      "label": "Estado",
+      "active": "Activo",
+      "revoked": "Revocado",
+      "expired": "Caducado",
+      "exhausted": "Totalmente canjeado"
+    }
   }
 }

@@ -8,6 +8,8 @@ import { StatisticsPage } from "./pages/StatisticsPage";
 import { OrganisationPage } from "./pages/OrganisationPage";
 import { FeedbackPage } from "./pages/FeedbackPage";
 import { CompletedPage } from "./pages/CompletedPage";
+import { BillingPage } from "./pages/BillingPage";
+import { AdminPromoCodesPage } from "./pages/AdminPromoCodesPage";
 
 export const router = createBrowserRouter([
 	{ path: "/", element: <StartPage /> },
@@ -23,6 +25,9 @@ export const router = createBrowserRouter([
 					{ path: "/app/statistics", element: <StatisticsPage /> },
 					{ path: "/app/organisation", element: <OrganisationPage /> },
 					{ path: "/app/feedback", element: <FeedbackPage /> },
+					{ path: "/app/billing", element: <BillingPage /> },
+					// Not linked from nav — platform-admin only, gated server-side (see PlatformAdmins).
+					{ path: "/app/admin/promo-codes", element: <AdminPromoCodesPage /> },
 				],
 			},
 		],

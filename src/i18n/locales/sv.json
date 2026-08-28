@@ -15,7 +15,8 @@
     "statistics": "Statistik",
     "organisation": "Organisation",
     "feedback": "Feedback",
-    "yourInformation": "Din information"
+    "yourInformation": "Din information",
+    "billing": "Fakturering"
   },
   "accountSwitcher": {
     "label": "Aktivt konto"
@@ -191,5 +192,48 @@
     "submit": "Spara ändringar",
     "submitting": "Sparar…",
     "couldntSubmit": "Kunde inte spara aktiviteten — försök igen."
+  },
+  "billing": {
+    "title": "Fakturering",
+    "noSubscription": "Ingen aktiv plan ännu.",
+    "statusLine": "{{status}} till och med {{until}}",
+    "status": {
+      "INCOMPLETE": "Ofullständig",
+      "ACTIVE": "Aktiv",
+      "PAST_DUE": "Förfallen",
+      "CANCELED": "Avbruten",
+      "EXPIRED": "Utgången"
+    },
+    "redeemCode": "Har du en kampanjkod?",
+    "redeemCodePlaceholder": "t.ex. ABCD-1234",
+    "redeem": "Lös in",
+    "redeeming": "Löser in…",
+    "redeemed": "Inlöst! Din plan har uppdaterats.",
+    "couldntRedeem": "Kunde inte lösa in koden — kontrollera den och försök igen."
+  },
+  "adminPromoCodes": {
+    "title": "Testkoder",
+    "durationDays": "Varaktighet (dagar)",
+    "maxRedemptions": "Max antal inlösen",
+    "note": "Anteckning ({{optional}})",
+    "notePlaceholder": "t.ex. Acme AB pilot",
+    "generate": "Generera kod",
+    "generating": "Genererar…",
+    "generated": "Genererad:",
+    "couldntGenerate": "Kunde inte generera en kod — försök igen.",
+    "existingCodes": "Befintliga koder",
+    "noneYet": "Inga koder genererade ännu.",
+    "code": "Kod",
+    "redemptions": "Inlösta",
+    "revoke": "Återkalla",
+    "couldntRevoke": "Kunde inte återkalla koden — försök igen.",
+    "notAnAdmin": "Du har inte åtkomst till den här sidan.",
+    "status": {
+      "label": "Status",
+      "active": "Aktiv",
+      "revoked": "Återkallad",
+      "expired": "Utgången",
+      "exhausted": "Fullt inlöst"
+    }
   }
 }

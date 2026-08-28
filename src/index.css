@@ -743,3 +743,43 @@ button {
 .notification-bell__item--unread {
 	border-left: 3px solid var(--accent-magenta);
 }
+
+/* ---------- Billing / promo codes ---------- */
+.billing-page__status {
+	font-size: 1.05rem;
+	margin-bottom: 20px;
+}
+.billing-page__redeemed {
+	color: var(--success);
+	font-size: 0.9rem;
+}
+
+.admin-promo-codes-page__generated {
+	margin-top: 12px;
+	font-size: 0.95rem;
+}
+.admin-promo-codes-page__generated code {
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 4px;
+	padding: 2px 6px;
+	font-size: 1rem;
+}
+.admin-promo-codes-page__table-wrap {
+	overflow-x: auto;
+}
+.admin-promo-codes-page__table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 8px;
+	font-size: 0.9rem;
+}
+.admin-promo-codes-page__table th,
+.admin-promo-codes-page__table td {
+	text-align: left;
+	padding: 8px 12px;
+	border-bottom: 1px solid var(--border);
+}
+.admin-promo-codes-page__table code {
+	font-size: 0.95rem;
+}
