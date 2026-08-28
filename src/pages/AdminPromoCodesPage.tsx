@@ -69,6 +69,19 @@ export function AdminPromoCodesPage() {
 		}
 	}
 
+	// Admin status isn't known until this resolves — the generate form (and
+	// the rest of the page) must wait for it rather than rendering
+	// optimistically, or a non-admin briefly sees an admin-only form before
+	// the 403 comes back.
+	if (codesQuery.isLoading) {
+		return (
+			<div className="admin-promo-codes-page">
+				<h1>{t("adminPromoCodes.title")}</h1>
+				<p className="page-loading">{t("common.loading")}</p>
+			</div>
+		);
+	}
+
 	if (codesQuery.isError && codesQuery.error instanceof ApiError && codesQuery.error.status === 403) {
 		return (
 			<div className="admin-promo-codes-page">
@@ -120,7 +133,6 @@ export function AdminPromoCodesPage() {
 			)}
 
 			<h2>{t("adminPromoCodes.existingCodes")}</h2>
-			{codesQuery.isLoading && <p className="page-loading">{t("common.loading")}</p>}
 			{codesQuery.data && codesQuery.data.length === 0 && (
 				<p className="empty-state">{t("adminPromoCodes.noneYet")}</p>
 			)}

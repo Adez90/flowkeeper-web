@@ -41,6 +41,18 @@ describe("AdminPromoCodesPage", () => {
 		await screen.findByText("You don't have access to this page.");
 	});
 
+	it("never renders the generate form before admin status is known, even for a non-admin", async () => {
+		// A deliberately unresolved promise — simulates the window between
+		// mount and the admin check actually coming back.
+		mockedAdminApi.listPromoCodes.mockReturnValue(new Promise(() => {}));
+
+		renderWithProviders(<AdminPromoCodesPage />);
+
+		await screen.findByText("Loading…");
+		expect(screen.queryByLabelText("Duration (days)")).not.toBeInTheDocument();
+		expect(screen.queryByRole("button", { name: "Generate code" })).not.toBeInTheDocument();
+	});
+
 	it("lists existing codes with their redemption counts", async () => {
 		mockedAdminApi.listPromoCodes.mockResolvedValue([CODE]);
 
