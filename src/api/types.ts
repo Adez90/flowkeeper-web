@@ -103,6 +103,17 @@ export interface CompleteEventRequest {
 	outgoingNote: string | null;
 }
 
+/** Full correction of an already-completed event — every field is required, since this replaces the whole record. */
+export interface UpdateEventRequest {
+	eventTypeId: string;
+	ingoingEnergy: number;
+	ingoingNote: string | null;
+	startedAt: string;
+	outgoingEnergy: number;
+	outgoingNote: string | null;
+	completedAt: string;
+}
+
 export interface TypeBreakdown {
 	eventTypeId: string;
 	label: string;

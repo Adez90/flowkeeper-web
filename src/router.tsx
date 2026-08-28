@@ -7,6 +7,7 @@ import { ProfilePage } from "./pages/ProfilePage";
 import { StatisticsPage } from "./pages/StatisticsPage";
 import { OrganisationPage } from "./pages/OrganisationPage";
 import { FeedbackPage } from "./pages/FeedbackPage";
+import { CompletedPage } from "./pages/CompletedPage";
 
 export const router = createBrowserRouter([
 	{ path: "/", element: <StartPage /> },
@@ -17,6 +18,7 @@ export const router = createBrowserRouter([
 				element: <AppLayout />,
 				children: [
 					{ path: "/app", element: <LandingPage /> },
+					{ path: "/app/completed", element: <CompletedPage /> },
 					{ path: "/app/profile", element: <ProfilePage /> },
 					{ path: "/app/statistics", element: <StatisticsPage /> },
 					{ path: "/app/organisation", element: <OrganisationPage /> },

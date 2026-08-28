@@ -5,6 +5,7 @@ import type {
 	EventResponse,
 	EventStatus,
 	EventTypeResponse,
+	UpdateEventRequest,
 	UpdateEventSharingRequest,
 } from "./types";
 
@@ -14,6 +15,17 @@ export function listEvents(token: string, accountId: string, status?: EventStatu
 		params.set("status", status);
 	}
 	return apiFetchJson<EventResponse[]>(`/api/v1/events?${params.toString()}`, { token });
+}
+
+/** The caller's own completed events within [rangeStart, rangeEndExclusive) — dates as yyyy-MM-dd, resolved in the caller's own timezone server-side. */
+export function listMyCompletedEvents(
+	token: string,
+	accountId: string,
+	rangeStart: string,
+	rangeEndExclusive: string,
+): Promise<EventResponse[]> {
+	const params = new URLSearchParams({ accountId, rangeStart, rangeEndExclusive });
+	return apiFetchJson<EventResponse[]>(`/api/v1/events/completed?${params.toString()}`, { token });
 }
 
 export function listEventTypes(token: string, accountId: string): Promise<EventTypeResponse[]> {
@@ -39,6 +51,15 @@ export function completeEvent(token: string, eventId: string, body: CompleteEven
 
 export function updateEventSharing(token: string, eventId: string, body: UpdateEventSharingRequest): Promise<EventResponse> {
 	return apiFetchJson<EventResponse>(`/api/v1/events/${eventId}/sharing`, {
+		method: "PATCH",
+		token,
+		body: JSON.stringify(body),
+	});
+}
+
+/** Full correction of an already-completed event. */
+export function editEvent(token: string, eventId: string, body: UpdateEventRequest): Promise<EventResponse> {
+	return apiFetchJson<EventResponse>(`/api/v1/events/${eventId}`, {
 		method: "PATCH",
 		token,
 		body: JSON.stringify(body),

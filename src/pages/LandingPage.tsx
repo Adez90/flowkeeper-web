@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -37,9 +38,14 @@ export function LandingPage() {
 		<div className="landing-page">
 			<div className="landing-page__toolbar">
 				<h1>{t("landing.title")}</h1>
-				<button type="button" className="button button--primary" onClick={() => setCreating(true)}>
-					{t("landing.logActivity")}
-				</button>
+				<div className="landing-page__toolbar-actions">
+					<Link to="/app/completed" className="button">
+						{t("landing.viewCompleted")}
+					</Link>
+					<button type="button" className="button button--primary" onClick={() => setCreating(true)}>
+						{t("landing.logActivity")}
+					</button>
+				</div>
 			</div>
 
 			{eventsQuery.isLoading && <p className="page-loading">{t("landing.loading")}</p>}

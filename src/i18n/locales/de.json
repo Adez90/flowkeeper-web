@@ -31,7 +31,8 @@
     "couldntLoadEvents": "Deine Aktivitäten konnten nicht geladen werden.",
     "emptyState": "Gerade läuft nichts — erfasse eine Aktivität, um loszulegen.",
     "ingoingEnergy": "Energie zu Beginn {{value}}/5",
-    "complete": "Abschließen"
+    "complete": "Abschließen",
+    "viewCompleted": "Abgeschlossen"
   },
   "events": {
     "type": "Typ",
@@ -179,5 +180,16 @@
     "labelWithUnread": "Benachrichtigungen ({{count}} ungelesen)",
     "nothingYet": "Noch nichts.",
     "markRead": "Als gelesen markieren"
+  },
+  "completed": {
+    "title": "Abgeschlossen",
+    "loading": "Wird geladen…",
+    "emptyState": "In diesem Zeitraum nichts abgeschlossen."
+  },
+  "editEvent": {
+    "title": "Aktivität bearbeiten",
+    "submit": "Änderungen speichern",
+    "submitting": "Wird gespeichert…",
+    "couldntSubmit": "Diese Aktivität konnte nicht gespeichert werden — bitte erneut versuchen."
   }
 }
