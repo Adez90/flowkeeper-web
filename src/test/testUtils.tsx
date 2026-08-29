@@ -15,14 +15,17 @@ function createTestQueryClient() {
 
 // Triggers oxlint's "only export components" fast-refresh rule below,
 // which doesn't apply here — this file is a test helper, never hot-reloaded.
-function Providers({ children }: { children: ReactNode }) {
-	return (
-		<QueryClientProvider client={createTestQueryClient()}>
-			<MemoryRouter>{children}</MemoryRouter>
-		</QueryClientProvider>
-	);
+function makeProviders(initialEntries: string[]) {
+	return function Providers({ children }: { children: ReactNode }) {
+		return (
+			<QueryClientProvider client={createTestQueryClient()}>
+				<MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
+			</QueryClientProvider>
+		);
+	};
 }
 
-export function renderWithProviders(ui: ReactElement) {
-	return render(ui, { wrapper: Providers });
+/** `route` sets the MemoryRouter's starting location — only needed by a test whose component reads the URL itself (useSearchParams, useLocation). */
+export function renderWithProviders(ui: ReactElement, options?: { route?: string }) {
+	return render(ui, { wrapper: makeProviders(options?.route ? [options.route] : ["/"]) });
 }

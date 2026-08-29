@@ -323,6 +323,27 @@ export interface GeneratePromoCodeRequest {
 	note?: string | null;
 }
 
+export type ExternalProvider = "GOOGLE_CALENDAR" | "MICROSOFT_CALENDAR" | "APPLE_CALENDAR" | "STRAVA";
+export type ConnectionStatus = "CONNECTED" | "ERROR" | "DISCONNECTED";
+
+export interface ProviderResponse {
+	provider: ExternalProvider;
+	available: boolean;
+}
+
+export interface ConnectionResponse {
+	id: string;
+	provider: ExternalProvider;
+	status: ConnectionStatus;
+	externalAccountLabel: string | null;
+	lastSyncedAt: string | null;
+	createdAt: string;
+}
+
+export interface AuthorizationUrlResponse {
+	authorizationUrl: string;
+}
+
 export interface PromoCodeResponse {
 	id: string;
 	code: string;

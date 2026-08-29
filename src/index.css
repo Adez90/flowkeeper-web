@@ -754,6 +754,61 @@ button {
 	font-size: 0.9rem;
 }
 
+/* ---------- Calendar/fitness sync ---------- */
+.integrations-page__intro {
+	color: var(--text-muted);
+	max-width: 60ch;
+	margin-bottom: 20px;
+}
+.integrations-page__banner {
+	padding: 10px 14px;
+	border-radius: 8px;
+	font-size: 0.9rem;
+	margin-bottom: 16px;
+}
+.integrations-page__banner--success {
+	background: var(--surface-2);
+	color: var(--success);
+}
+.integrations-page__banner--error {
+	background: var(--surface-2);
+	color: var(--danger);
+}
+.integrations-page__list {
+	list-style: none;
+	margin: 0 0 20px;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+.integrations-page__item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 14px 16px;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: 8px;
+}
+.integrations-page__status {
+	display: block;
+	font-size: 0.85rem;
+	color: var(--text-muted);
+	margin-top: 2px;
+}
+.integrations-page__status--connected {
+	color: var(--success);
+}
+.integrations-page__status--error {
+	color: var(--danger);
+}
+.integrations-page__apple-note {
+	color: var(--text-muted);
+	font-size: 0.88rem;
+}
+
 .admin-promo-codes-page__generated {
 	margin-top: 12px;
 	font-size: 0.95rem;

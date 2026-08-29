@@ -36,6 +36,9 @@ export function AppHeader({ me, activeAccountRole, activeAccountType }: AppHeade
 				<NavLink to="/app/billing" className={({ isActive }) => (isActive ? "active" : undefined)}>
 					{t("nav.billing")}
 				</NavLink>
+				<NavLink to="/app/integrations" className={({ isActive }) => (isActive ? "active" : undefined)}>
+					{t("nav.integrations")}
+				</NavLink>
 				{activeAccountType === "ORGANISATION" && activeAccountRole === "OWNER" && (
 					<NavLink to="/app/feedback" className={({ isActive }) => (isActive ? "active" : undefined)}>
 						{t("nav.feedback")}

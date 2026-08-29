@@ -16,7 +16,8 @@
     "organisation": "Organisation",
     "feedback": "Feedback",
     "yourInformation": "Din information",
-    "billing": "Fakturering"
+    "billing": "Fakturering",
+    "integrations": "Kalendersynk"
   },
   "accountSwitcher": {
     "label": "Aktivt konto"
@@ -210,6 +211,29 @@
     "redeeming": "Löser in…",
     "redeemed": "Inlöst! Din plan har uppdaterats.",
     "couldntRedeem": "Kunde inte lösa in koden — kontrollera den och försök igen."
+  },
+  "integrations": {
+    "title": "Kalender- och träningssynk",
+    "intro": "Länka ett externt kalender- eller träningskonto. Att automatiskt hämta in aktiviteter kommer snart — just nu kopplar detta bara ihop kontot.",
+    "connect": "Anslut",
+    "reconnect": "Anslut igen",
+    "disconnect": "Koppla från",
+    "disconnecting": "Kopplar från…",
+    "connecting": "Ansluter…",
+    "connected": "Ansluten",
+    "connectedAs": "Ansluten som {{label}}",
+    "notAvailable": "Inte tillgängligt än",
+    "errorState": "Det uppstod ett problem med den här anslutningen",
+    "connectedSuccess": "Anslutet! Du kan koppla från när som helst.",
+    "connectedError": "Kunde inte ansluta — försök igen.",
+    "couldntStart": "Kunde inte starta anslutningen — försök igen.",
+    "disconnectConfirm": "Koppla från det här kontot?",
+    "appleNote": "Att läsa direkt från din iPhone- eller Android-kalender finns i FlowKeepers mobilapp.",
+    "providers": {
+      "GOOGLE_CALENDAR": "Google Kalender",
+      "MICROSOFT_CALENDAR": "Outlook / Microsoft Kalender",
+      "STRAVA": "Strava"
+    }
   },
   "adminPromoCodes": {
     "title": "Testkoder",

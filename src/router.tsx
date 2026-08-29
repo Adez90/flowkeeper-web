@@ -9,6 +9,7 @@ import { OrganisationPage } from "./pages/OrganisationPage";
 import { FeedbackPage } from "./pages/FeedbackPage";
 import { CompletedPage } from "./pages/CompletedPage";
 import { BillingPage } from "./pages/BillingPage";
+import { IntegrationsPage } from "./pages/IntegrationsPage";
 import { AdminPromoCodesPage } from "./pages/AdminPromoCodesPage";
 
 export const router = createBrowserRouter([
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
 					{ path: "/app/organisation", element: <OrganisationPage /> },
 					{ path: "/app/feedback", element: <FeedbackPage /> },
 					{ path: "/app/billing", element: <BillingPage /> },
+					{ path: "/app/integrations", element: <IntegrationsPage /> },
 					// Not linked from nav — platform-admin only, gated server-side (see PlatformAdmins).
 					{ path: "/app/admin/promo-codes", element: <AdminPromoCodesPage /> },
 				],

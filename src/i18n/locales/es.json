@@ -16,7 +16,8 @@
     "organisation": "Organización",
     "feedback": "Comentarios",
     "yourInformation": "Tu información",
-    "billing": "Facturación"
+    "billing": "Facturación",
+    "integrations": "Sincr. de calendario"
   },
   "accountSwitcher": {
     "label": "Cuenta activa"
@@ -210,6 +211,29 @@
     "redeeming": "Canjeando…",
     "redeemed": "¡Canjeado! Tu plan se ha actualizado.",
     "couldntRedeem": "No se pudo canjear ese código — compruébalo e inténtalo de nuevo."
+  },
+  "integrations": {
+    "title": "Sincronización de calendario y actividad física",
+    "intro": "Vincula una cuenta externa de calendario o actividad física. La importación automática de actividades llegará pronto — por ahora, esto solo conecta la cuenta.",
+    "connect": "Conectar",
+    "reconnect": "Reconectar",
+    "disconnect": "Desconectar",
+    "disconnecting": "Desconectando…",
+    "connecting": "Conectando…",
+    "connected": "Conectado",
+    "connectedAs": "Conectado como {{label}}",
+    "notAvailable": "Aún no disponible",
+    "errorState": "Hubo un problema con esta conexión",
+    "connectedSuccess": "¡Conectado! Puedes desconectarlo cuando quieras.",
+    "connectedError": "No se pudo conectar — inténtalo de nuevo.",
+    "couldntStart": "No se pudo iniciar la conexión — inténtalo de nuevo.",
+    "disconnectConfirm": "¿Desconectar esta cuenta?",
+    "appleNote": "Leer directamente tu calendario de iPhone o Android está disponible en la app móvil de FlowKeeper.",
+    "providers": {
+      "GOOGLE_CALENDAR": "Google Calendar",
+      "MICROSOFT_CALENDAR": "Outlook / Calendario de Microsoft",
+      "STRAVA": "Strava"
+    }
   },
   "adminPromoCodes": {
     "title": "Códigos de prueba",
