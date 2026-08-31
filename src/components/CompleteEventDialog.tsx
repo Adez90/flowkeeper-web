@@ -53,6 +53,7 @@ export function CompleteEventDialog({
 			<form className="dialog" onSubmit={handleSubmit}>
 				<h2>{t("events.complete.title", { eventType: event.eventTypeLabel })}</h2>
 				<p className="dialog__hint">{t("events.complete.ingoingWas", { value: event.ingoingEnergy })}</p>
+				{event.ingoingNote && <p className="dialog__hint dialog__hint--note">&ldquo;{event.ingoingNote}&rdquo;</p>}
 
 				<label className="field field--energy">
 					<span>

@@ -50,6 +50,19 @@ describe("CompleteEventDialog", () => {
 		expect(screen.getByText("Ingoing energy was 4/5.")).toBeInTheDocument();
 	});
 
+	it("shows the ingoing note so it's clear what's being finished", () => {
+		const withNote = { ...OPEN_EVENT, ingoingNote: "quick sync with the design team" };
+		render(<CompleteEventDialog event={withNote} token="test-token" onClose={vi.fn()} onCompleted={vi.fn()} />);
+
+		expect(screen.getByText("“quick sync with the design team”")).toBeInTheDocument();
+	});
+
+	it("shows nothing extra when there was no ingoing note", () => {
+		render(<CompleteEventDialog event={OPEN_EVENT} token="test-token" onClose={vi.fn()} onCompleted={vi.fn()} />);
+
+		expect(screen.queryByText(/^“.*”$/)).not.toBeInTheDocument();
+	});
+
 	it("shows an error and does not call onCompleted if the API call fails", async () => {
 		mockedEventsApi.completeEvent.mockRejectedValue(new Error("boom"));
 		const onCompleted = vi.fn();

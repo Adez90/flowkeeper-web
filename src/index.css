@@ -306,6 +306,10 @@ button {
 	font-size: 0.9rem;
 	margin: -4px 0 4px;
 }
+.dialog__hint--note {
+	font-style: italic;
+	margin-top: -8px;
+}
 .dialog__actions {
 	display: flex;
 	justify-content: flex-end;
