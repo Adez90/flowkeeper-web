@@ -1,6 +1,8 @@
 import type { EventResponse } from "../api/types";
 
-function energyLabel(ingoing: number, outgoing: number | null): string {
+// ingoing is only ever null for an imported event nobody has started yet,
+// which can't be COMPLETED — the only status this export includes.
+function energyLabel(ingoing: number | null, outgoing: number | null): string {
 	return outgoing != null ? `${ingoing} → ${outgoing}` : `${ingoing} (ongoing)`;
 }
 

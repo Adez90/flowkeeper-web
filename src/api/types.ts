@@ -75,13 +75,23 @@ export interface EventResponse {
 	eventTypeId: string;
 	eventTypeLabel: string;
 	status: EventStatus;
-	ingoingEnergy: number;
+	/** Null only for an imported event nobody has started yet — see StartEventRequest. */
+	ingoingEnergy: number | null;
 	ingoingNote: string | null;
 	outgoingEnergy: number | null;
 	outgoingNote: string | null;
 	shareAnonymously: boolean;
 	startedAt: string;
 	completedAt: string | null;
+	/** Set only for an event brought in from a connected provider. */
+	externalProvider: ExternalProvider | null;
+	/** The provider's own end time — offered as the default when finalizing, never applied automatically. */
+	externalEndedAt: string | null;
+}
+
+export interface StartEventRequest {
+	ingoingEnergy: number;
+	ingoingNote: string | null;
 }
 
 export interface CreateEventRequest {
@@ -101,6 +111,8 @@ export interface CreateEventRequest {
 export interface CompleteEventRequest {
 	outgoingEnergy: number;
 	outgoingNote: string | null;
+	/** Omit to finish now — set to record when the activity actually ended (e.g. an imported event's known end time). */
+	completedAt?: string;
 }
 
 /** Full correction of an already-completed event — every field is required, since this replaces the whole record. */
@@ -342,6 +354,40 @@ export interface ConnectionResponse {
 
 export interface AuthorizationUrlResponse {
 	authorizationUrl: string;
+}
+
+/** One activity/event a provider reports for the requested day, not yet brought into FlowKeeper. */
+export interface ImportableItem {
+	externalId: string;
+	title: string;
+	startedAt: string;
+	endedAt: string;
+}
+
+/**
+ * One connected provider's importable items for the requested day.
+ * needsReconnect is true when the stored connection couldn't be
+ * refreshed (revoked access, an expired refresh token) — items is empty
+ * in that case, and the client should point back at Connect.
+ */
+export interface ImportableGroupResponse {
+	provider: ExternalProvider;
+	needsReconnect: boolean;
+	items: ImportableItem[];
+}
+
+/** One item picked from a prior GET .../importable response, echoed back rather than re-fetched. */
+export interface ImportSelectionRequest {
+	provider: ExternalProvider;
+	externalId: string;
+	eventTypeId: string;
+	startedAt: string;
+	endedAt: string;
+}
+
+export interface ImportEventsRequest {
+	accountId: string;
+	selections: ImportSelectionRequest[];
 }
 
 export interface PromoCodeResponse {

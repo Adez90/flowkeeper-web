@@ -28,6 +28,8 @@ const COMPLETED_EVENT: EventResponse = {
 	shareAnonymously: false,
 	startedAt: "2026-01-01T08:00:00Z",
 	completedAt: "2026-01-01T09:00:00Z",
+	externalProvider: null,
+	externalEndedAt: null,
 };
 
 describe("EditEventDialog", () => {

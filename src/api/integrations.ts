@@ -1,5 +1,13 @@
 import { apiFetchJson } from "./client";
-import type { AuthorizationUrlResponse, ConnectionResponse, ExternalProvider, ProviderResponse } from "./types";
+import type {
+	AuthorizationUrlResponse,
+	ConnectionResponse,
+	EventResponse,
+	ExternalProvider,
+	ImportableGroupResponse,
+	ImportEventsRequest,
+	ProviderResponse,
+} from "./types";
 
 export function listProviders(token: string): Promise<ProviderResponse[]> {
 	return apiFetchJson<ProviderResponse[]>("/api/v1/integrations/providers", { token });
@@ -22,5 +30,22 @@ export function disconnect(token: string, connectionId: string): Promise<void> {
 	return apiFetchJson<void>(`/api/v1/integrations/connections/${connectionId}`, {
 		method: "DELETE",
 		token,
+	});
+}
+
+/** What's importable from every connected provider for one day (defaults to today, in the caller's own timezone) — grouped by provider, already-imported items excluded. */
+export function listImportable(token: string, accountId: string, date?: string): Promise<ImportableGroupResponse[]> {
+	const params = new URLSearchParams({ accountId });
+	if (date) {
+		params.set("date", date);
+	}
+	return apiFetchJson<ImportableGroupResponse[]>(`/api/v1/integrations/importable?${params.toString()}`, { token });
+}
+
+export function importEvents(token: string, body: ImportEventsRequest): Promise<EventResponse[]> {
+	return apiFetchJson<EventResponse[]>("/api/v1/integrations/import", {
+		method: "POST",
+		token,
+		body: JSON.stringify(body),
 	});
 }

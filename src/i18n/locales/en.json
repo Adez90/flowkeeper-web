@@ -34,7 +34,9 @@
     "emptyState": "Nothing ongoing right now — log an activity to get started.",
     "ingoingEnergy": "ingoing energy {{value}}/5",
     "complete": "Complete",
-    "viewCompleted": "Completed"
+    "viewCompleted": "Completed",
+    "needsStart": "Tap Start to add your energy",
+    "start": "Start"
   },
   "events": {
     "type": "Type",
@@ -64,6 +66,25 @@
       "submit": "Complete",
       "submitting": "Saving…",
       "couldntSubmit": "Couldn't complete that activity — try again."
+    },
+    "import": {
+      "button": "Import events",
+      "title": "Import today's activities",
+      "intro": "Pick anything from your connected calendars or Strava you'd like to log — you can press this again later if your plans change.",
+      "couldntLoad": "Couldn't load importable activities — try again.",
+      "empty": "Nothing new to import right now.",
+      "groupEmpty": "Nothing new here right now.",
+      "needsReconnect": "This connection needs reconnecting — visit Calendar sync.",
+      "submit": "Import {{count}} selected",
+      "submitting": "Importing…",
+      "couldntSubmit": "Couldn't import those activities — try again."
+    },
+    "start": {
+      "title": "Start \"{{eventType}}\"",
+      "hint": "Brought in from your calendar — add how it's going so far.",
+      "submit": "Start",
+      "submitting": "Starting…",
+      "couldntSubmit": "Couldn't start that activity — try again."
     }
   },
   "statistics": {
@@ -198,7 +219,11 @@
     "title": "Completed",
     "loading": "Loading…",
     "emptyState": "Nothing completed in this range.",
-    "couldntLoad": "Couldn't load your completed activities — try again."
+    "couldntLoad": "Couldn't load your completed activities — try again.",
+    "delete": "Delete",
+    "deleting": "Deleting…",
+    "deleteConfirm": "Delete this activity? This can't be undone.",
+    "couldntDelete": "Couldn't delete that activity — try again."
   },
   "editEvent": {
     "title": "Edit activity",

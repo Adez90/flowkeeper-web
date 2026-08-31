@@ -36,6 +36,11 @@ export function CompleteEventDialog({
 			await completeEvent(token, event.id, {
 				outgoingEnergy,
 				outgoingNote: outgoingNote.trim() || null,
+				// An imported event already has a known end time from its
+				// provider — use it instead of "now" so the record reflects
+				// when the activity actually finished, not when it happened
+				// to be finalized in the app.
+				completedAt: event.externalEndedAt ?? undefined,
 			});
 			if (shareAnonymously) {
 				await updateEventSharing(token, event.id, { shareAnonymously: true });

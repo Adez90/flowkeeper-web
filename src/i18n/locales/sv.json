@@ -34,7 +34,9 @@
     "emptyState": "Inget pågående just nu — logga en aktivitet för att komma igång.",
     "ingoingEnergy": "energi vid start {{value}}/5",
     "complete": "Slutför",
-    "viewCompleted": "Slutförda"
+    "viewCompleted": "Slutförda",
+    "needsStart": "Tryck Starta för att lägga till energi",
+    "start": "Starta"
   },
   "events": {
     "type": "Typ",
@@ -64,6 +66,25 @@
       "submit": "Slutför",
       "submitting": "Sparar…",
       "couldntSubmit": "Kunde inte slutföra aktiviteten — försök igen."
+    },
+    "import": {
+      "button": "Importera händelser",
+      "title": "Importera dagens aktiviteter",
+      "intro": "Välj vad du vill logga från dina kopplade kalendrar eller Strava — du kan trycka igen senare om dina planer ändras.",
+      "couldntLoad": "Kunde inte hämta importerbara aktiviteter — försök igen.",
+      "empty": "Inget nytt att importera just nu.",
+      "groupEmpty": "Inget nytt här just nu.",
+      "needsReconnect": "Den här kopplingen behöver återanslutas — besök Kalendersynk.",
+      "submit": "Importera {{count}} valda",
+      "submitting": "Importerar…",
+      "couldntSubmit": "Kunde inte importera aktiviteterna — försök igen."
+    },
+    "start": {
+      "title": "Starta \"{{eventType}}\"",
+      "hint": "Hämtad från din kalender — lägg till hur det går hittills.",
+      "submit": "Starta",
+      "submitting": "Startar…",
+      "couldntSubmit": "Kunde inte starta aktiviteten — försök igen."
     }
   },
   "statistics": {
@@ -198,7 +219,11 @@
     "title": "Slutförda",
     "loading": "Laddar…",
     "emptyState": "Inget slutfört i det här intervallet.",
-    "couldntLoad": "Kunde inte läsa in dina avslutade aktiviteter — försök igen."
+    "couldntLoad": "Kunde inte läsa in dina avslutade aktiviteter — försök igen.",
+    "delete": "Radera",
+    "deleting": "Raderar…",
+    "deleteConfirm": "Radera den här aktiviteten? Det går inte att ångra.",
+    "couldntDelete": "Kunde inte radera aktiviteten — försök igen."
   },
   "editEvent": {
     "title": "Redigera aktivitet",

@@ -33,6 +33,8 @@ const MEMBER_EVENT: EventResponse = {
 	shareAnonymously: false,
 	startedAt: "2026-03-09T10:00:00Z",
 	completedAt: "2026-03-09T11:00:00Z",
+	externalProvider: null,
+	externalEndedAt: null,
 };
 
 function renderDialog(canWrite: boolean) {

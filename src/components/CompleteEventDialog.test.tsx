@@ -22,6 +22,8 @@ const OPEN_EVENT: EventResponse = {
 	shareAnonymously: false,
 	startedAt: "2026-01-01T10:00:00Z",
 	completedAt: null,
+	externalProvider: null,
+	externalEndedAt: null,
 };
 
 describe("CompleteEventDialog", () => {
@@ -61,6 +63,24 @@ describe("CompleteEventDialog", () => {
 		render(<CompleteEventDialog event={OPEN_EVENT} token="test-token" onClose={vi.fn()} onCompleted={vi.fn()} />);
 
 		expect(screen.queryByText(/^“.*”$/)).not.toBeInTheDocument();
+	});
+
+	it("uses the provider's known end time for an imported event instead of leaving it to default to now", async () => {
+		const imported = { ...OPEN_EVENT, externalProvider: "STRAVA" as const, externalEndedAt: "2026-01-01T11:00:00Z" };
+		mockedEventsApi.completeEvent.mockResolvedValue({ ...imported, status: "COMPLETED" });
+		const user = userEvent.setup();
+
+		render(<CompleteEventDialog event={imported} token="test-token" onClose={vi.fn()} onCompleted={vi.fn()} />);
+
+		await user.click(screen.getByRole("button", { name: "Complete" }));
+
+		await waitFor(() =>
+			expect(mockedEventsApi.completeEvent).toHaveBeenCalledWith("test-token", "event-1", {
+				outgoingEnergy: 3,
+				outgoingNote: null,
+				completedAt: "2026-01-01T11:00:00Z",
+			}),
+		);
 	});
 
 	it("shows an error and does not call onCompleted if the API call fails", async () => {

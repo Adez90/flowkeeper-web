@@ -5,6 +5,7 @@ import type {
 	EventResponse,
 	EventStatus,
 	EventTypeResponse,
+	StartEventRequest,
 	UpdateEventRequest,
 	UpdateEventSharingRequest,
 } from "./types";
@@ -63,5 +64,21 @@ export function editEvent(token: string, eventId: string, body: UpdateEventReque
 		method: "PATCH",
 		token,
 		body: JSON.stringify(body),
+	});
+}
+
+/** The first interaction with an imported event — sets the ingoing energy a manually-created one already has from the start. */
+export function startEvent(token: string, eventId: string, body: StartEventRequest): Promise<EventResponse> {
+	return apiFetchJson<EventResponse>(`/api/v1/events/${eventId}/start`, {
+		method: "PATCH",
+		token,
+		body: JSON.stringify(body),
+	});
+}
+
+export function deleteEvent(token: string, eventId: string): Promise<void> {
+	return apiFetchJson<void>(`/api/v1/events/${eventId}`, {
+		method: "DELETE",
+		token,
 	});
 }

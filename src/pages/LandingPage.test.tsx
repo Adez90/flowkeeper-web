@@ -6,16 +6,19 @@ import type { AuthContextProps } from "react-oidc-context";
 import { renderWithProviders } from "../test/testUtils";
 import { LandingPage } from "./LandingPage";
 import * as eventsApi from "../api/events";
+import * as integrationsApi from "../api/integrations";
 import { useActiveAccount } from "../context/ActiveAccountContext";
 import type { AccountSummary, EventResponse } from "../api/types";
 
 vi.mock("react-oidc-context", () => ({ useAuth: vi.fn() }));
 vi.mock("../api/events");
+vi.mock("../api/integrations");
 vi.mock("../context/ActiveAccountContext", () => ({ useActiveAccount: vi.fn() }));
 
 const mockedUseAuth = vi.mocked(useAuth);
 const mockedUseActiveAccount = vi.mocked(useActiveAccount);
 const mockedEventsApi = vi.mocked(eventsApi);
+const mockedIntegrationsApi = vi.mocked(integrationsApi);
 
 const ACCOUNT: AccountSummary = { accountId: "account-1", name: "Anders Johansson", type: "PERSONAL", role: "OWNER" };
 
@@ -32,6 +35,15 @@ const OPEN_EVENT: EventResponse = {
 	shareAnonymously: false,
 	startedAt: "2026-01-01T10:00:00Z",
 	completedAt: null,
+	externalProvider: null,
+	externalEndedAt: null,
+};
+
+const IMPORTED_UNSTARTED_EVENT: EventResponse = {
+	...OPEN_EVENT,
+	id: "event-2",
+	ingoingEnergy: null,
+	externalProvider: "STRAVA",
 };
 
 describe("LandingPage", () => {
@@ -82,5 +94,40 @@ describe("LandingPage", () => {
 		await user.click(screen.getByRole("button", { name: "+ Log activity" }));
 
 		expect(screen.getByText("Log an activity")).toBeInTheDocument();
+	});
+
+	it("shows a Start action instead of Complete for an imported event that hasn't been started yet", async () => {
+		mockedEventsApi.listEvents.mockResolvedValue([IMPORTED_UNSTARTED_EVENT]);
+
+		renderWithProviders(<LandingPage />);
+
+		await screen.findByText("Meeting");
+		expect(screen.getByText("Tap Start to add your energy")).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Start" })).toBeInTheDocument();
+		expect(screen.queryByRole("button", { name: "Complete" })).not.toBeInTheDocument();
+	});
+
+	it("opens the start dialog for an imported event", async () => {
+		mockedEventsApi.listEvents.mockResolvedValue([IMPORTED_UNSTARTED_EVENT]);
+		const user = userEvent.setup();
+
+		renderWithProviders(<LandingPage />);
+
+		await user.click(await screen.findByRole("button", { name: "Start" }));
+
+		expect(screen.getByText('Start "Meeting"')).toBeInTheDocument();
+	});
+
+	it("opens the import-events dialog from the toolbar button", async () => {
+		mockedEventsApi.listEvents.mockResolvedValue([]);
+		mockedEventsApi.listEventTypes.mockResolvedValue([]);
+		mockedIntegrationsApi.listImportable.mockResolvedValue([]);
+		const user = userEvent.setup();
+
+		renderWithProviders(<LandingPage />);
+
+		await user.click(screen.getByRole("button", { name: "Import events" }));
+
+		expect(screen.getByText("Import today's activities")).toBeInTheDocument();
 	});
 });

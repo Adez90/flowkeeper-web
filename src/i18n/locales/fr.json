@@ -34,7 +34,9 @@
     "emptyState": "Rien en cours pour le moment — enregistrez une activité pour commencer.",
     "ingoingEnergy": "énergie de départ {{value}}/5",
     "complete": "Terminer",
-    "viewCompleted": "Terminées"
+    "viewCompleted": "Terminées",
+    "needsStart": "Appuyez sur Démarrer pour ajouter votre énergie",
+    "start": "Démarrer"
   },
   "events": {
     "type": "Type",
@@ -64,6 +66,25 @@
       "submit": "Terminer",
       "submitting": "Enregistrement…",
       "couldntSubmit": "Impossible de terminer cette activité — veuillez réessayer."
+    },
+    "import": {
+      "button": "Importer des événements",
+      "title": "Importer les activités du jour",
+      "intro": "Choisissez ce que vous souhaitez enregistrer depuis vos calendriers connectés ou Strava — vous pourrez appuyer à nouveau plus tard si vos plans changent.",
+      "couldntLoad": "Impossible de charger les activités importables — réessayez.",
+      "empty": "Rien de nouveau à importer pour le moment.",
+      "groupEmpty": "Rien de nouveau ici pour le moment.",
+      "needsReconnect": "Cette connexion doit être rétablie — consultez Synchronisation du calendrier.",
+      "submit": "Importer {{count}} sélectionnée(s)",
+      "submitting": "Importation…",
+      "couldntSubmit": "Impossible d'importer ces activités — réessayez."
+    },
+    "start": {
+      "title": "Démarrer « {{eventType}} »",
+      "hint": "Importé depuis votre calendrier — indiquez comment ça se passe jusqu'à présent.",
+      "submit": "Démarrer",
+      "submitting": "Démarrage…",
+      "couldntSubmit": "Impossible de démarrer cette activité — réessayez."
     }
   },
   "statistics": {
@@ -198,7 +219,11 @@
     "title": "Terminées",
     "loading": "Chargement…",
     "emptyState": "Rien de terminé sur cette période.",
-    "couldntLoad": "Impossible de charger vos activités terminées — veuillez réessayer."
+    "couldntLoad": "Impossible de charger vos activités terminées — veuillez réessayer.",
+    "delete": "Supprimer",
+    "deleting": "Suppression…",
+    "deleteConfirm": "Supprimer cette activité ? Cette action est irréversible.",
+    "couldntDelete": "Impossible de supprimer cette activité — réessayez."
   },
   "editEvent": {
     "title": "Modifier l'activité",

@@ -24,6 +24,8 @@ const COMPLETED_EVENT: EventResponse = {
 	shareAnonymously: false,
 	startedAt: "2026-03-10T09:00:00Z",
 	completedAt: "2026-03-10T10:00:00Z",
+	externalProvider: null,
+	externalEndedAt: null,
 };
 
 describe("exportDiaryPdf", () => {

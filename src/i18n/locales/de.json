@@ -34,7 +34,9 @@
     "emptyState": "Gerade läuft nichts — erfasse eine Aktivität, um loszulegen.",
     "ingoingEnergy": "Energie zu Beginn {{value}}/5",
     "complete": "Abschließen",
-    "viewCompleted": "Abgeschlossen"
+    "viewCompleted": "Abgeschlossen",
+    "needsStart": "Tippe auf Starten, um deine Energie hinzuzufügen",
+    "start": "Starten"
   },
   "events": {
     "type": "Typ",
@@ -64,6 +66,25 @@
       "submit": "Abschließen",
       "submitting": "Wird gespeichert…",
       "couldntSubmit": "Diese Aktivität konnte nicht abgeschlossen werden — bitte erneut versuchen."
+    },
+    "import": {
+      "button": "Termine importieren",
+      "title": "Heutige Aktivitäten importieren",
+      "intro": "Wähle aus, was du aus deinen verbundenen Kalendern oder Strava protokollieren möchtest — du kannst später erneut darauf tippen, wenn sich deine Pläne ändern.",
+      "couldntLoad": "Importierbare Aktivitäten konnten nicht geladen werden — versuche es erneut.",
+      "empty": "Gerade nichts Neues zum Importieren.",
+      "groupEmpty": "Gerade nichts Neues hier.",
+      "needsReconnect": "Diese Verbindung muss erneut hergestellt werden — besuche Kalendersynchronisierung.",
+      "submit": "{{count}} ausgewählte importieren",
+      "submitting": "Importiere…",
+      "couldntSubmit": "Diese Aktivitäten konnten nicht importiert werden — versuche es erneut."
+    },
+    "start": {
+      "title": "\"{{eventType}}\" starten",
+      "hint": "Aus deinem Kalender übernommen — füge hinzu, wie es bisher läuft.",
+      "submit": "Starten",
+      "submitting": "Wird gestartet…",
+      "couldntSubmit": "Diese Aktivität konnte nicht gestartet werden — versuche es erneut."
     }
   },
   "statistics": {
@@ -198,7 +219,11 @@
     "title": "Abgeschlossen",
     "loading": "Wird geladen…",
     "emptyState": "In diesem Zeitraum nichts abgeschlossen.",
-    "couldntLoad": "Deine abgeschlossenen Aktivitäten konnten nicht geladen werden — bitte erneut versuchen."
+    "couldntLoad": "Deine abgeschlossenen Aktivitäten konnten nicht geladen werden — bitte erneut versuchen.",
+    "delete": "Löschen",
+    "deleting": "Wird gelöscht…",
+    "deleteConfirm": "Diese Aktivität löschen? Das kann nicht rückgängig gemacht werden.",
+    "couldntDelete": "Die Aktivität konnte nicht gelöscht werden — versuche es erneut."
   },
   "editEvent": {
     "title": "Aktivität bearbeiten",

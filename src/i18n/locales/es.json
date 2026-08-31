@@ -34,7 +34,9 @@
     "emptyState": "No hay nada en curso ahora mismo — registra una actividad para empezar.",
     "ingoingEnergy": "energía inicial {{value}}/5",
     "complete": "Completar",
-    "viewCompleted": "Completadas"
+    "viewCompleted": "Completadas",
+    "needsStart": "Toca Iniciar para añadir tu energía",
+    "start": "Iniciar"
   },
   "events": {
     "type": "Tipo",
@@ -64,6 +66,25 @@
       "submit": "Completar",
       "submitting": "Guardando…",
       "couldntSubmit": "No se pudo completar esa actividad — inténtalo de nuevo."
+    },
+    "import": {
+      "button": "Importar eventos",
+      "title": "Importar las actividades de hoy",
+      "intro": "Elige lo que quieras registrar de tus calendarios conectados o Strava — puedes volver a pulsar esto más tarde si tus planes cambian.",
+      "couldntLoad": "No se pudieron cargar las actividades importables — inténtalo de nuevo.",
+      "empty": "No hay nada nuevo para importar ahora mismo.",
+      "groupEmpty": "Nada nuevo aquí por ahora.",
+      "needsReconnect": "Esta conexión necesita reconectarse — visita Sincronización de calendario.",
+      "submit": "Importar {{count}} seleccionadas",
+      "submitting": "Importando…",
+      "couldntSubmit": "No se pudieron importar esas actividades — inténtalo de nuevo."
+    },
+    "start": {
+      "title": "Iniciar \"{{eventType}}\"",
+      "hint": "Traído de tu calendario — añade cómo va hasta ahora.",
+      "submit": "Iniciar",
+      "submitting": "Iniciando…",
+      "couldntSubmit": "No se pudo iniciar esa actividad — inténtalo de nuevo."
     }
   },
   "statistics": {
@@ -198,7 +219,11 @@
     "title": "Completadas",
     "loading": "Cargando…",
     "emptyState": "Nada completado en este rango.",
-    "couldntLoad": "No se pudieron cargar tus actividades completadas — inténtalo de nuevo."
+    "couldntLoad": "No se pudieron cargar tus actividades completadas — inténtalo de nuevo.",
+    "delete": "Eliminar",
+    "deleting": "Eliminando…",
+    "deleteConfirm": "¿Eliminar esta actividad? No se puede deshacer.",
+    "couldntDelete": "No se pudo eliminar la actividad — inténtalo de nuevo."
   },
   "editEvent": {
     "title": "Editar actividad",

@@ -37,6 +37,8 @@ const COMPLETED_EVENT: EventResponse = {
 	shareAnonymously: false,
 	startedAt: "2026-01-01T08:00:00Z",
 	completedAt: "2026-01-01T09:00:00Z",
+	externalProvider: null,
+	externalEndedAt: null,
 };
 
 const TODAY = toIsoDate(new Date());
@@ -132,5 +134,49 @@ describe("CompletedPage", () => {
 
 		await waitFor(() => expect(screen.queryByText("Edit activity")).not.toBeInTheDocument());
 		await waitFor(() => expect(mockedEventsApi.listMyCompletedEvents).toHaveBeenCalled());
+	});
+
+	it("deletes an event once the confirmation is accepted, and refreshes the list", async () => {
+		mockedEventsApi.listMyCompletedEvents.mockResolvedValue([COMPLETED_EVENT]);
+		mockedEventsApi.deleteEvent.mockResolvedValue(undefined);
+		vi.spyOn(window, "confirm").mockReturnValue(true);
+		const user = userEvent.setup();
+
+		renderWithProviders(<CompletedPage />);
+
+		await screen.findByText("Meeting");
+		mockedEventsApi.listMyCompletedEvents.mockClear();
+		await user.click(screen.getByRole("button", { name: "Delete" }));
+
+		expect(window.confirm).toHaveBeenCalledWith("Delete this activity? This can't be undone.");
+		await waitFor(() => expect(mockedEventsApi.deleteEvent).toHaveBeenCalledWith("test-token", "event-1"));
+		await waitFor(() => expect(mockedEventsApi.listMyCompletedEvents).toHaveBeenCalled());
+	});
+
+	it("does not delete when the confirmation is declined", async () => {
+		mockedEventsApi.listMyCompletedEvents.mockResolvedValue([COMPLETED_EVENT]);
+		vi.spyOn(window, "confirm").mockReturnValue(false);
+		const user = userEvent.setup();
+
+		renderWithProviders(<CompletedPage />);
+
+		await screen.findByText("Meeting");
+		await user.click(screen.getByRole("button", { name: "Delete" }));
+
+		expect(mockedEventsApi.deleteEvent).not.toHaveBeenCalled();
+	});
+
+	it("shows an error rather than failing silently when deleting fails", async () => {
+		mockedEventsApi.listMyCompletedEvents.mockResolvedValue([COMPLETED_EVENT]);
+		mockedEventsApi.deleteEvent.mockRejectedValue(new Error("boom"));
+		vi.spyOn(window, "confirm").mockReturnValue(true);
+		const user = userEvent.setup();
+
+		renderWithProviders(<CompletedPage />);
+
+		await screen.findByText("Meeting");
+		await user.click(screen.getByRole("button", { name: "Delete" }));
+
+		await screen.findByText("Couldn't delete that activity — try again.");
 	});
 });

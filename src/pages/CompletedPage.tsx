@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuth } from "react-oidc-context";
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { listMyCompletedEvents } from "../api/events";
+import { deleteEvent, listMyCompletedEvents } from "../api/events";
 import { EditEventDialog } from "../components/EditEventDialog";
 import { useActiveAccount } from "../context/ActiveAccountContext";
 import { energyColor } from "../lib/energy";
@@ -21,6 +21,8 @@ export function CompletedPage() {
 	const [rangeStart, setRangeStart] = useState(TODAY);
 	const [rangeEnd, setRangeEnd] = useState(TODAY);
 	const [editingEvent, setEditingEvent] = useState<EventResponse | null>(null);
+	const [deletingId, setDeletingId] = useState<string | null>(null);
+	const [deleteError, setDeleteError] = useState<string | null>(null);
 	const rangeEndExclusive = addDaysIso(rangeEnd, 1);
 
 	const eventsQuery = useQuery({
@@ -31,6 +33,22 @@ export function CompletedPage() {
 
 	function refresh() {
 		void queryClient.invalidateQueries({ queryKey: ["completed-events", accountId] });
+	}
+
+	async function handleDelete(event: EventResponse) {
+		if (!window.confirm(t("completed.deleteConfirm"))) {
+			return;
+		}
+		setDeleteError(null);
+		setDeletingId(event.id);
+		try {
+			await deleteEvent(token, event.id);
+			refresh();
+		} catch {
+			setDeleteError(t("completed.couldntDelete"));
+		} finally {
+			setDeletingId(null);
+		}
 	}
 
 	return (
@@ -70,6 +88,7 @@ export function CompletedPage() {
 			{eventsQuery.isLoading && <p className="page-loading">{t("completed.loading")}</p>}
 			{eventsQuery.isError && <p className="error-text">{t("completed.couldntLoad")}</p>}
 			{eventsQuery.data && eventsQuery.data.length === 0 && <p className="empty-state">{t("completed.emptyState")}</p>}
+			{deleteError && <p className="error-text">{deleteError}</p>}
 
 			<ul className="event-list">
 				{eventsQuery.data?.map((event) => (
@@ -80,7 +99,7 @@ export function CompletedPage() {
 								<span className="event-list__meta">
 									<span
 										className="energy-dot"
-										style={{ background: energyColor(event.ingoingEnergy) }}
+										style={{ background: energyColor(event.ingoingEnergy ?? 0) }}
 										aria-hidden="true"
 									/>
 									{t("landing.ingoingEnergy", { value: event.ingoingEnergy })}
@@ -97,6 +116,14 @@ export function CompletedPage() {
 									)}
 								</span>
 							</div>
+						</button>
+						<button
+							type="button"
+							className="button button--danger"
+							onClick={() => void handleDelete(event)}
+							disabled={deletingId === event.id}
+						>
+							{deletingId === event.id ? t("completed.deleting") : t("completed.delete")}
 						</button>
 					</li>
 				))}

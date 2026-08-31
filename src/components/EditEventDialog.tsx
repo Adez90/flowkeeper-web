@@ -24,7 +24,9 @@ export function EditEventDialog({ event, accountId, token, onClose, onSaved }: E
 	});
 
 	const [eventTypeId, setEventTypeId] = useState(event.eventTypeId);
-	const [ingoingEnergy, setIngoingEnergy] = useState(event.ingoingEnergy);
+	// Always non-null here in practice — this dialog only ever opens for an
+	// already-completed event, which can't exist without having been started.
+	const [ingoingEnergy, setIngoingEnergy] = useState(event.ingoingEnergy ?? 3);
 	const [ingoingNote, setIngoingNote] = useState(event.ingoingNote ?? "");
 	const [startedAt, setStartedAt] = useState(() => toDatetimeLocalValue(new Date(event.startedAt)));
 	const [outgoingEnergy, setOutgoingEnergy] = useState(event.outgoingEnergy ?? 3);

@@ -30,6 +30,8 @@ function eventOn(date: string): EventResponse {
 		shareAnonymously: false,
 		startedAt: `${date}T09:00:00Z`,
 		completedAt: `${date}T10:00:00Z`,
+		externalProvider: null,
+		externalEndedAt: null,
 	};
 }
 
