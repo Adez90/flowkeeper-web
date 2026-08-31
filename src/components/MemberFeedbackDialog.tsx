@@ -57,7 +57,10 @@ export function MemberFeedbackDialog({ accountId, token, memberId, memberDisplay
 				<h2>{t("memberFeedbackDialog.titleFor", { displayName: memberDisplayName })}</h2>
 
 				{feedbackQuery.isLoading && <p className="page-loading">{t("memberFeedbackDialog.loading")}</p>}
-				{feedback.length === 0 && !feedbackQuery.isLoading && <p className="empty-state">{t("memberFeedbackDialog.noFeedbackYet")}</p>}
+				{feedbackQuery.isError && <p className="error-text">{t("memberFeedbackDialog.couldntLoad")}</p>}
+				{feedback.length === 0 && !feedbackQuery.isLoading && !feedbackQuery.isError && (
+					<p className="empty-state">{t("memberFeedbackDialog.noFeedbackYet")}</p>
+				)}
 				<ul className="feedback-thread">
 					{feedback.map((item) => (
 						<li key={item.id} className="feedback-thread__item">

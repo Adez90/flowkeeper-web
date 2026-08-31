@@ -148,4 +148,38 @@ describe("IntegrationsPage", () => {
 
 		await screen.findByText(/available in the FlowKeeper mobile app/);
 	});
+
+	it("shows an error instead of an empty 'not available' list when providers fail to load", async () => {
+		mockedIntegrationsApi.listProviders.mockRejectedValue(new Error("boom"));
+		mockedIntegrationsApi.listConnections.mockResolvedValue([]);
+
+		renderWithProviders(<IntegrationsPage />);
+
+		await screen.findByText("Couldn't load integrations — try again.");
+		expect(screen.queryByText("Not available yet")).not.toBeInTheDocument();
+	});
+
+	it("shows an error when the connections list fails to load", async () => {
+		mockedIntegrationsApi.listProviders.mockResolvedValue(ALL_AVAILABLE);
+		mockedIntegrationsApi.listConnections.mockRejectedValue(new Error("boom"));
+
+		renderWithProviders(<IntegrationsPage />);
+
+		await screen.findByText("Couldn't load your connections — try again.");
+	});
+
+	it("shows an error message if disconnecting fails", async () => {
+		mockedIntegrationsApi.listProviders.mockResolvedValue(ALL_AVAILABLE);
+		mockedIntegrationsApi.listConnections.mockResolvedValue([GOOGLE_CONNECTION]);
+		mockedIntegrationsApi.disconnect.mockRejectedValue(new Error("boom"));
+		vi.spyOn(window, "confirm").mockReturnValue(true);
+		const user = userEvent.setup();
+
+		renderWithProviders(<IntegrationsPage />);
+
+		await screen.findByText("Connected as alex@example.com");
+		await user.click(screen.getByRole("button", { name: "Disconnect" }));
+
+		await screen.findByText("Couldn't disconnect — try again.");
+	});
 });

@@ -98,4 +98,14 @@ describe("OrganisationStatistics trend", () => {
 		await screen.findByText("Not enough members yet (2) to show a trend without singling anyone out.");
 		expect(screen.queryByRole("img", { name: "Flow percentage trend" })).toBeNull();
 	});
+
+	it("shows an error instead of an endless loading state when a query fails", async () => {
+		mockedOrganisationsApi.fetchMembers.mockResolvedValue([OWNER]);
+		mockedStatisticsApi.fetchOrganisationStatistics.mockRejectedValue(new Error("boom"));
+		mockedStatisticsApi.fetchOrganisationTrend.mockRejectedValue(new Error("boom"));
+
+		renderTrend();
+
+		await screen.findAllByText("Couldn't load your statistics — try again.");
+	});
 });

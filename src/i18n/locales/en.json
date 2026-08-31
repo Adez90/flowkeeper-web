@@ -52,7 +52,8 @@
       "completedAt": "Completed at",
       "submit": "Log activity",
       "submitting": "Logging…",
-      "couldntSubmit": "Couldn't log that activity — try again."
+      "couldntSubmit": "Couldn't log that activity — try again.",
+      "couldntLoadTypes": "Couldn't load activity types — try again."
     },
     "complete": {
       "title": "Complete \"{{eventType}}\"",
@@ -100,7 +101,8 @@
     "notEnoughMembersForTotal": "Not enough members yet ({{count}}) to show a total without singling anyone out.",
     "notEnoughMembersForTrend": "Not enough members yet ({{count}}) to show a trend without singling anyone out.",
     "noDaysInRange": "No days in this range.",
-    "noActivityInRange": "No activity logged in this range yet."
+    "noActivityInRange": "No activity logged in this range yet.",
+    "couldntLoad": "Couldn't load your statistics — try again."
   },
   "profile": {
     "title": "Your information",
@@ -120,7 +122,8 @@
     "remindersHint": "A nudge if you leave an activity open, or haven't logged anything yet today. Pick whichever channel(s) work for you — none are on by default.",
     "inApp": "In-app",
     "push": "Push notification",
-    "email": "Email"
+    "email": "Email",
+    "couldntUpdateNotifications": "Couldn't update your notification preferences — try again."
   },
   "organisation": {
     "title": "Organisation",
@@ -143,7 +146,11 @@
     "shareGroupAverage": "Share our average with other groups",
     "members": "Members",
     "shareMyFlow": "Share my Flow % with my group",
-    "feedback": "Feedback"
+    "feedback": "Feedback",
+    "couldntLoad": "Couldn't load your organisation — try again.",
+    "couldntCreateDepartment": "Couldn't create that department — try again.",
+    "couldntCreateGroup": "Couldn't create that group — try again.",
+    "couldntUpdateSharing": "Couldn't update that — try again."
   },
   "feedback": {
     "title": "Feedback",
@@ -152,7 +159,8 @@
     "notEnoughMembers": "Not enough members yet ({{count}}) to show this anonymously.",
     "nothingInRange": "Nothing in this range yet.",
     "anonymousNotes": "Anonymous notes",
-    "nobodySharedYet": "Nobody's shared a note yet."
+    "nobodySharedYet": "Nobody's shared a note yet.",
+    "couldntLoad": "Couldn't load this — try again."
   },
   "addMemberDialog": {
     "title": "Add a member",
@@ -175,18 +183,22 @@
     "freeform": "Freeform — not attached to a specific activity",
     "submit": "Add feedback",
     "submitting": "Saving…",
-    "couldntSubmit": "Couldn't save that feedback — try again."
+    "couldntSubmit": "Couldn't save that feedback — try again.",
+    "couldntLoad": "Couldn't load feedback — try again."
   },
   "notifications": {
     "label": "Notifications",
     "labelWithUnread": "Notifications ({{count}} unread)",
     "nothingYet": "Nothing yet.",
-    "markRead": "Mark read"
+    "markRead": "Mark read",
+    "couldntMarkRead": "Couldn't mark that as read — try again.",
+    "couldntLoad": "Couldn't load notifications."
   },
   "completed": {
     "title": "Completed",
     "loading": "Loading…",
-    "emptyState": "Nothing completed in this range."
+    "emptyState": "Nothing completed in this range.",
+    "couldntLoad": "Couldn't load your completed activities — try again."
   },
   "editEvent": {
     "title": "Edit activity",
@@ -210,7 +222,8 @@
     "redeem": "Redeem",
     "redeeming": "Redeeming…",
     "redeemed": "Redeemed! Your plan has been updated.",
-    "couldntRedeem": "Couldn't redeem that code — check it and try again."
+    "couldntRedeem": "Couldn't redeem that code — check it and try again.",
+    "couldntLoadSubscription": "Couldn't load your subscription — try again."
   },
   "integrations": {
     "title": "Calendar & fitness sync",
@@ -233,7 +246,10 @@
       "GOOGLE_CALENDAR": "Google Calendar",
       "MICROSOFT_CALENDAR": "Outlook / Microsoft Calendar",
       "STRAVA": "Strava"
-    }
+    },
+    "couldntLoadProviders": "Couldn't load integrations — try again.",
+    "couldntLoadConnections": "Couldn't load your connections — try again.",
+    "couldntDisconnect": "Couldn't disconnect — try again."
   },
   "adminPromoCodes": {
     "title": "Trial codes",
@@ -258,6 +274,7 @@
       "revoked": "Revoked",
       "expired": "Expired",
       "exhausted": "Fully redeemed"
-    }
+    },
+    "couldntLoad": "Couldn't load promo codes — try again."
   }
 }

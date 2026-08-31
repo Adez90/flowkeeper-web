@@ -76,6 +76,8 @@ export function CreateEventDialog({ accountId, token, onClose, onCreated }: Crea
 						))}
 					</select>
 				</label>
+				{typesQuery.isLoading && <p className="dialog__hint">{t("common.loading")}</p>}
+				{typesQuery.isError && <p className="error-text">{t("events.create.couldntLoadTypes")}</p>}
 
 				<label className="field field--energy">
 					<span>

@@ -91,6 +91,15 @@ export function AdminPromoCodesPage() {
 		);
 	}
 
+	if (codesQuery.isError) {
+		return (
+			<div className="admin-promo-codes-page">
+				<h1>{t("adminPromoCodes.title")}</h1>
+				<p className="error-text">{t("adminPromoCodes.couldntLoad")}</p>
+			</div>
+		);
+	}
+
 	return (
 		<div className="admin-promo-codes-page">
 			<h1>{t("adminPromoCodes.title")}</h1>

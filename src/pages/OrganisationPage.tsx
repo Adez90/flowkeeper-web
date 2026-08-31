@@ -85,6 +85,7 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 	const [groupDepartmentId, setGroupDepartmentId] = useState("");
 	const [addingMember, setAddingMember] = useState(false);
 	const [feedbackForMember, setFeedbackForMember] = useState<MemberResponse | null>(null);
+	const [error, setError] = useState<string | null>(null);
 
 	const structureQuery = useQuery({
 		queryKey: ["organisation-structure", accountId],
@@ -100,19 +101,40 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 		void queryClient.invalidateQueries({ queryKey: ["organisation-members", accountId] });
 	}
 
+	/** Best-effort feedback for a fire-and-forget sharing toggle — the checkbox itself stays controlled by server data, so on failure it just reverts; this is the only visible sign anything went wrong. */
+	async function updateSharing(action: () => Promise<unknown>) {
+		setError(null);
+		try {
+			await action();
+			refresh();
+		} catch {
+			setError(t("organisation.couldntUpdateSharing"));
+		}
+	}
+
 	async function handleCreateDepartment(event: FormEvent) {
 		event.preventDefault();
-		await createDepartment(token, accountId, { name: departmentName.trim() });
-		setDepartmentName("");
-		refresh();
+		setError(null);
+		try {
+			await createDepartment(token, accountId, { name: departmentName.trim() });
+			setDepartmentName("");
+			refresh();
+		} catch {
+			setError(t("organisation.couldntCreateDepartment"));
+		}
 	}
 
 	async function handleCreateGroup(event: FormEvent) {
 		event.preventDefault();
-		await createGroup(token, accountId, { name: groupName.trim(), departmentId: groupDepartmentId || null });
-		setGroupName("");
-		setGroupDepartmentId("");
-		refresh();
+		setError(null);
+		try {
+			await createGroup(token, accountId, { name: groupName.trim(), departmentId: groupDepartmentId || null });
+			setGroupName("");
+			setGroupDepartmentId("");
+			refresh();
+		} catch {
+			setError(t("organisation.couldntCreateGroup"));
+		}
 	}
 
 	const departments = structureQuery.data?.departments ?? [];
@@ -150,6 +172,9 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 		return member.userId === meUserId || supervises(member);
 	}
 
+	const isLoading = structureQuery.isLoading || membersQuery.isLoading;
+	const isError = structureQuery.isError || membersQuery.isError;
+
 	return (
 		<div className="organisation-page">
 			<div className="landing-page__toolbar">
@@ -160,6 +185,10 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 					</button>
 				)}
 			</div>
+
+			{isLoading && <p className="page-loading">{t("common.loading")}</p>}
+			{isError && <p className="error-text">{t("organisation.couldntLoad")}</p>}
+			{error && <p className="error-text">{error}</p>}
 
 			<h2>{t("organisation.departments")}</h2>
 			{departments.length === 0 && <p className="empty-state">{t("organisation.noDepartmentsYet")}</p>}
@@ -172,12 +201,13 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 								<input
 									type="checkbox"
 									checked={department.shareFlowWithPeers}
-									onChange={async (e) => {
-										await updateDepartmentSharing(token, accountId, department.id, {
-											shareFlowWithPeers: e.target.checked,
-										});
-										refresh();
-									}}
+									onChange={(e) =>
+										void updateSharing(() =>
+											updateDepartmentSharing(token, accountId, department.id, {
+												shareFlowWithPeers: e.target.checked,
+											}),
+										)
+									}
 								/>
 								{t("organisation.shareDepartmentAverage")}
 							</label>
@@ -214,10 +244,11 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 								<input
 									type="checkbox"
 									checked={group.shareFlowWithPeers}
-									onChange={async (e) => {
-										await updateGroupSharing(token, accountId, group.id, { shareFlowWithPeers: e.target.checked });
-										refresh();
-									}}
+									onChange={(e) =>
+										void updateSharing(() =>
+											updateGroupSharing(token, accountId, group.id, { shareFlowWithPeers: e.target.checked }),
+										)
+									}
 								/>
 								{t("organisation.shareGroupAverage")}
 							</label>
@@ -266,10 +297,11 @@ function OrganisationStructure({ accountId, role, meUserId }: { accountId: strin
 								<input
 									type="checkbox"
 									checked={member.shareFlowWithPeers}
-									onChange={async (e) => {
-										await updateMemberSharing(token, accountId, { shareFlowWithPeers: e.target.checked });
-										refresh();
-									}}
+									onChange={(e) =>
+										void updateSharing(() =>
+											updateMemberSharing(token, accountId, { shareFlowWithPeers: e.target.checked }),
+										)
+									}
 								/>
 								{t("organisation.shareMyFlow")}
 							</label>

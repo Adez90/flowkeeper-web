@@ -50,6 +50,22 @@ describe("EditEventDialog", () => {
 		expect(screen.getByDisplayValue("went fine")).toBeInTheDocument();
 	});
 
+	it("shows an error when event types fail to load, instead of a silently blank type dropdown", async () => {
+		mockedEventsApi.listEventTypes.mockRejectedValue(new Error("boom"));
+
+		renderWithProviders(
+			<EditEventDialog
+				event={COMPLETED_EVENT}
+				accountId="account-1"
+				token="test-token"
+				onClose={vi.fn()}
+				onSaved={vi.fn()}
+			/>,
+		);
+
+		await screen.findByText("Couldn't load activity types — try again.");
+	});
+
 	it("submits every field, including a changed type, as a full update", async () => {
 		mockedEventsApi.listEventTypes.mockResolvedValue(TYPES);
 		mockedEventsApi.editEvent.mockResolvedValue({ ...COMPLETED_EVENT, eventTypeId: "type-2" });

@@ -61,6 +61,17 @@ describe("FeedbackPage", () => {
 		expect(screen.getByText("still rushed")).toBeInTheDocument();
 	});
 
+	it("shows an error instead of a silently empty page when the stats fail to load", async () => {
+		setActiveAccount(OWNER_ACCOUNT);
+		mockedStatisticsApi.fetchOrganisationTypeStatistics.mockRejectedValue(new Error("boom"));
+		mockedStatisticsApi.fetchOrganisationFeedback.mockRejectedValue(new Error("boom"));
+
+		renderWithProviders(<FeedbackPage />);
+
+		const messages = await screen.findAllByText("Couldn't load this — try again.");
+		expect(messages).toHaveLength(2);
+	});
+
 	it("shows the withheld message below the minimum size", async () => {
 		setActiveAccount(OWNER_ACCOUNT);
 		mockedStatisticsApi.fetchOrganisationTypeStatistics.mockResolvedValue({

@@ -75,4 +75,29 @@ describe("NotificationBell", () => {
 
 		await waitFor(() => expect(mockedNotificationsApi.markNotificationRead).toHaveBeenCalledWith("test-token", "notif-1"));
 	});
+
+	it("shows an error message if marking a notification read fails", async () => {
+		mockedNotificationsApi.fetchNotifications.mockResolvedValue([UNREAD]);
+		mockedNotificationsApi.markNotificationRead.mockRejectedValue(new Error("boom"));
+		const user = userEvent.setup();
+
+		renderWithProviders(<NotificationBell />);
+
+		await user.click(screen.getByRole("button", { name: /Notifications/ }));
+		await user.click(await screen.findByRole("button", { name: "Mark read" }));
+
+		await screen.findByText("Couldn't mark that as read — try again.");
+	});
+
+	it("shows an error instead of a silent empty panel when notifications fail to load", async () => {
+		mockedNotificationsApi.fetchNotifications.mockRejectedValue(new Error("boom"));
+		const user = userEvent.setup();
+
+		renderWithProviders(<NotificationBell />);
+
+		await user.click(screen.getByRole("button", { name: /Notifications/ }));
+
+		await screen.findByText("Couldn't load notifications.");
+		expect(screen.queryByText("Nothing yet.")).not.toBeInTheDocument();
+	});
 });

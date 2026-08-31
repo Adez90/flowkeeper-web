@@ -52,7 +52,8 @@
       "completedAt": "Completada a las",
       "submit": "Registrar actividad",
       "submitting": "Registrando…",
-      "couldntSubmit": "No se pudo registrar esa actividad — inténtalo de nuevo."
+      "couldntSubmit": "No se pudo registrar esa actividad — inténtalo de nuevo.",
+      "couldntLoadTypes": "No se pudieron cargar los tipos de actividad — inténtalo de nuevo."
     },
     "complete": {
       "title": "Completar \"{{eventType}}\"",
@@ -100,7 +101,8 @@
     "notEnoughMembersForTotal": "Aún no hay suficientes miembros ({{count}}) para mostrar un total sin identificar a nadie.",
     "notEnoughMembersForTrend": "Aún no hay suficientes miembros ({{count}}) para mostrar una tendencia sin identificar a nadie.",
     "noDaysInRange": "No hay días en este rango.",
-    "noActivityInRange": "Todavía no se ha registrado actividad en este rango."
+    "noActivityInRange": "Todavía no se ha registrado actividad en este rango.",
+    "couldntLoad": "No se pudieron cargar tus estadísticas — inténtalo de nuevo."
   },
   "profile": {
     "title": "Tu información",
@@ -120,7 +122,8 @@
     "remindersHint": "Un aviso si dejas una actividad abierta, o si aún no has registrado nada hoy. Elige los canales que prefieras — ninguno está activado por defecto.",
     "inApp": "En la app",
     "push": "Notificación push",
-    "email": "Correo electrónico"
+    "email": "Correo electrónico",
+    "couldntUpdateNotifications": "No se pudieron actualizar tus preferencias de notificación — inténtalo de nuevo."
   },
   "organisation": {
     "title": "Organización",
@@ -143,7 +146,11 @@
     "shareGroupAverage": "Compartir nuestro promedio con otros grupos",
     "members": "Miembros",
     "shareMyFlow": "Compartir mi % de flow con mi grupo",
-    "feedback": "Comentarios"
+    "feedback": "Comentarios",
+    "couldntLoad": "No se pudo cargar tu organización — inténtalo de nuevo.",
+    "couldntCreateDepartment": "No se pudo crear ese departamento — inténtalo de nuevo.",
+    "couldntCreateGroup": "No se pudo crear ese grupo — inténtalo de nuevo.",
+    "couldntUpdateSharing": "No se pudo actualizar — inténtalo de nuevo."
   },
   "feedback": {
     "title": "Comentarios",
@@ -152,7 +159,8 @@
     "notEnoughMembers": "Aún no hay suficientes miembros ({{count}}) para mostrar esto de forma anónima.",
     "nothingInRange": "Nada en este rango todavía.",
     "anonymousNotes": "Notas anónimas",
-    "nobodySharedYet": "Todavía nadie ha compartido una nota."
+    "nobodySharedYet": "Todavía nadie ha compartido una nota.",
+    "couldntLoad": "No se pudo cargar esto — inténtalo de nuevo."
   },
   "addMemberDialog": {
     "title": "Añadir un miembro",
@@ -175,18 +183,22 @@
     "freeform": "Libre — no está vinculado a una actividad concreta",
     "submit": "Añadir comentario",
     "submitting": "Guardando…",
-    "couldntSubmit": "No se pudo guardar ese comentario — inténtalo de nuevo."
+    "couldntSubmit": "No se pudo guardar ese comentario — inténtalo de nuevo.",
+    "couldntLoad": "No se pudo cargar el feedback — inténtalo de nuevo."
   },
   "notifications": {
     "label": "Notificaciones",
     "labelWithUnread": "Notificaciones ({{count}} sin leer)",
     "nothingYet": "Nada todavía.",
-    "markRead": "Marcar como leída"
+    "markRead": "Marcar como leída",
+    "couldntMarkRead": "No se pudo marcar como leída — inténtalo de nuevo.",
+    "couldntLoad": "No se pudieron cargar las notificaciones."
   },
   "completed": {
     "title": "Completadas",
     "loading": "Cargando…",
-    "emptyState": "Nada completado en este rango."
+    "emptyState": "Nada completado en este rango.",
+    "couldntLoad": "No se pudieron cargar tus actividades completadas — inténtalo de nuevo."
   },
   "editEvent": {
     "title": "Editar actividad",
@@ -210,7 +222,8 @@
     "redeem": "Canjear",
     "redeeming": "Canjeando…",
     "redeemed": "¡Canjeado! Tu plan se ha actualizado.",
-    "couldntRedeem": "No se pudo canjear ese código — compruébalo e inténtalo de nuevo."
+    "couldntRedeem": "No se pudo canjear ese código — compruébalo e inténtalo de nuevo.",
+    "couldntLoadSubscription": "No se pudo cargar tu suscripción — inténtalo de nuevo."
   },
   "integrations": {
     "title": "Sincronización de calendario y actividad física",
@@ -233,7 +246,10 @@
       "GOOGLE_CALENDAR": "Google Calendar",
       "MICROSOFT_CALENDAR": "Outlook / Calendario de Microsoft",
       "STRAVA": "Strava"
-    }
+    },
+    "couldntLoadProviders": "No se pudieron cargar las integraciones — inténtalo de nuevo.",
+    "couldntLoadConnections": "No se pudieron cargar tus conexiones — inténtalo de nuevo.",
+    "couldntDisconnect": "No se pudo desconectar — inténtalo de nuevo."
   },
   "adminPromoCodes": {
     "title": "Códigos de prueba",
@@ -258,6 +274,7 @@
       "revoked": "Revocado",
       "expired": "Caducado",
       "exhausted": "Totalmente canjeado"
-    }
+    },
+    "couldntLoad": "No se pudieron cargar los códigos promocionales — inténtalo de nuevo."
   }
 }

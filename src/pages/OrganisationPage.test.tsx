@@ -181,5 +181,52 @@ describe("OrganisationPage", () => {
 				}),
 			);
 		});
+
+		it("shows an error message if toggling sharing fails", async () => {
+			mockedOrganisationsApi.updateMemberSharing.mockRejectedValue(new Error("boom"));
+			const user = userEvent.setup();
+
+			renderWithProviders(<OrganisationPage />);
+
+			await screen.findByText("Share my Flow % with my group");
+			await user.click(screen.getByLabelText("Share my Flow % with my group"));
+
+			await screen.findByText("Couldn't update that — try again.");
+		});
+
+		it("shows an error message if creating a department fails, without losing the typed name", async () => {
+			mockedOrganisationsApi.createDepartment.mockRejectedValue(new Error("boom"));
+			const user = userEvent.setup();
+
+			renderWithProviders(<OrganisationPage />);
+
+			await screen.findByText("Engineering", { selector: "li.org-structure-list__item > span" });
+			await user.type(screen.getByPlaceholderText("New department name"), "Sales");
+			await user.click(screen.getByRole("button", { name: "+ Add department" }));
+
+			await screen.findByText("Couldn't create that department — try again.");
+			expect(screen.getByPlaceholderText("New department name")).toHaveValue("Sales");
+		});
+
+		it("shows an error message if creating a group fails", async () => {
+			mockedOrganisationsApi.createGroup.mockRejectedValue(new Error("boom"));
+			const user = userEvent.setup();
+
+			renderWithProviders(<OrganisationPage />);
+
+			await screen.findByText("Engineering", { selector: "li.org-structure-list__item > span" });
+			await user.type(screen.getByPlaceholderText("New group name"), "Frontend");
+			await user.click(screen.getByRole("button", { name: "+ Add group" }));
+
+			await screen.findByText("Couldn't create that group — try again.");
+		});
+
+		it("shows an error instead of silently rendering an empty structure when it fails to load", async () => {
+			mockedOrganisationsApi.fetchStructure.mockRejectedValue(new Error("boom"));
+
+			renderWithProviders(<OrganisationPage />);
+
+			await screen.findByText("Couldn't load your organisation — try again.");
+		});
 	});
 });

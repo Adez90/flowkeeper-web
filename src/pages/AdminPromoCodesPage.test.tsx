@@ -53,6 +53,15 @@ describe("AdminPromoCodesPage", () => {
 		expect(screen.queryByRole("button", { name: "Generate code" })).not.toBeInTheDocument();
 	});
 
+	it("shows a generic load error for a non-403 failure, not a silently empty page", async () => {
+		mockedAdminApi.listPromoCodes.mockRejectedValue(new Error("network down"));
+
+		renderWithProviders(<AdminPromoCodesPage />);
+
+		await screen.findByText("Couldn't load promo codes — try again.");
+		expect(screen.queryByLabelText("Duration (days)")).not.toBeInTheDocument();
+	});
+
 	it("lists existing codes with their redemption counts", async () => {
 		mockedAdminApi.listPromoCodes.mockResolvedValue([CODE]);
 

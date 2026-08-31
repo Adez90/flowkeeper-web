@@ -72,6 +72,33 @@ describe("DiaryExportSection", () => {
 		);
 	});
 
+	it("buckets events by the viewer's local calendar day, not the UTC date in the ISO string", async () => {
+		// 09:00 UTC on the 10th is still the evening of the 9th in
+		// Honolulu — the range filter must agree with exportDiaryPdf's own
+		// local-day grouping, or an event can silently vanish from the
+		// export despite falling within the selected local date range.
+		vi.stubEnv("TZ", "Pacific/Honolulu");
+		try {
+			const lateEvent = eventOn(TODAY); // 09:00Z on TODAY -> local date is "the day before" in Honolulu
+			const localDayBefore = addDaysIso(TODAY, -1);
+			mockedEventsApi.listEvents.mockResolvedValue([lateEvent]);
+			mockedExportDiaryPdf.mockResolvedValue();
+			const user = userEvent.setup();
+
+			renderWithProviders(<DiaryExportSection accountId="acc-1" token="test-token" displayName="Anders Johansson" />);
+
+			fireEvent.change(screen.getByLabelText("Export from"), { target: { value: localDayBefore } });
+			fireEvent.change(screen.getByLabelText("Export to"), { target: { value: localDayBefore } });
+			await user.click(screen.getByRole("button", { name: "Download PDF" }));
+
+			await waitFor(() =>
+				expect(mockedExportDiaryPdf).toHaveBeenCalledWith([lateEvent], "Anders Johansson", localDayBefore, localDayBefore),
+			);
+		} finally {
+			vi.unstubAllEnvs();
+		}
+	});
+
 	it("shows an error if the export fails", async () => {
 		mockedEventsApi.listEvents.mockRejectedValue(new Error("network error"));
 		const user = userEvent.setup();

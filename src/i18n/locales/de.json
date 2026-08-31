@@ -52,7 +52,8 @@
       "completedAt": "Abgeschlossen um",
       "submit": "Aktivität erfassen",
       "submitting": "Wird erfasst…",
-      "couldntSubmit": "Diese Aktivität konnte nicht erfasst werden — bitte erneut versuchen."
+      "couldntSubmit": "Diese Aktivität konnte nicht erfasst werden — bitte erneut versuchen.",
+      "couldntLoadTypes": "Aktivitätstypen konnten nicht geladen werden — bitte erneut versuchen."
     },
     "complete": {
       "title": "„{{eventType}}“ abschließen",
@@ -100,7 +101,8 @@
     "notEnoughMembersForTotal": "Noch nicht genug Mitglieder ({{count}}), um eine Summe zu zeigen, ohne jemanden herauszustellen.",
     "notEnoughMembersForTrend": "Noch nicht genug Mitglieder ({{count}}), um einen Verlauf zu zeigen, ohne jemanden herauszustellen.",
     "noDaysInRange": "Keine Tage in diesem Zeitraum.",
-    "noActivityInRange": "In diesem Zeitraum wurde noch keine Aktivität erfasst."
+    "noActivityInRange": "In diesem Zeitraum wurde noch keine Aktivität erfasst.",
+    "couldntLoad": "Deine Statistik konnte nicht geladen werden — bitte erneut versuchen."
   },
   "profile": {
     "title": "Deine Angaben",
@@ -120,7 +122,8 @@
     "remindersHint": "Ein Hinweis, wenn du eine Aktivität offen lässt oder heute noch nichts erfasst hast. Wähle die Kanäle, die zu dir passen — standardmäßig ist keiner aktiviert.",
     "inApp": "In der App",
     "push": "Push-Benachrichtigung",
-    "email": "E-Mail"
+    "email": "E-Mail",
+    "couldntUpdateNotifications": "Deine Benachrichtigungseinstellungen konnten nicht aktualisiert werden — bitte erneut versuchen."
   },
   "organisation": {
     "title": "Organisation",
@@ -143,7 +146,11 @@
     "shareGroupAverage": "Unseren Durchschnitt mit anderen Gruppen teilen",
     "members": "Mitglieder",
     "shareMyFlow": "Meine Flow-% mit meiner Gruppe teilen",
-    "feedback": "Feedback"
+    "feedback": "Feedback",
+    "couldntLoad": "Deine Organisation konnte nicht geladen werden — bitte erneut versuchen.",
+    "couldntCreateDepartment": "Diese Abteilung konnte nicht erstellt werden — bitte erneut versuchen.",
+    "couldntCreateGroup": "Diese Gruppe konnte nicht erstellt werden — bitte erneut versuchen.",
+    "couldntUpdateSharing": "Konnte nicht aktualisiert werden — bitte erneut versuchen."
   },
   "feedback": {
     "title": "Feedback",
@@ -152,7 +159,8 @@
     "notEnoughMembers": "Noch nicht genug Mitglieder ({{count}}), um das anonym anzuzeigen.",
     "nothingInRange": "In diesem Zeitraum bisher nichts.",
     "anonymousNotes": "Anonyme Notizen",
-    "nobodySharedYet": "Noch hat niemand eine Notiz geteilt."
+    "nobodySharedYet": "Noch hat niemand eine Notiz geteilt.",
+    "couldntLoad": "Dies konnte nicht geladen werden — bitte erneut versuchen."
   },
   "addMemberDialog": {
     "title": "Mitglied hinzufügen",
@@ -175,18 +183,22 @@
     "freeform": "Frei — nicht mit einer bestimmten Aktivität verknüpft",
     "submit": "Feedback hinzufügen",
     "submitting": "Wird gespeichert…",
-    "couldntSubmit": "Dieses Feedback konnte nicht gespeichert werden — bitte erneut versuchen."
+    "couldntSubmit": "Dieses Feedback konnte nicht gespeichert werden — bitte erneut versuchen.",
+    "couldntLoad": "Feedback konnte nicht geladen werden — bitte erneut versuchen."
   },
   "notifications": {
     "label": "Benachrichtigungen",
     "labelWithUnread": "Benachrichtigungen ({{count}} ungelesen)",
     "nothingYet": "Noch nichts.",
-    "markRead": "Als gelesen markieren"
+    "markRead": "Als gelesen markieren",
+    "couldntMarkRead": "Konnte nicht als gelesen markiert werden — bitte erneut versuchen.",
+    "couldntLoad": "Benachrichtigungen konnten nicht geladen werden."
   },
   "completed": {
     "title": "Abgeschlossen",
     "loading": "Wird geladen…",
-    "emptyState": "In diesem Zeitraum nichts abgeschlossen."
+    "emptyState": "In diesem Zeitraum nichts abgeschlossen.",
+    "couldntLoad": "Deine abgeschlossenen Aktivitäten konnten nicht geladen werden — bitte erneut versuchen."
   },
   "editEvent": {
     "title": "Aktivität bearbeiten",
@@ -210,7 +222,8 @@
     "redeem": "Einlösen",
     "redeeming": "Wird eingelöst…",
     "redeemed": "Eingelöst! Dein Plan wurde aktualisiert.",
-    "couldntRedeem": "Der Code konnte nicht eingelöst werden — bitte prüfen und erneut versuchen."
+    "couldntRedeem": "Der Code konnte nicht eingelöst werden — bitte prüfen und erneut versuchen.",
+    "couldntLoadSubscription": "Dein Abo konnte nicht geladen werden — bitte erneut versuchen."
   },
   "integrations": {
     "title": "Kalender- und Fitness-Sync",
@@ -233,7 +246,10 @@
       "GOOGLE_CALENDAR": "Google Kalender",
       "MICROSOFT_CALENDAR": "Outlook / Microsoft Kalender",
       "STRAVA": "Strava"
-    }
+    },
+    "couldntLoadProviders": "Integrationen konnten nicht geladen werden — bitte erneut versuchen.",
+    "couldntLoadConnections": "Deine Verbindungen konnten nicht geladen werden — bitte erneut versuchen.",
+    "couldntDisconnect": "Verbindung konnte nicht getrennt werden — bitte erneut versuchen."
   },
   "adminPromoCodes": {
     "title": "Testcodes",
@@ -258,6 +274,7 @@
       "revoked": "Widerrufen",
       "expired": "Abgelaufen",
       "exhausted": "Vollständig eingelöst"
-    }
+    },
+    "couldntLoad": "Codes konnten nicht geladen werden — bitte erneut versuchen."
   }
 }

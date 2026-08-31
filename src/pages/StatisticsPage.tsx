@@ -76,6 +76,7 @@ export function StatisticsPage() {
 			</div>
 
 			{statsQuery.isLoading && <p className="page-loading">{t("statistics.loading")}</p>}
+			{statsQuery.isError && <p className="error-text">{t("statistics.couldntLoad")}</p>}
 
 			{statsQuery.data && (
 				<>
@@ -155,6 +156,7 @@ export function StatisticsPage() {
 					</div>
 				</div>
 				{trendQuery.isLoading && <p className="page-loading">{t("statistics.loading")}</p>}
+				{trendQuery.isError && <p className="error-text">{t("statistics.couldntLoad")}</p>}
 				{trendQuery.data && <FlowTrendChart points={trendQuery.data.points} />}
 			</section>
 

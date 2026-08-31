@@ -115,6 +115,17 @@ describe("ProfilePage", () => {
 		);
 	});
 
+	it("shows an error message when toggling a reminder channel fails", async () => {
+		mockedMeApi.updateNotificationPreferences.mockRejectedValue(new Error("boom"));
+		const user = userEvent.setup();
+
+		renderWithProviders(<ProfilePage />);
+
+		await user.click(screen.getByLabelText("In-app"));
+
+		await screen.findByText("Couldn't update your notification preferences — try again.");
+	});
+
 	it("has no avatar preview when no avatar is set, and uploads a selected file", async () => {
 		mockedMeApi.uploadAvatar.mockResolvedValue({ ...ME, avatarUrl: "https://api.example.com/api/v1/avatars/abc.jpg" });
 		const user = userEvent.setup();

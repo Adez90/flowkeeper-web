@@ -51,7 +51,11 @@ export function IntegrationsPage() {
 
 	const disconnectMutation = useMutation({
 		mutationFn: (connectionId: string) => disconnect(token, connectionId),
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ["integration-connections", accountId] }),
+		onSuccess: () => {
+			setError(null);
+			return queryClient.invalidateQueries({ queryKey: ["integration-connections", accountId] });
+		},
+		onError: () => setError(t("integrations.couldntDisconnect")),
 	});
 
 	async function handleConnect(provider: ExternalProvider) {
@@ -81,6 +85,15 @@ export function IntegrationsPage() {
 		);
 	}
 
+	if (providersQuery.isError) {
+		return (
+			<div className="integrations-page">
+				<h1>{t("integrations.title")}</h1>
+				<p className="error-text">{t("integrations.couldntLoadProviders")}</p>
+			</div>
+		);
+	}
+
 	return (
 		<div className="integrations-page">
 			<h1>{t("integrations.title")}</h1>
@@ -88,6 +101,7 @@ export function IntegrationsPage() {
 
 			{connectedResult === "success" && <p className="integrations-page__banner integrations-page__banner--success">{t("integrations.connectedSuccess")}</p>}
 			{connectedResult === "error" && <p className="integrations-page__banner integrations-page__banner--error">{t("integrations.connectedError")}</p>}
+			{connectionsQuery.isError && <p className="error-text">{t("integrations.couldntLoadConnections")}</p>}
 			{error && <p className="error-text">{error}</p>}
 
 			<ul className="integrations-page__list">

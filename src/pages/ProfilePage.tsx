@@ -19,13 +19,20 @@ export function ProfilePage() {
 	const { t, i18n } = useTranslation();
 	const token = auth.user?.access_token ?? "";
 
+	const [notificationError, setNotificationError] = useState<string | null>(null);
+
 	async function toggleNotificationChannel(channel: "notifyInApp" | "notifyPush" | "notifyEmail", enabled: boolean) {
-		await updateNotificationPreferences(token, {
-			notifyInApp: channel === "notifyInApp" ? enabled : me.notifyInApp,
-			notifyPush: channel === "notifyPush" ? enabled : me.notifyPush,
-			notifyEmail: channel === "notifyEmail" ? enabled : me.notifyEmail,
-		});
-		await queryClient.invalidateQueries({ queryKey: ["me"] });
+		setNotificationError(null);
+		try {
+			await updateNotificationPreferences(token, {
+				notifyInApp: channel === "notifyInApp" ? enabled : me.notifyInApp,
+				notifyPush: channel === "notifyPush" ? enabled : me.notifyPush,
+				notifyEmail: channel === "notifyEmail" ? enabled : me.notifyEmail,
+			});
+			await queryClient.invalidateQueries({ queryKey: ["me"] });
+		} catch {
+			setNotificationError(t("profile.couldntUpdateNotifications"));
+		}
 	}
 
 	const [displayName, setDisplayName] = useState(me.displayName);
@@ -140,6 +147,7 @@ export function ProfilePage() {
 
 			<h2>{t("profile.reminders")}</h2>
 			<p className="dialog__hint">{t("profile.remindersHint")}</p>
+			{notificationError && <p className="error-text">{notificationError}</p>}
 			<div className="notification-preferences">
 				<label className="sharing-toggle">
 					<input

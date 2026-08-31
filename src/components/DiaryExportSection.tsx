@@ -31,7 +31,11 @@ export function DiaryExportSection({ accountId, token, displayName }: DiaryExpor
 				queryFn: () => listEvents(token, accountId),
 			});
 			const inRange = events.filter((event) => {
-				const eventDate = event.startedAt.slice(0, 10);
+				// Local calendar day, not the UTC date the ISO string's own
+				// digits show — matches the local-day bucketing
+				// exportDiaryPdf itself uses, so an event near local
+				// midnight lands on the same day here as it does in the PDF.
+				const eventDate = new Date(event.startedAt).toLocaleDateString("sv-SE");
 				return eventDate >= from && eventDate <= to;
 			});
 			await exportDiaryPdf(inRange, displayName, from, to);

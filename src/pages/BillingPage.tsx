@@ -49,6 +49,7 @@ export function BillingPage() {
 			<h1>{t("billing.title")}</h1>
 
 			{subscriptionQuery.isLoading && <p className="page-loading">{t("common.loading")}</p>}
+			{subscriptionQuery.isError && <p className="error-text">{t("billing.couldntLoadSubscription")}</p>}
 
 			{subscriptionQuery.data === null && <p className="empty-state">{t("billing.noSubscription")}</p>}
 

@@ -68,6 +68,7 @@ export function CompletedPage() {
 			</div>
 
 			{eventsQuery.isLoading && <p className="page-loading">{t("completed.loading")}</p>}
+			{eventsQuery.isError && <p className="error-text">{t("completed.couldntLoad")}</p>}
 			{eventsQuery.data && eventsQuery.data.length === 0 && <p className="empty-state">{t("completed.emptyState")}</p>}
 
 			<ul className="event-list">

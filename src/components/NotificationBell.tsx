@@ -13,6 +13,7 @@ export function NotificationBell() {
 	const { t } = useTranslation();
 	const token = auth.user?.access_token ?? "";
 	const [open, setOpen] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
 	const notificationsQuery = useQuery({
 		queryKey: ["notifications"],
@@ -24,8 +25,13 @@ export function NotificationBell() {
 	const unreadCount = notifications.filter((n) => !n.readAt).length;
 
 	async function handleMarkRead(notificationId: string) {
-		await markNotificationRead(token, notificationId);
-		await queryClient.invalidateQueries({ queryKey: ["notifications"] });
+		setError(null);
+		try {
+			await markNotificationRead(token, notificationId);
+			await queryClient.invalidateQueries({ queryKey: ["notifications"] });
+		} catch {
+			setError(t("notifications.couldntMarkRead"));
+		}
 	}
 
 	return (
@@ -42,7 +48,11 @@ export function NotificationBell() {
 
 			{open && (
 				<div className="notification-bell__panel">
-					{notifications.length === 0 && <p className="empty-state">{t("notifications.nothingYet")}</p>}
+					{notificationsQuery.isError && <p className="error-text">{t("notifications.couldntLoad")}</p>}
+					{error && <p className="error-text">{error}</p>}
+					{!notificationsQuery.isError && notifications.length === 0 && (
+						<p className="empty-state">{t("notifications.nothingYet")}</p>
+					)}
 					<ul className="notification-bell__list">
 						{notifications.map((notification) => (
 							<li

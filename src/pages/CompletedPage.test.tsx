@@ -105,6 +105,15 @@ describe("CompletedPage", () => {
 		expect(screen.queryByRole("button", { name: "Today" })).not.toBeInTheDocument();
 	});
 
+	it("shows an error instead of a silent empty list when completed events fail to load", async () => {
+		mockedEventsApi.listMyCompletedEvents.mockRejectedValue(new Error("boom"));
+
+		renderWithProviders(<CompletedPage />);
+
+		await screen.findByText("Couldn't load your completed activities — try again.");
+		expect(screen.queryByText("Nothing completed in this range.")).not.toBeInTheDocument();
+	});
+
 	it("opens the edit dialog for a clicked event and refreshes the list once saved", async () => {
 		mockedEventsApi.listMyCompletedEvents.mockResolvedValue([COMPLETED_EVENT]);
 		mockedEventsApi.listEventTypes.mockResolvedValue(TYPES);

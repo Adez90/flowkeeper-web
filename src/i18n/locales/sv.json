@@ -52,7 +52,8 @@
       "completedAt": "Avslutades",
       "submit": "Logga aktivitet",
       "submitting": "Loggar…",
-      "couldntSubmit": "Kunde inte logga aktiviteten — försök igen."
+      "couldntSubmit": "Kunde inte logga aktiviteten — försök igen.",
+      "couldntLoadTypes": "Kunde inte läsa in aktivitetstyper — försök igen."
     },
     "complete": {
       "title": "Slutför \"{{eventType}}\"",
@@ -100,7 +101,8 @@
     "notEnoughMembersForTotal": "Inte tillräckligt många medlemmar än ({{count}}) för att visa en summa utan att peka ut någon.",
     "notEnoughMembersForTrend": "Inte tillräckligt många medlemmar än ({{count}}) för att visa en trend utan att peka ut någon.",
     "noDaysInRange": "Inga dagar i det här intervallet.",
-    "noActivityInRange": "Ingen aktivitet loggad i det här intervallet ännu."
+    "noActivityInRange": "Ingen aktivitet loggad i det här intervallet ännu.",
+    "couldntLoad": "Kunde inte läsa in din statistik — försök igen."
   },
   "profile": {
     "title": "Din information",
@@ -120,7 +122,8 @@
     "remindersHint": "En påminnelse om du lämnar en aktivitet öppen, eller inte har loggat något än idag. Välj de kanaler som passar dig — inga är på som standard.",
     "inApp": "I appen",
     "push": "Push-notis",
-    "email": "E-post"
+    "email": "E-post",
+    "couldntUpdateNotifications": "Kunde inte uppdatera dina aviseringsinställningar — försök igen."
   },
   "organisation": {
     "title": "Organisation",
@@ -143,7 +146,11 @@
     "shareGroupAverage": "Dela vårt genomsnitt med andra grupper",
     "members": "Medlemmar",
     "shareMyFlow": "Dela min Flow % med min grupp",
-    "feedback": "Feedback"
+    "feedback": "Feedback",
+    "couldntLoad": "Kunde inte läsa in din organisation — försök igen.",
+    "couldntCreateDepartment": "Kunde inte skapa avdelningen — försök igen.",
+    "couldntCreateGroup": "Kunde inte skapa gruppen — försök igen.",
+    "couldntUpdateSharing": "Kunde inte uppdatera — försök igen."
   },
   "feedback": {
     "title": "Feedback",
@@ -152,7 +159,8 @@
     "notEnoughMembers": "Inte tillräckligt många medlemmar än ({{count}}) för att visa det här anonymt.",
     "nothingInRange": "Inget i det här intervallet ännu.",
     "anonymousNotes": "Anonyma anteckningar",
-    "nobodySharedYet": "Ingen har delat en anteckning ännu."
+    "nobodySharedYet": "Ingen har delat en anteckning ännu.",
+    "couldntLoad": "Kunde inte läsa in det här — försök igen."
   },
   "addMemberDialog": {
     "title": "Lägg till en medlem",
@@ -175,18 +183,22 @@
     "freeform": "Fritext — inte kopplad till en specifik aktivitet",
     "submit": "Lägg till feedback",
     "submitting": "Sparar…",
-    "couldntSubmit": "Kunde inte spara feedbacken — försök igen."
+    "couldntSubmit": "Kunde inte spara feedbacken — försök igen.",
+    "couldntLoad": "Kunde inte läsa in feedback — försök igen."
   },
   "notifications": {
     "label": "Notiser",
     "labelWithUnread": "Notiser ({{count}} olästa)",
     "nothingYet": "Inget ännu.",
-    "markRead": "Markera som läst"
+    "markRead": "Markera som läst",
+    "couldntMarkRead": "Kunde inte markera som läst — försök igen.",
+    "couldntLoad": "Kunde inte läsa in aviseringar."
   },
   "completed": {
     "title": "Slutförda",
     "loading": "Laddar…",
-    "emptyState": "Inget slutfört i det här intervallet."
+    "emptyState": "Inget slutfört i det här intervallet.",
+    "couldntLoad": "Kunde inte läsa in dina avslutade aktiviteter — försök igen."
   },
   "editEvent": {
     "title": "Redigera aktivitet",
@@ -210,7 +222,8 @@
     "redeem": "Lös in",
     "redeeming": "Löser in…",
     "redeemed": "Inlöst! Din plan har uppdaterats.",
-    "couldntRedeem": "Kunde inte lösa in koden — kontrollera den och försök igen."
+    "couldntRedeem": "Kunde inte lösa in koden — kontrollera den och försök igen.",
+    "couldntLoadSubscription": "Kunde inte läsa in ditt abonnemang — försök igen."
   },
   "integrations": {
     "title": "Kalender- och träningssynk",
@@ -233,7 +246,10 @@
       "GOOGLE_CALENDAR": "Google Kalender",
       "MICROSOFT_CALENDAR": "Outlook / Microsoft Kalender",
       "STRAVA": "Strava"
-    }
+    },
+    "couldntLoadProviders": "Kunde inte läsa in integrationer — försök igen.",
+    "couldntLoadConnections": "Kunde inte läsa in dina anslutningar — försök igen.",
+    "couldntDisconnect": "Kunde inte koppla från — försök igen."
   },
   "adminPromoCodes": {
     "title": "Testkoder",
@@ -258,6 +274,7 @@
       "revoked": "Återkallad",
       "expired": "Utgången",
       "exhausted": "Fullt inlöst"
-    }
+    },
+    "couldntLoad": "Kunde inte läsa in kampanjkoder — försök igen."
   }
 }

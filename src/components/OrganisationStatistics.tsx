@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
+import type { UseQueryResult } from "@tanstack/react-query";
 import { fetchMembers } from "../api/organisations";
 import {
 	fetchDepartmentStatistics,
@@ -91,22 +92,24 @@ export function OrganisationStatistics({
 
 	return (
 		<>
-			{groupId && <AggregateSection title={t("statistics.yourGroup")} data={groupQuery.data} />}
-			{groupId && <AggregateTrendSection title={t("statistics.yourGroupTrend")} data={groupTrendQuery.data} />}
-			{departmentId && <AggregateSection title={t("statistics.yourDepartment")} data={departmentQuery.data} />}
-			{departmentId && <AggregateTrendSection title={t("statistics.yourDepartmentTrend")} data={departmentTrendQuery.data} />}
-			{role === "OWNER" && <AggregateSection title={t("statistics.yourOrganisation")} data={organisationQuery.data} />}
-			{role === "OWNER" && <AggregateTrendSection title={t("statistics.yourOrganisationTrend")} data={organisationTrendQuery.data} />}
+			{groupId && <AggregateSection title={t("statistics.yourGroup")} query={groupQuery} />}
+			{groupId && <AggregateTrendSection title={t("statistics.yourGroupTrend")} query={groupTrendQuery} />}
+			{departmentId && <AggregateSection title={t("statistics.yourDepartment")} query={departmentQuery} />}
+			{departmentId && <AggregateTrendSection title={t("statistics.yourDepartmentTrend")} query={departmentTrendQuery} />}
+			{role === "OWNER" && <AggregateSection title={t("statistics.yourOrganisation")} query={organisationQuery} />}
+			{role === "OWNER" && <AggregateTrendSection title={t("statistics.yourOrganisationTrend")} query={organisationTrendQuery} />}
 		</>
 	);
 }
 
-function AggregateTrendSection({ title, data }: { title: string; data?: AggregateTrendResponse }) {
+function AggregateTrendSection({ title, query }: { title: string; query: UseQueryResult<AggregateTrendResponse> }) {
 	const { t } = useTranslation();
+	const data = query.data;
 	return (
 		<section className="trend-section">
 			<h2>{title}</h2>
-			{!data && <p className="page-loading">{t("statistics.loading")}</p>}
+			{query.isLoading && <p className="page-loading">{t("statistics.loading")}</p>}
+			{query.isError && <p className="error-text">{t("statistics.couldntLoad")}</p>}
 			{data?.belowMinimumSize && (
 				<p className="empty-state">{t("statistics.notEnoughMembersForTrend", { count: data.memberCount })}</p>
 			)}
@@ -115,12 +118,14 @@ function AggregateTrendSection({ title, data }: { title: string; data?: Aggregat
 	);
 }
 
-function AggregateSection({ title, data }: { title: string; data?: AggregateStatisticsResponse }) {
+function AggregateSection({ title, query }: { title: string; query: UseQueryResult<AggregateStatisticsResponse> }) {
 	const { t } = useTranslation();
+	const data = query.data;
 	return (
 		<section className="aggregate-section">
 			<h2>{title}</h2>
-			{!data && <p className="page-loading">{t("statistics.loading")}</p>}
+			{query.isLoading && <p className="page-loading">{t("statistics.loading")}</p>}
+			{query.isError && <p className="error-text">{t("statistics.couldntLoad")}</p>}
 			{data?.belowMinimumSize && (
 				<p className="empty-state">{t("statistics.notEnoughMembersForTotal", { count: data.memberCount })}</p>
 			)}

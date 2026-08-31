@@ -63,6 +63,8 @@ export function FeedbackPage() {
 			</div>
 
 			<h2>{t("feedback.byType")}</h2>
+			{byTypeQuery.isLoading && <p className="page-loading">{t("common.loading")}</p>}
+			{byTypeQuery.isError && <p className="error-text">{t("feedback.couldntLoad")}</p>}
 			{byTypeQuery.data?.belowMinimumSize && (
 				<p className="empty-state">{t("feedback.notEnoughMembers", { count: byTypeQuery.data.memberCount })}</p>
 			)}
@@ -84,6 +86,8 @@ export function FeedbackPage() {
 			)}
 
 			<h2>{t("feedback.anonymousNotes")}</h2>
+			{feedbackQuery.isLoading && <p className="page-loading">{t("common.loading")}</p>}
+			{feedbackQuery.isError && <p className="error-text">{t("feedback.couldntLoad")}</p>}
 			{feedbackQuery.data?.belowMinimumSize && (
 				<p className="empty-state">{t("feedback.notEnoughMembers", { count: feedbackQuery.data.memberCount })}</p>
 			)}

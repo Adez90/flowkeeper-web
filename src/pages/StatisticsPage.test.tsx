@@ -160,6 +160,15 @@ describe("StatisticsPage", () => {
 		expect(screen.getByRole("img", { name: "Flow percentage trend" })).toBeTruthy();
 	});
 
+	it("shows an error instead of an endless loading state when statistics fail to load", async () => {
+		mockedStatisticsApi.fetchPersonalStatistics.mockRejectedValue(new Error("boom"));
+		mockedStatisticsApi.fetchPersonalTrend.mockResolvedValue({ rangeStart: "2026-02-15", rangeEndExclusive: "2026-03-17", points: [] });
+
+		renderWithProviders(<StatisticsPage />);
+
+		await screen.findByText("Couldn't load your statistics — try again.");
+	});
+
 	it("changing the trend 'to' date re-fetches with the new range", async () => {
 		mockedStatisticsApi.fetchPersonalStatistics.mockResolvedValue(statsFor());
 		mockedStatisticsApi.fetchPersonalTrend.mockResolvedValue({

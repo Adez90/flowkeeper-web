@@ -68,6 +68,15 @@ describe("MemberFeedbackDialog", () => {
 		expect(screen.queryByLabelText("New feedback")).not.toBeInTheDocument();
 	});
 
+	it("shows an error instead of a false 'no feedback yet' when loading feedback fails", async () => {
+		mockedCoachFeedbackApi.fetchMemberFeedback.mockRejectedValue(new Error("boom"));
+
+		renderDialog(false);
+
+		await screen.findByText("Couldn't load feedback — try again.");
+		expect(screen.queryByText("No feedback yet.")).not.toBeInTheDocument();
+	});
+
 	it("lets a supervisor add freeform feedback", async () => {
 		mockedCoachFeedbackApi.fetchMemberFeedback.mockResolvedValue([]);
 		mockedCoachFeedbackApi.fetchMemberEvents.mockResolvedValue([]);

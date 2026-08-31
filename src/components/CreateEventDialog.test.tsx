@@ -72,6 +72,18 @@ describe("CreateEventDialog", () => {
 		expect(onCreated).not.toHaveBeenCalled();
 	});
 
+	it("shows an error, not a silently-stuck disabled button, when event types fail to load", async () => {
+		mockedEventsApi.listEventTypes.mockRejectedValue(new Error("boom"));
+
+		renderWithProviders(
+			<CreateEventDialog accountId="account-1" token="test-token" onClose={vi.fn()} onCreated={vi.fn()} />,
+		);
+
+		await screen.findByText("Couldn't load activity types — try again.");
+		expect(screen.getByRole("button", { name: "Log activity" })).toBeDisabled();
+		expect(mockedEventsApi.createEvent).not.toHaveBeenCalled();
+	});
+
 	it("calls onClose without submitting when Cancel is clicked", async () => {
 		mockedEventsApi.listEventTypes.mockResolvedValue(TYPES);
 		const onClose = vi.fn();

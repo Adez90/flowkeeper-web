@@ -92,6 +92,20 @@ describe("BillingPage", () => {
 		await screen.findByText("Redeemed! Your plan has been updated.");
 	});
 
+	it("shows an error instead of a silent blank area when the subscription fails to load", async () => {
+		mockedUseActiveAccount.mockReturnValue({
+			account: OWNER_ACCOUNT,
+			accountId: OWNER_ACCOUNT.accountId,
+			accounts: [OWNER_ACCOUNT],
+			setAccountId: vi.fn(),
+		});
+		mockedBillingApi.getSubscription.mockRejectedValue(new Error("boom"));
+
+		renderWithProviders(<BillingPage />);
+
+		await screen.findByText("Couldn't load your subscription — try again.");
+	});
+
 	it("hides the redeem form from a non-owner member", async () => {
 		mockedUseActiveAccount.mockReturnValue({
 			account: MEMBER_ACCOUNT,
