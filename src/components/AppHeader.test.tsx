@@ -21,6 +21,7 @@ function baseMe(overrides: Partial<MeResponse> = {}): MeResponse {
 		notifyPush: false,
 		notifyEmail: false,
 		accounts: [],
+		isPlatformAdmin: false,
 		...overrides,
 	};
 }

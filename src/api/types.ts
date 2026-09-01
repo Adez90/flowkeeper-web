@@ -27,6 +27,7 @@ export interface MeResponse {
 	notifyPush: boolean;
 	notifyEmail: boolean;
 	accounts: AccountSummary[];
+	isPlatformAdmin: boolean;
 }
 
 export interface UpdateProfileRequest {

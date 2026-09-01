@@ -144,7 +144,12 @@
     "inApp": "En la app",
     "push": "Notificación push",
     "email": "Correo electrónico",
-    "couldntUpdateNotifications": "No se pudieron actualizar tus preferencias de notificación — inténtalo de nuevo."
+    "couldntUpdateNotifications": "No se pudieron actualizar tus preferencias de notificación — inténtalo de nuevo.",
+    "diagnosticsTitle": "Diagnóstico",
+    "diagnosticsHint": "Solo visible para administradores de la plataforma — envía un error de prueba deliberado para confirmar que el seguimiento de errores funciona de extremo a extremo.",
+    "sendTestError": "Enviar error de prueba",
+    "sendingTestError": "Enviando…",
+    "testErrorSent": "Error de prueba enviado — comprueba Sentry para confirmar que llegó."
   },
   "organisation": {
     "title": "Organización",

@@ -37,6 +37,7 @@ const ME: MeResponse = {
 	notifyPush: false,
 	notifyEmail: false,
 	accounts: [ACCOUNT],
+	isPlatformAdmin: false,
 };
 
 function statsFor(overrides: Partial<PersonalStatisticsResponse> = {}): PersonalStatisticsResponse {
