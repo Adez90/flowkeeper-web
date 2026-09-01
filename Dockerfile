@@ -14,6 +14,12 @@ COPY . .
 ARG VITE_API_BASE_URL
 ARG VITE_KEYCLOAK_AUTHORITY
 ARG VITE_KEYCLOAK_CLIENT_ID
+# Same rule applies here — omitted, Sentry just never initializes (see
+# src/lib/sentry.ts), not a build failure, but a value passed via
+# --build-arg without a matching ARG line here is silently dropped.
+ARG VITE_SENTRY_DSN
+ARG VITE_SENTRY_ENVIRONMENT
+ARG VITE_SENTRY_RELEASE
 RUN npm run build
 
 FROM nginx:1.27-alpine

@@ -1,9 +1,17 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
+import * as Sentry from "@sentry/react";
 import { apiFetchJson, ApiError } from "./client";
+
+vi.mock("@sentry/react", () => ({
+	captureException: vi.fn(),
+	addBreadcrumb: vi.fn(),
+}));
 
 describe("apiFetchJson", () => {
 	beforeEach(() => {
 		globalThis.fetch = vi.fn();
+		vi.mocked(Sentry.captureException).mockClear();
+		vi.mocked(Sentry.addBreadcrumb).mockClear();
 	});
 
 	it("attaches the bearer token and JSON content type", async () => {
@@ -50,5 +58,33 @@ describe("apiFetchJson", () => {
 		await expect(apiFetchJson("/api/v1/me/avatar")).rejects.toMatchObject(
 			new ApiError(413, "File is too large — please choose a smaller image"),
 		);
+	});
+
+	it("reports a 5xx to Sentry as a real event, not just a breadcrumb", async () => {
+		vi.mocked(globalThis.fetch).mockResolvedValue(new Response("boom", { status: 500 }));
+
+		await expect(apiFetchJson("/api/v1/events")).rejects.toThrow();
+
+		expect(Sentry.captureException).toHaveBeenCalledWith(expect.any(ApiError), { tags: { endpoint: "/api/v1/events" } });
+		expect(Sentry.addBreadcrumb).not.toHaveBeenCalled();
+	});
+
+	it("reports a 4xx as a breadcrumb only, not a Sentry event", async () => {
+		vi.mocked(globalThis.fetch).mockResolvedValue(new Response("Not a member of this account", { status: 403 }));
+
+		await expect(apiFetchJson("/api/v1/events")).rejects.toThrow();
+
+		expect(Sentry.addBreadcrumb).toHaveBeenCalledWith(
+			expect.objectContaining({ category: "api", message: "/api/v1/events → 403", level: "warning" }),
+		);
+		expect(Sentry.captureException).not.toHaveBeenCalled();
+	});
+
+	it("reports a raw network failure (fetch itself throwing) as a Sentry event", async () => {
+		vi.mocked(globalThis.fetch).mockRejectedValue(new TypeError("Failed to fetch"));
+
+		await expect(apiFetchJson("/api/v1/events")).rejects.toThrow("Failed to fetch");
+
+		expect(Sentry.captureException).toHaveBeenCalledWith(expect.any(TypeError), { tags: { endpoint: "/api/v1/events" } });
 	});
 });

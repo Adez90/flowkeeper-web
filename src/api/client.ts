@@ -1,3 +1,5 @@
+import * as Sentry from "@sentry/react";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080";
 
 export class ApiError extends Error {
@@ -41,26 +43,56 @@ async function apiFetch(path: string, options: ApiFetchOptions = {}): Promise<Re
 	});
 }
 
-export async function apiFetchJson<T>(path: string, options: ApiFetchOptions = {}): Promise<T> {
-	const res = await apiFetch(path, options);
-	if (!res.ok) {
-		throw new ApiError(res.status, await parseErrorMessage(res));
+/**
+ * A 4xx is usually an expected part of some flow (validation, a stale
+ * token) — kept as a breadcrumb, so it's still there as context if a real
+ * issue happens nearby, without burying genuine bugs under routine-response
+ * noise. A 5xx or a raw network failure (the request never reached the
+ * API at all) is always worth a real Sentry event.
+ */
+function reportApiFailure(path: string, error: unknown): void {
+	if (error instanceof ApiError && error.status < 500) {
+		Sentry.addBreadcrumb({
+			category: "api",
+			message: `${path} → ${error.status}`,
+			level: "warning",
+			data: { status: error.status, message: error.message },
+		});
+		return;
 	}
-	const text = await res.text();
-	return text ? (JSON.parse(text) as T) : (undefined as T);
+	Sentry.captureException(error, { tags: { endpoint: path } });
+}
+
+export async function apiFetchJson<T>(path: string, options: ApiFetchOptions = {}): Promise<T> {
+	try {
+		const res = await apiFetch(path, options);
+		if (!res.ok) {
+			throw new ApiError(res.status, await parseErrorMessage(res));
+		}
+		const text = await res.text();
+		return text ? (JSON.parse(text) as T) : (undefined as T);
+	} catch (error) {
+		reportApiFailure(path, error);
+		throw error;
+	}
 }
 
 /** For multipart uploads — the browser must set Content-Type itself (with the multipart boundary), so this can't go through apiFetch's fixed "application/json" header. */
 export async function apiUploadFile<T>(path: string, token: string, file: File): Promise<T> {
-	const formData = new FormData();
-	formData.append("file", file);
-	const res = await fetch(`${API_BASE_URL}${path}`, {
-		method: "POST",
-		headers: { Authorization: `Bearer ${token}` },
-		body: formData,
-	});
-	if (!res.ok) {
-		throw new ApiError(res.status, await parseErrorMessage(res));
+	try {
+		const formData = new FormData();
+		formData.append("file", file);
+		const res = await fetch(`${API_BASE_URL}${path}`, {
+			method: "POST",
+			headers: { Authorization: `Bearer ${token}` },
+			body: formData,
+		});
+		if (!res.ok) {
+			throw new ApiError(res.status, await parseErrorMessage(res));
+		}
+		return (await res.json()) as T;
+	} catch (error) {
+		reportApiFailure(path, error);
+		throw error;
 	}
-	return (await res.json()) as T;
 }
