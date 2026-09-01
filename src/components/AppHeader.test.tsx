@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { AppHeader } from "./AppHeader";
 import { ActiveAccountProvider } from "../context/ActiveAccountContext";
@@ -116,5 +117,22 @@ describe("AppHeader", () => {
 		);
 
 		expect(screen.queryByRole("link", { name: "Feedback" })).not.toBeInTheDocument();
+	});
+
+	it("the mobile menu toggle opens and closes the nav, and closes it again on a nav click", async () => {
+		const user = userEvent.setup();
+		render(
+			<MemoryRouter>
+				<AppHeader me={baseMe()} />
+			</MemoryRouter>,
+		);
+
+		const toggle = screen.getByLabelText("Open menu");
+
+		await user.click(toggle);
+		expect(screen.getByLabelText("Close menu")).toBeInTheDocument();
+
+		await user.click(screen.getByRole("link", { name: "Statistics" }));
+		expect(screen.getByLabelText("Open menu")).toBeInTheDocument();
 	});
 });

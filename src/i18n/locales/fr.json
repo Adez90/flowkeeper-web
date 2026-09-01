@@ -17,7 +17,9 @@
     "feedback": "Retours",
     "yourInformation": "Vos informations",
     "billing": "Facturation",
-    "integrations": "Synchro calendrier"
+    "integrations": "Synchro calendrier",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
   },
   "accountSwitcher": {
     "label": "Compte actif"

@@ -17,7 +17,9 @@
     "feedback": "Feedback",
     "yourInformation": "Deine Angaben",
     "billing": "Abrechnung",
-    "integrations": "Kalendersync"
+    "integrations": "Kalendersync",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen"
   },
   "accountSwitcher": {
     "label": "Aktives Konto"

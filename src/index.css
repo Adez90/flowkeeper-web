@@ -176,10 +176,28 @@ button {
 	font-family: "Manrope", system-ui, sans-serif;
 	letter-spacing: -0.01em;
 }
+.app-header__menu {
+	display: contents;
+}
 .app-header__nav {
 	display: flex;
 	gap: 20px;
 	flex: 1;
+}
+.app-header__actions {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+.app-header__menu-toggle {
+	display: none;
+	background: none;
+	border: none;
+	color: white;
+	font-size: 1.3rem;
+	line-height: 1;
+	cursor: pointer;
+	padding: 4px 6px;
 }
 .app-header__nav a {
 	color: rgba(255, 255, 255, 0.72);
@@ -233,12 +251,15 @@ button {
 /* ---------- Landing page ---------- */
 .landing-page__toolbar {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	justify-content: space-between;
+	gap: 12px;
 	margin-bottom: 16px;
 }
 .landing-page__toolbar-actions {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	gap: 8px;
 }
@@ -891,6 +912,55 @@ button {
 }
 .admin-promo-codes-page__table-wrap {
 	overflow-x: auto;
+}
+
+/* ---------- Responsive (phones) ---------- */
+@media (max-width: 760px) {
+	.app-header {
+		flex-wrap: wrap;
+		height: auto;
+		padding: 10px 16px;
+		row-gap: 0;
+	}
+	.app-header__brand {
+		order: 1;
+	}
+	.app-header__actions {
+		order: 2;
+		margin-left: auto;
+	}
+	.app-header__menu-toggle {
+		order: 3;
+		display: block;
+	}
+	.app-header__menu {
+		display: none;
+		order: 4;
+		width: 100%;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 12px;
+		padding: 14px 0 4px;
+		margin-top: 10px;
+		border-top: 1px solid rgba(255, 255, 255, 0.15);
+	}
+	.app-header__menu--open {
+		display: flex;
+	}
+	.app-header__nav {
+		flex-direction: column;
+		gap: 2px;
+	}
+	.app-header__nav a {
+		padding: 10px 4px;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	}
+	.account-switcher {
+		width: 100%;
+	}
+	.notification-bell__panel {
+		max-width: calc(100vw - 32px);
+	}
 }
 .admin-promo-codes-page__table {
 	width: 100%;

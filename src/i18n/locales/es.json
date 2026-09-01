@@ -17,7 +17,9 @@
     "feedback": "Comentarios",
     "yourInformation": "Tu información",
     "billing": "Facturación",
-    "integrations": "Sincr. de calendario"
+    "integrations": "Sincr. de calendario",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
   },
   "accountSwitcher": {
     "label": "Cuenta activa"
