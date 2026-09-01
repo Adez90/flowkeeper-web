@@ -4,7 +4,7 @@ import { useAuth } from "react-oidc-context";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { disconnect, listConnections, listProviders, startAuthorization } from "../api/integrations";
-import { useActiveAccount } from "../context/ActiveAccountContext";
+import { useActiveAccount } from "../context/useActiveAccount";
 import type { ConnectionResponse, ExternalProvider } from "../api/types";
 
 // Apple/iOS calendar (EventKit) is mobile-only by design — reading the

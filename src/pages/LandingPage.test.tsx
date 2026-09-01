@@ -7,13 +7,13 @@ import { renderWithProviders } from "../test/testUtils";
 import { LandingPage } from "./LandingPage";
 import * as eventsApi from "../api/events";
 import * as integrationsApi from "../api/integrations";
-import { useActiveAccount } from "../context/ActiveAccountContext";
+import { useActiveAccount } from "../context/useActiveAccount";
 import type { AccountSummary, EventResponse } from "../api/types";
 
 vi.mock("react-oidc-context", () => ({ useAuth: vi.fn() }));
 vi.mock("../api/events");
 vi.mock("../api/integrations");
-vi.mock("../context/ActiveAccountContext", () => ({ useActiveAccount: vi.fn() }));
+vi.mock("../context/useActiveAccount", () => ({ useActiveAccount: vi.fn() }));
 
 const mockedUseAuth = vi.mocked(useAuth);
 const mockedUseActiveAccount = vi.mocked(useActiveAccount);

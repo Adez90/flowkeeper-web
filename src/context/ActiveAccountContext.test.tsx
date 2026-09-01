@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { act, renderHook } from "@testing-library/react";
-import { ActiveAccountProvider, useActiveAccount } from "./ActiveAccountContext";
+import { ActiveAccountProvider } from "./ActiveAccountContext";
+import { useActiveAccount } from "./useActiveAccount";
 import type { AccountSummary, MeResponse } from "../api/types";
 
 const PERSONAL: AccountSummary = { accountId: "personal-1", name: "Anders Johansson", type: "PERSONAL", role: "OWNER" };

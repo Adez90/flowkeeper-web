@@ -6,12 +6,12 @@ import type { AuthContextProps } from "react-oidc-context";
 import { renderWithProviders } from "../test/testUtils";
 import { BillingPage } from "./BillingPage";
 import * as billingApi from "../api/billing";
-import { useActiveAccount } from "../context/ActiveAccountContext";
+import { useActiveAccount } from "../context/useActiveAccount";
 import type { AccountSummary, SubscriptionResponse } from "../api/types";
 
 vi.mock("react-oidc-context", () => ({ useAuth: vi.fn() }));
 vi.mock("../api/billing");
-vi.mock("../context/ActiveAccountContext", () => ({ useActiveAccount: vi.fn() }));
+vi.mock("../context/useActiveAccount", () => ({ useActiveAccount: vi.fn() }));
 
 const mockedUseAuth = vi.mocked(useAuth);
 const mockedUseActiveAccount = vi.mocked(useActiveAccount);

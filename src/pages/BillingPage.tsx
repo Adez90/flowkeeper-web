@@ -4,7 +4,7 @@ import { useAuth } from "react-oidc-context";
 import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getSubscription, redeemPromoCode } from "../api/billing";
-import { useActiveAccount } from "../context/ActiveAccountContext";
+import { useActiveAccount } from "../context/useActiveAccount";
 
 export function BillingPage() {
 	const auth = useAuth();

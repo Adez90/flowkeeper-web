@@ -14,7 +14,7 @@ import {
 	updateGroupSharing,
 	updateMemberSharing,
 } from "../api/organisations";
-import { useActiveAccount } from "../context/ActiveAccountContext";
+import { useActiveAccount } from "../context/useActiveAccount";
 import { AddMemberDialog } from "../components/AddMemberDialog";
 import { MemberFeedbackDialog } from "../components/MemberFeedbackDialog";
 import type { MemberResponse, MeResponse } from "../api/types";

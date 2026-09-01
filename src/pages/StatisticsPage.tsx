@@ -4,7 +4,7 @@ import { useAuth } from "react-oidc-context";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPersonalStatistics, fetchPersonalTrend } from "../api/statistics";
-import { useActiveAccount } from "../context/ActiveAccountContext";
+import { useActiveAccount } from "../context/useActiveAccount";
 import { energyDeltaColor } from "../lib/energy";
 import { addDaysIso, toIsoDate } from "../lib/dates";
 import { OrganisationStatistics } from "../components/OrganisationStatistics";

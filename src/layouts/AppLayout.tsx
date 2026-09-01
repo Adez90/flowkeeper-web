@@ -7,7 +7,8 @@ import { AppHeader } from "../components/AppHeader";
 import { fetchMe } from "../api/me";
 import { register } from "../api/registration";
 import { ApiError } from "../api/client";
-import { ActiveAccountProvider, useActiveAccount } from "../context/ActiveAccountContext";
+import { ActiveAccountProvider } from "../context/ActiveAccountContext";
+import { useActiveAccount } from "../context/useActiveAccount";
 import { isSupportedLocale } from "../i18n";
 import type { MeResponse } from "../api/types";
 

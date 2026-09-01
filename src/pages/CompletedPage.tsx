@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteEvent, listMyCompletedEvents } from "../api/events";
 import { EditEventDialog } from "../components/EditEventDialog";
-import { useActiveAccount } from "../context/ActiveAccountContext";
+import { useActiveAccount } from "../context/useActiveAccount";
 import { energyColor } from "../lib/energy";
 import { addDaysIso, toIsoDate } from "../lib/dates";
 import type { EventResponse } from "../api/types";

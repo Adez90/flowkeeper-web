@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useActiveAccount } from "../context/ActiveAccountContext";
+import { useActiveAccount } from "../context/useActiveAccount";
 
 /** Only rendered once there's more than one account to switch between — see AppHeader. */
 export function AccountSwitcher() {

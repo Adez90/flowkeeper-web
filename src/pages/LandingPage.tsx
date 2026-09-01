@@ -8,7 +8,7 @@ import { CreateEventDialog } from "../components/CreateEventDialog";
 import { CompleteEventDialog } from "../components/CompleteEventDialog";
 import { ImportEventsDialog } from "../components/ImportEventsDialog";
 import { StartEventDialog } from "../components/StartEventDialog";
-import { useActiveAccount } from "../context/ActiveAccountContext";
+import { useActiveAccount } from "../context/useActiveAccount";
 import { energyColor } from "../lib/energy";
 import type { EventResponse } from "../api/types";
 

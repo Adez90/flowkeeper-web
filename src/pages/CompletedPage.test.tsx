@@ -6,13 +6,13 @@ import type { AuthContextProps } from "react-oidc-context";
 import { renderWithProviders } from "../test/testUtils";
 import { CompletedPage } from "./CompletedPage";
 import * as eventsApi from "../api/events";
-import { useActiveAccount } from "../context/ActiveAccountContext";
+import { useActiveAccount } from "../context/useActiveAccount";
 import { addDaysIso, toIsoDate } from "../lib/dates";
 import type { AccountSummary, EventResponse, EventTypeResponse } from "../api/types";
 
 vi.mock("react-oidc-context", () => ({ useAuth: vi.fn() }));
 vi.mock("../api/events");
-vi.mock("../context/ActiveAccountContext", () => ({ useActiveAccount: vi.fn() }));
+vi.mock("../context/useActiveAccount", () => ({ useActiveAccount: vi.fn() }));
 
 const mockedUseAuth = vi.mocked(useAuth);
 const mockedUseActiveAccount = vi.mocked(useActiveAccount);

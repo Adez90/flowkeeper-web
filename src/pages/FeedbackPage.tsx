@@ -3,7 +3,7 @@ import { useAuth } from "react-oidc-context";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { fetchOrganisationFeedback, fetchOrganisationTypeStatistics } from "../api/statistics";
-import { useActiveAccount } from "../context/ActiveAccountContext";
+import { useActiveAccount } from "../context/useActiveAccount";
 import { energyDeltaColor } from "../lib/energy";
 import type { StatisticsPeriod } from "../api/types";
 

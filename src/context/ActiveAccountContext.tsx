@@ -1,17 +1,10 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import type { AccountSummary, MeResponse } from "../api/types";
+import type { MeResponse } from "../api/types";
+import { ActiveAccountContext } from "./activeAccountContextObject";
+import type { ActiveAccountContextValue } from "./activeAccountContextObject";
 
 const STORAGE_KEY = "flowkeeper.activeAccountId";
-
-interface ActiveAccountContextValue {
-	account: AccountSummary;
-	accountId: string;
-	accounts: AccountSummary[];
-	setAccountId: (accountId: string) => void;
-}
-
-const ActiveAccountContext = createContext<ActiveAccountContextValue | null>(null);
 
 function readStoredAccountId(): string | null {
 	try {
@@ -63,12 +56,4 @@ export function ActiveAccountProvider({ me, children }: { me: MeResponse; childr
 	}
 
 	return <ActiveAccountContext.Provider value={value}>{children}</ActiveAccountContext.Provider>;
-}
-
-export function useActiveAccount(): ActiveAccountContextValue {
-	const ctx = useContext(ActiveAccountContext);
-	if (!ctx) {
-		throw new Error("useActiveAccount must be used within an ActiveAccountProvider");
-	}
-	return ctx;
 }

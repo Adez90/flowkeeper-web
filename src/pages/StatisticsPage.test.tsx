@@ -7,13 +7,13 @@ import * as reactRouterDom from "react-router-dom";
 import { renderWithProviders } from "../test/testUtils";
 import { StatisticsPage } from "./StatisticsPage";
 import * as statisticsApi from "../api/statistics";
-import { useActiveAccount } from "../context/ActiveAccountContext";
+import { useActiveAccount } from "../context/useActiveAccount";
 import { addDaysIso, toIsoDate } from "../lib/dates";
 import type { AccountSummary, MeResponse, PersonalStatisticsResponse } from "../api/types";
 
 vi.mock("react-oidc-context", () => ({ useAuth: vi.fn() }));
 vi.mock("../api/statistics");
-vi.mock("../context/ActiveAccountContext", () => ({ useActiveAccount: vi.fn() }));
+vi.mock("../context/useActiveAccount", () => ({ useActiveAccount: vi.fn() }));
 vi.mock("react-router-dom", async (importOriginal) => {
 	const actual = await importOriginal<typeof reactRouterDom>();
 	return { ...actual, useOutletContext: vi.fn() };
