@@ -1,6 +1,7 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import * as Sentry from "@sentry/react";
 import { renderWithProviders } from "../test/testUtils";
 import { DiaryExportSection } from "./DiaryExportSection";
 import * as eventsApi from "../api/events";
@@ -10,6 +11,7 @@ import type { EventResponse } from "../api/types";
 
 vi.mock("../api/events");
 vi.mock("../lib/exportDiaryPdf");
+vi.mock("@sentry/react", () => ({ captureException: vi.fn() }));
 
 const mockedEventsApi = vi.mocked(eventsApi);
 const mockedExportDiaryPdf = vi.mocked(exportDiaryPdfModule.exportDiaryPdf);
@@ -110,5 +112,48 @@ describe("DiaryExportSection", () => {
 		await user.click(screen.getByRole("button", { name: "Download PDF" }));
 
 		await screen.findByText(/couldn.t generate that pdf/i);
+	});
+
+	it("reports a genuine pdf-build failure to Sentry", async () => {
+		mockedEventsApi.listEvents.mockResolvedValue([eventOn(TODAY)]);
+		mockedExportDiaryPdf.mockRejectedValue(new Error("pdfmake blew up"));
+		const user = userEvent.setup();
+
+		renderWithProviders(<DiaryExportSection accountId="acc-1" token="test-token" displayName="Anders Johansson" />);
+
+		await user.click(screen.getByRole("button", { name: "Download PDF" }));
+
+		await screen.findByText(/couldn.t generate that pdf/i);
+		expect(Sentry.captureException).toHaveBeenCalledWith(expect.any(Error), { tags: { feature: "diary-export" } });
+	});
+
+	describe("when this tab is running a stale build", () => {
+		const originalLocation = window.location;
+		let reload: ReturnType<typeof vi.fn>;
+
+		beforeEach(() => {
+			reload = vi.fn();
+			Object.defineProperty(window, "location", { configurable: true, value: { ...originalLocation, reload } });
+		});
+
+		afterEach(() => {
+			Object.defineProperty(window, "location", { configurable: true, value: originalLocation });
+		});
+
+		it("reloads instead of showing an error or reporting to Sentry", async () => {
+			mockedEventsApi.listEvents.mockResolvedValue([eventOn(TODAY)]);
+			mockedExportDiaryPdf.mockRejectedValue(
+				new Error("Failed to fetch dynamically imported module: https://example.com/assets/pdfmake-abc123.js"),
+			);
+			const user = userEvent.setup();
+
+			renderWithProviders(<DiaryExportSection accountId="acc-1" token="test-token" displayName="Anders Johansson" />);
+
+			await user.click(screen.getByRole("button", { name: "Download PDF" }));
+
+			await waitFor(() => expect(reload).toHaveBeenCalled());
+			expect(Sentry.captureException).not.toHaveBeenCalled();
+			expect(screen.queryByText(/couldn.t generate that pdf/i)).not.toBeInTheDocument();
+		});
 	});
 });

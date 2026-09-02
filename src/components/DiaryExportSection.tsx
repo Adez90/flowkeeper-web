@@ -1,9 +1,11 @@
 import { useState } from "react";
+import * as Sentry from "@sentry/react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "@tanstack/react-query";
 import { listEvents } from "../api/events";
 import { exportDiaryPdf } from "../lib/exportDiaryPdf";
 import { toIsoDate } from "../lib/dates";
+import { isStaleChunkError } from "../lib/staleChunk";
 
 const TODAY = toIsoDate(new Date());
 
@@ -26,6 +28,8 @@ export function DiaryExportSection({ accountId, token, displayName }: DiaryExpor
 		setExporting(true);
 		setError(null);
 		try {
+			// listEvents' own failure is already reported to Sentry inside
+			// apiFetchJson — nothing extra needed for that half.
 			const events = await queryClient.fetchQuery({
 				queryKey: ["diary-events", accountId],
 				queryFn: () => listEvents(token, accountId),
@@ -38,7 +42,22 @@ export function DiaryExportSection({ accountId, token, displayName }: DiaryExpor
 				const eventDate = new Date(event.startedAt).toLocaleDateString("sv-SE");
 				return eventDate >= from && eventDate <= to;
 			});
-			await exportDiaryPdf(inRange, displayName, from, to);
+			try {
+				await exportDiaryPdf(inRange, displayName, from, to);
+			} catch (exportError) {
+				if (isStaleChunkError(exportError)) {
+					// This tab's JS is older than the currently-deployed build —
+					// the pdfmake chunk it's trying to fetch by its old hashed
+					// filename no longer exists on the server. A reload picks up
+					// the current build and the export just works.
+					window.location.reload();
+					return;
+				}
+				// The PDF build/download step itself — purely client-side, so
+				// this is the only place that can ever report its failures.
+				Sentry.captureException(exportError, { tags: { feature: "diary-export" } });
+				throw exportError;
+			}
 		} catch {
 			setError(t("statistics.couldntExport"));
 		} finally {
