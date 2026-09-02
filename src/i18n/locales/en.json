@@ -146,12 +146,7 @@
     "inApp": "In-app",
     "push": "Push notification",
     "email": "Email",
-    "couldntUpdateNotifications": "Couldn't update your notification preferences — try again.",
-    "diagnosticsTitle": "Diagnostics",
-    "diagnosticsHint": "Only visible to platform admins — sends a deliberate test error to confirm error tracking is working end to end.",
-    "sendTestError": "Send test error",
-    "sendingTestError": "Sending…",
-    "testErrorSent": "Test error sent — check Sentry to confirm it arrived."
+    "couldntUpdateNotifications": "Couldn't update your notification preferences — try again."
   },
   "organisation": {
     "title": "Organisation",

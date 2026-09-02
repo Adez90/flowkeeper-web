@@ -5,7 +5,6 @@ import { useAuth } from "react-oidc-context";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "@tanstack/react-query";
 import { updateNotificationPreferences, updateProfile, uploadAvatar } from "../api/me";
-import { triggerTestError } from "../api/diagnostics";
 import { listTimezones, timezoneLabel } from "../lib/timezones";
 import { LOCALE_LABELS, SUPPORTED_LOCALES, isSupportedLocale } from "../i18n";
 import type { SupportedLocale } from "../i18n";
@@ -45,22 +44,6 @@ export function ProfilePage() {
 
 	const [avatarUploading, setAvatarUploading] = useState(false);
 	const [avatarError, setAvatarError] = useState<string | null>(null);
-
-	const [sendingTestError, setSendingTestError] = useState(false);
-	const [testErrorSent, setTestErrorSent] = useState(false);
-
-	async function handleSendTestError() {
-		setSendingTestError(true);
-		setTestErrorSent(false);
-		try {
-			await triggerTestError(token);
-		} catch {
-			// Expected — the endpoint always throws. The failed request is the point: it's what should show up in Sentry.
-			setTestErrorSent(true);
-		} finally {
-			setSendingTestError(false);
-		}
-	}
 
 	function handleLocaleChange(next: SupportedLocale) {
 		setLocale(next);
@@ -191,17 +174,6 @@ export function ProfilePage() {
 					{t("profile.email")}
 				</label>
 			</div>
-
-			{me.isPlatformAdmin && (
-				<div className="profile-page__diagnostics">
-					<h2>{t("profile.diagnosticsTitle")}</h2>
-					<p className="dialog__hint">{t("profile.diagnosticsHint")}</p>
-					<button type="button" className="button" onClick={() => void handleSendTestError()} disabled={sendingTestError}>
-						{sendingTestError ? t("profile.sendingTestError") : t("profile.sendTestError")}
-					</button>
-					{testErrorSent && <p className="success-text">{t("profile.testErrorSent")}</p>}
-				</div>
-			)}
 		</div>
 	);
 }

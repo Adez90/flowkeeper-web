@@ -146,12 +146,7 @@
     "inApp": "Dans l'application",
     "push": "Notification push",
     "email": "E-mail",
-    "couldntUpdateNotifications": "Impossible de mettre à jour vos préférences de notification — veuillez réessayer.",
-    "diagnosticsTitle": "Diagnostic",
-    "diagnosticsHint": "Visible uniquement par les administrateurs de la plateforme — envoie une erreur de test délibérée pour confirmer que le suivi des erreurs fonctionne de bout en bout.",
-    "sendTestError": "Envoyer une erreur de test",
-    "sendingTestError": "Envoi…",
-    "testErrorSent": "Erreur de test envoyée — vérifiez Sentry pour confirmer sa réception."
+    "couldntUpdateNotifications": "Impossible de mettre à jour vos préférences de notification — veuillez réessayer."
   },
   "organisation": {
     "title": "Organisation",

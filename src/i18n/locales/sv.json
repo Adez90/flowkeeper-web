@@ -146,12 +146,7 @@
     "inApp": "I appen",
     "push": "Push-notis",
     "email": "E-post",
-    "couldntUpdateNotifications": "Kunde inte uppdatera dina aviseringsinställningar — försök igen.",
-    "diagnosticsTitle": "Diagnostik",
-    "diagnosticsHint": "Syns bara för plattformsadministratörer — skickar ett avsiktligt testfel för att bekräfta att felspårningen fungerar hela vägen.",
-    "sendTestError": "Skicka testfel",
-    "sendingTestError": "Skickar…",
-    "testErrorSent": "Testfel skickat — kontrollera Sentry för att bekräfta att det kom fram."
+    "couldntUpdateNotifications": "Kunde inte uppdatera dina aviseringsinställningar — försök igen."
   },
   "organisation": {
     "title": "Organisation",

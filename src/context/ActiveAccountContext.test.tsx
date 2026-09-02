@@ -19,7 +19,6 @@ function meWith(accounts: AccountSummary[]): MeResponse {
 		notifyPush: false,
 		notifyEmail: false,
 		accounts,
-		isPlatformAdmin: false,
 	};
 }
 

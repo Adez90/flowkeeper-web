@@ -37,7 +37,6 @@ const ME: MeResponse = {
 	notifyPush: false,
 	notifyEmail: false,
 	accounts: [PERSONAL],
-	isPlatformAdmin: false,
 };
 
 function setActiveAccount(account: AccountSummary) {

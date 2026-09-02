@@ -7,13 +7,11 @@ import * as reactRouterDom from "react-router-dom";
 import { renderWithProviders } from "../test/testUtils";
 import { ProfilePage } from "./ProfilePage";
 import * as meApi from "../api/me";
-import * as diagnosticsApi from "../api/diagnostics";
 import i18n from "../i18n";
 import type { MeResponse } from "../api/types";
 
 vi.mock("react-oidc-context", () => ({ useAuth: vi.fn() }));
 vi.mock("../api/me");
-vi.mock("../api/diagnostics");
 vi.mock("react-router-dom", async (importOriginal) => {
 	const actual = await importOriginal<typeof reactRouterDom>();
 	return { ...actual, useOutletContext: vi.fn() };
@@ -22,7 +20,6 @@ vi.mock("react-router-dom", async (importOriginal) => {
 const mockedUseAuth = vi.mocked(useAuth);
 const mockedUseOutletContext = vi.mocked(reactRouterDom.useOutletContext);
 const mockedMeApi = vi.mocked(meApi);
-const mockedDiagnosticsApi = vi.mocked(diagnosticsApi);
 
 const ME: MeResponse = {
 	userId: "u1",
@@ -35,7 +32,6 @@ const ME: MeResponse = {
 	notifyPush: false,
 	notifyEmail: false,
 	accounts: [],
-	isPlatformAdmin: false,
 };
 
 describe("ProfilePage", () => {
@@ -198,24 +194,5 @@ describe("ProfilePage", () => {
 		renderWithProviders(<ProfilePage />);
 
 		expect(screen.getByLabelText("Language")).toHaveValue("de");
-	});
-
-	it("hides the diagnostics test-error button for a non-admin", () => {
-		renderWithProviders(<ProfilePage />);
-
-		expect(screen.queryByRole("button", { name: "Send test error" })).not.toBeInTheDocument();
-	});
-
-	it("shows the diagnostics test-error button for a platform admin, and confirms once sent", async () => {
-		mockedUseOutletContext.mockReturnValue({ ...ME, isPlatformAdmin: true });
-		mockedDiagnosticsApi.triggerTestError.mockRejectedValue(new Error("Deliberate test error"));
-		const user = userEvent.setup();
-
-		renderWithProviders(<ProfilePage />);
-
-		await user.click(screen.getByRole("button", { name: "Send test error" }));
-
-		await screen.findByText("Test error sent — check Sentry to confirm it arrived.");
-		expect(mockedDiagnosticsApi.triggerTestError).toHaveBeenCalledWith("test-token");
 	});
 });

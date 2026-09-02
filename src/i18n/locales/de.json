@@ -146,12 +146,7 @@
     "inApp": "In der App",
     "push": "Push-Benachrichtigung",
     "email": "E-Mail",
-    "couldntUpdateNotifications": "Deine Benachrichtigungseinstellungen konnten nicht aktualisiert werden — bitte erneut versuchen.",
-    "diagnosticsTitle": "Diagnose",
-    "diagnosticsHint": "Nur für Plattform-Administratoren sichtbar — sendet einen absichtlichen Testfehler, um die Fehlerverfolgung end-to-end zu bestätigen.",
-    "sendTestError": "Testfehler senden",
-    "sendingTestError": "Wird gesendet…",
-    "testErrorSent": "Testfehler gesendet — in Sentry prüfen, ob er angekommen ist."
+    "couldntUpdateNotifications": "Deine Benachrichtigungseinstellungen konnten nicht aktualisiert werden — bitte erneut versuchen."
   },
   "organisation": {
     "title": "Organisation",
