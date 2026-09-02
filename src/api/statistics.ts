@@ -2,6 +2,7 @@ import { apiFetchJson } from "./client";
 import type {
 	AggregateStatisticsResponse,
 	AggregateTrendResponse,
+	GroupMemberFlowResponse,
 	OrganisationFeedbackResponse,
 	OrganisationTypeStatisticsResponse,
 	PersonalStatisticsResponse,
@@ -34,6 +35,20 @@ export function fetchGroupStatistics(
 		params.set("date", date);
 	}
 	return apiFetchJson<AggregateStatisticsResponse>(`/api/v1/statistics/group?${params.toString()}`, { token });
+}
+
+export function fetchGroupMemberFlow(
+	token: string,
+	accountId: string,
+	groupId: string,
+	period: StatisticsPeriod,
+	date?: string,
+): Promise<GroupMemberFlowResponse> {
+	const params = new URLSearchParams({ accountId, groupId, period });
+	if (date) {
+		params.set("date", date);
+	}
+	return apiFetchJson<GroupMemberFlowResponse>(`/api/v1/statistics/group/members?${params.toString()}`, { token });
 }
 
 export function fetchDepartmentStatistics(

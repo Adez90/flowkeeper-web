@@ -184,6 +184,22 @@ export interface AggregateTrendResponse {
 	points: TrendPoint[] | null;
 }
 
+/** One opted-in group member's own name and Flow % — unlike the other statistics responses, deliberately not anonymous. */
+export interface MemberFlow {
+	userId: string;
+	displayName: string;
+	completedEvents: number;
+	flowPercentage: number;
+}
+
+/** A single group's opted-in members, by name — only ever returned to a fellow member of that exact group. */
+export interface GroupMemberFlowResponse {
+	period: StatisticsPeriod;
+	rangeStart: string;
+	rangeEndExclusive: string;
+	members: MemberFlow[];
+}
+
 export interface OrganisationTypeStatisticsResponse {
 	period: StatisticsPeriod;
 	rangeStart: string;

@@ -116,6 +116,8 @@
     "couldntExport": "Kunde inte skapa den PDF:en — försök igen.",
     "yourGroup": "Din grupp",
     "yourGroupTrend": "Din grupps trend",
+    "teamFlow": "Teamets Flow %",
+    "noOneSharingYet": "Ingen i gruppen har valt att dela sin Flow % än.",
     "yourDepartment": "Din avdelning",
     "yourDepartmentTrend": "Din avdelnings trend",
     "yourOrganisation": "Din organisation",

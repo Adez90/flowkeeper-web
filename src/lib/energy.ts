@@ -25,3 +25,10 @@ export function energyDeltaColor(delta: number | null | undefined): string {
 	const position = Math.round(((clamped + 4) / 8) * (ENERGY_SCALE.length - 1));
 	return ENERGY_SCALE[position];
 }
+
+/** Color for a 0-100 Flow % value — same red-to-green scale as energy. */
+export function flowPercentageColor(percentage: number): string {
+	const clamped = Math.min(Math.max(percentage, 0), 100);
+	const position = Math.round((clamped / 100) * (ENERGY_SCALE.length - 1));
+	return ENERGY_SCALE[position];
+}

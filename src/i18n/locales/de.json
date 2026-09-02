@@ -116,6 +116,8 @@
     "couldntExport": "Dieses PDF konnte nicht erstellt werden — bitte erneut versuchen.",
     "yourGroup": "Deine Gruppe",
     "yourGroupTrend": "Verlauf deiner Gruppe",
+    "teamFlow": "Team-Flow %",
+    "noOneSharingYet": "Noch niemand in der Gruppe hat seine Flow % geteilt.",
     "yourDepartment": "Deine Abteilung",
     "yourDepartmentTrend": "Verlauf deiner Abteilung",
     "yourOrganisation": "Deine Organisation",

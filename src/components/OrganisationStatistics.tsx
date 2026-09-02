@@ -5,14 +5,22 @@ import { fetchMembers } from "../api/organisations";
 import {
 	fetchDepartmentStatistics,
 	fetchDepartmentTrend,
+	fetchGroupMemberFlow,
 	fetchGroupStatistics,
 	fetchGroupTrend,
 	fetchOrganisationStatistics,
 	fetchOrganisationTrend,
 } from "../api/statistics";
 import { energyDeltaColor } from "../lib/energy";
+import { FlowGauge } from "./FlowGauge";
 import { FlowTrendChart } from "./FlowTrendChart";
-import type { AggregateStatisticsResponse, AggregateTrendResponse, MemberRole, StatisticsPeriod } from "../api/types";
+import type {
+	AggregateStatisticsResponse,
+	AggregateTrendResponse,
+	GroupMemberFlowResponse,
+	MemberRole,
+	StatisticsPeriod,
+} from "../api/types";
 
 interface OrganisationStatisticsProps {
 	accountId: string;
@@ -51,6 +59,16 @@ export function OrganisationStatistics({
 
 	const groupId = role === "COACH" ? me?.groupId : null;
 	const departmentId = role === "ADMIN" ? me?.departmentId : null;
+	// Unlike groupId above (the COACH's supervisory scope), this is anyone's
+	// own group membership — a plain MEMBER has one too, and this is their
+	// view onto teammates who've opted in, not an aggregate they supervise.
+	const myGroupId = me?.groupId ?? null;
+
+	const groupMemberFlowQuery = useQuery({
+		queryKey: ["group-member-flow", accountId, myGroupId, period],
+		queryFn: () => fetchGroupMemberFlow(token, accountId, myGroupId as string, period),
+		enabled: Boolean(myGroupId),
+	});
 
 	const groupQuery = useQuery({
 		queryKey: ["group-statistics", accountId, groupId, period],
@@ -86,7 +104,7 @@ export function OrganisationStatistics({
 
 	const { t } = useTranslation();
 
-	if (!groupId && !departmentId && role !== "OWNER") {
+	if (!groupId && !departmentId && role !== "OWNER" && !myGroupId) {
 		return null;
 	}
 
@@ -94,11 +112,33 @@ export function OrganisationStatistics({
 		<>
 			{groupId && <AggregateSection title={t("statistics.yourGroup")} query={groupQuery} />}
 			{groupId && <AggregateTrendSection title={t("statistics.yourGroupTrend")} query={groupTrendQuery} />}
+			{myGroupId && <GroupPeerFlowSection query={groupMemberFlowQuery} />}
 			{departmentId && <AggregateSection title={t("statistics.yourDepartment")} query={departmentQuery} />}
 			{departmentId && <AggregateTrendSection title={t("statistics.yourDepartmentTrend")} query={departmentTrendQuery} />}
 			{role === "OWNER" && <AggregateSection title={t("statistics.yourOrganisation")} query={organisationQuery} />}
 			{role === "OWNER" && <AggregateTrendSection title={t("statistics.yourOrganisationTrend")} query={organisationTrendQuery} />}
 		</>
+	);
+}
+
+/** Each teammate who's opted to share their Flow % with the group, by name — never anyone above group level. */
+function GroupPeerFlowSection({ query }: { query: UseQueryResult<GroupMemberFlowResponse> }) {
+	const { t } = useTranslation();
+	const members = query.data?.members;
+	return (
+		<section className="aggregate-section">
+			<h2>{t("statistics.teamFlow")}</h2>
+			{query.isLoading && <p className="page-loading">{t("statistics.loading")}</p>}
+			{query.isError && <p className="error-text">{t("statistics.couldntLoad")}</p>}
+			{members && members.length === 0 && <p className="empty-state">{t("statistics.noOneSharingYet")}</p>}
+			{members && members.length > 0 && (
+				<div className="flow-gauge-row">
+					{members.map((member) => (
+						<FlowGauge key={member.userId} displayName={member.displayName} flowPercentage={member.flowPercentage} />
+					))}
+				</div>
+			)}
+		</section>
 	);
 }
 

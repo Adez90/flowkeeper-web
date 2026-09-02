@@ -109,3 +109,65 @@ describe("OrganisationStatistics trend", () => {
 		await screen.findAllByText("Couldn't load your statistics — try again.");
 	});
 });
+
+const GROUP_MEMBER: MemberResponse = {
+	userId: "u2",
+	displayName: "Group Member",
+	email: "member@example.com",
+	role: "MEMBER",
+	departmentId: null,
+	groupId: "group-1",
+	shareFlowWithPeers: true,
+};
+
+function renderForGroupMember() {
+	return renderWithProviders(
+		<OrganisationStatistics
+			accountId="org-1"
+			meUserId="u2"
+			role="MEMBER"
+			token="test-token"
+			period="WEEK"
+			trendFrom="2026-02-15"
+			trendRangeEndExclusive="2026-03-17"
+		/>,
+	);
+}
+
+describe("OrganisationStatistics team flow gauges", () => {
+	it("shows each opted-in teammate's own name and Flow % — visible to a plain MEMBER of the group, not just its coach", async () => {
+		mockedOrganisationsApi.fetchMembers.mockResolvedValue([GROUP_MEMBER]);
+		mockedStatisticsApi.fetchGroupMemberFlow.mockResolvedValue({
+			period: "WEEK",
+			rangeStart: "2026-03-09",
+			rangeEndExclusive: "2026-03-16",
+			members: [
+				{ userId: "u2", displayName: "Group Member", completedEvents: 4, flowPercentage: 75 },
+				{ userId: "u3", displayName: "Another Sharer", completedEvents: 2, flowPercentage: 50 },
+			],
+		});
+
+		renderForGroupMember();
+
+		await screen.findByText("Team Flow %");
+		expect(await screen.findByRole("img", { name: "Group Member: 75% in flow" })).toBeTruthy();
+		expect(screen.getByRole("img", { name: "Another Sharer: 50% in flow" })).toBeTruthy();
+		await waitFor(() =>
+			expect(mockedStatisticsApi.fetchGroupMemberFlow).toHaveBeenCalledWith("test-token", "org-1", "group-1", "WEEK"),
+		);
+	});
+
+	it("shows an empty state when nobody in the group has opted in yet", async () => {
+		mockedOrganisationsApi.fetchMembers.mockResolvedValue([GROUP_MEMBER]);
+		mockedStatisticsApi.fetchGroupMemberFlow.mockResolvedValue({
+			period: "WEEK",
+			rangeStart: "2026-03-09",
+			rangeEndExclusive: "2026-03-16",
+			members: [],
+		});
+
+		renderForGroupMember();
+
+		await screen.findByText("No one in the group has chosen to share their Flow % yet.");
+	});
+});
