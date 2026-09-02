@@ -256,7 +256,7 @@
   },
   "integrations": {
     "title": "Synchronisation calendrier et activité physique",
-    "intro": "Associez un compte de calendrier ou d'activité physique externe. L'importation automatique des activités arrive bientôt — pour l'instant, cela ne fait que connecter le compte.",
+    "intro": "Associez un compte de calendrier ou d'activité physique externe, puis choisissez les activités que vous souhaitez enregistrer quand vous le souhaitez — rien n'est importé automatiquement.",
     "connect": "Connecter",
     "reconnect": "Reconnecter",
     "disconnect": "Déconnecter",

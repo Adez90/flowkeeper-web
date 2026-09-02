@@ -256,7 +256,7 @@
   },
   "integrations": {
     "title": "Sincronización de calendario y actividad física",
-    "intro": "Vincula una cuenta externa de calendario o actividad física. La importación automática de actividades llegará pronto — por ahora, esto solo conecta la cuenta.",
+    "intro": "Vincula una cuenta externa de calendario o actividad física y luego elige qué actividades quieres registrar cuando quieras — nada se importa automáticamente.",
     "connect": "Conectar",
     "reconnect": "Reconectar",
     "disconnect": "Desconectar",

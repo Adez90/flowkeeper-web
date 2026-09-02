@@ -256,7 +256,7 @@
   },
   "integrations": {
     "title": "Kalender- och träningssynk",
-    "intro": "Länka ett externt kalender- eller träningskonto. Att automatiskt hämta in aktiviteter kommer snart — just nu kopplar detta bara ihop kontot.",
+    "intro": "Länka ett externt kalender- eller träningskonto, och välj sedan vilka aktiviteter du vill logga när du vill — inget importeras automatiskt.",
     "connect": "Anslut",
     "reconnect": "Anslut igen",
     "disconnect": "Koppla från",

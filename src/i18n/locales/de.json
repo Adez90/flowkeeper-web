@@ -256,7 +256,7 @@
   },
   "integrations": {
     "title": "Kalender- und Fitness-Sync",
-    "intro": "Verknüpfe ein externes Kalender- oder Fitnesskonto. Das automatische Importieren von Aktivitäten kommt bald — vorerst wird nur das Konto verbunden.",
+    "intro": "Verknüpfe ein externes Kalender- oder Fitnesskonto und wähle dann aus, welche Aktivitäten du protokollieren möchtest, wann immer du willst — nichts wird automatisch importiert.",
     "connect": "Verbinden",
     "reconnect": "Erneut verbinden",
     "disconnect": "Trennen",

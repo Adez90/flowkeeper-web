@@ -256,7 +256,7 @@
   },
   "integrations": {
     "title": "Calendar & fitness sync",
-    "intro": "Link an external calendar or fitness account. Pulling activities in automatically is coming soon — for now, this just connects the account.",
+    "intro": "Link an external calendar or fitness account, then pick which of its activities you'd like to log whenever you want — nothing is imported automatically.",
     "connect": "Connect",
     "reconnect": "Reconnect",
     "disconnect": "Disconnect",
