@@ -270,7 +270,7 @@
     "connectedError": "No se pudo conectar — inténtalo de nuevo.",
     "couldntStart": "No se pudo iniciar la conexión — inténtalo de nuevo.",
     "disconnectConfirm": "¿Desconectar esta cuenta?",
-    "appleNote": "Leer directamente tu calendario de iPhone o Android está disponible en la app móvil de FlowKeeper.",
+    "appleNote": "Leer directamente tu calendario de iPhone está disponible en la app móvil de FlowKeeper.",
     "providers": {
       "GOOGLE_CALENDAR": "Google Calendar",
       "MICROSOFT_CALENDAR": "Outlook / Calendario de Microsoft",

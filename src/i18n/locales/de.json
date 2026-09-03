@@ -270,7 +270,7 @@
     "connectedError": "Verbindung fehlgeschlagen — bitte erneut versuchen.",
     "couldntStart": "Verbindung konnte nicht gestartet werden — bitte erneut versuchen.",
     "disconnectConfirm": "Dieses Konto trennen?",
-    "appleNote": "Das direkte Lesen deines iPhone- oder Android-Kalenders ist in der FlowKeeper-Mobile-App verfügbar.",
+    "appleNote": "Das direkte Lesen deines iPhone-Kalenders ist in der FlowKeeper-Mobile-App verfügbar.",
     "providers": {
       "GOOGLE_CALENDAR": "Google Kalender",
       "MICROSOFT_CALENDAR": "Outlook / Microsoft Kalender",

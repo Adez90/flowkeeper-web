@@ -270,7 +270,7 @@
     "connectedError": "Impossible de se connecter — veuillez réessayer.",
     "couldntStart": "Impossible de démarrer la connexion — veuillez réessayer.",
     "disconnectConfirm": "Déconnecter ce compte ?",
-    "appleNote": "La lecture directe de votre calendrier iPhone ou Android est disponible dans l'application mobile FlowKeeper.",
+    "appleNote": "La lecture directe de votre calendrier iPhone est disponible dans l'application mobile FlowKeeper.",
     "providers": {
       "GOOGLE_CALENDAR": "Google Agenda",
       "MICROSOFT_CALENDAR": "Outlook / Calendrier Microsoft",

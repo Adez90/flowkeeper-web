@@ -270,7 +270,7 @@
     "connectedError": "Kunde inte ansluta — försök igen.",
     "couldntStart": "Kunde inte starta anslutningen — försök igen.",
     "disconnectConfirm": "Koppla från det här kontot?",
-    "appleNote": "Att läsa direkt från din iPhone- eller Android-kalender finns i FlowKeepers mobilapp.",
+    "appleNote": "Att läsa direkt från din iPhone-kalender finns i FlowKeepers mobilapp.",
     "providers": {
       "GOOGLE_CALENDAR": "Google Kalender",
       "MICROSOFT_CALENDAR": "Outlook / Microsoft Kalender",
