@@ -64,7 +64,8 @@
       "ingoingWas": "L'énergie de départ était de {{value}}/5.",
       "outgoingEnergy": "Énergie de fin",
       "note": "Note ({{optional}})",
-      "shareAnonymously": "Partager cette note de manière anonyme en tant que retour à l'organisation",
+      "shareIngoingNoteAnonymously": "Partager la note d'avant l'activité de manière anonyme en tant que retour à l'organisation",
+      "shareOutgoingNoteAnonymously": "Partager la note d'après l'activité de manière anonyme en tant que retour à l'organisation",
       "submit": "Terminer",
       "submitting": "Enregistrement…",
       "couldntSubmit": "Impossible de terminer cette activité — veuillez réessayer."

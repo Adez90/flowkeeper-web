@@ -64,7 +64,8 @@
       "ingoingWas": "Die Energie zu Beginn war {{value}}/5.",
       "outgoingEnergy": "Energie am Ende",
       "note": "Notiz ({{optional}})",
-      "shareAnonymously": "Diese Notiz anonym als Feedback für die Organisation teilen",
+      "shareIngoingNoteAnonymously": "Notiz vor der Aktivität anonym als Feedback für die Organisation teilen",
+      "shareOutgoingNoteAnonymously": "Notiz nach der Aktivität anonym als Feedback für die Organisation teilen",
       "submit": "Abschließen",
       "submitting": "Wird gespeichert…",
       "couldntSubmit": "Diese Aktivität konnte nicht abgeschlossen werden — bitte erneut versuchen."

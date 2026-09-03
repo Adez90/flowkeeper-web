@@ -64,7 +64,8 @@
       "ingoingWas": "Ingoing energy was {{value}}/5.",
       "outgoingEnergy": "Outgoing energy",
       "note": "Note ({{optional}})",
-      "shareAnonymously": "Share this note anonymously as organisation feedback",
+      "shareIngoingNoteAnonymously": "Share the pre-activity note anonymously as organisation feedback",
+      "shareOutgoingNoteAnonymously": "Share the post-activity note anonymously as organisation feedback",
       "submit": "Complete",
       "submitting": "Saving…",
       "couldntSubmit": "Couldn't complete that activity — try again."

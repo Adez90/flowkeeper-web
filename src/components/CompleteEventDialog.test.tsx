@@ -19,7 +19,8 @@ const OPEN_EVENT: EventResponse = {
 	ingoingNote: null,
 	outgoingEnergy: null,
 	outgoingNote: null,
-	shareAnonymously: false,
+	shareIngoingNoteAnonymously: false,
+	shareOutgoingNoteAnonymously: false,
 	startedAt: "2026-01-01T10:00:00Z",
 	completedAt: null,
 	externalProvider: null,
@@ -96,5 +97,69 @@ describe("CompleteEventDialog", () => {
 
 		await screen.findByText("Couldn't complete that activity — try again.");
 		expect(onCompleted).not.toHaveBeenCalled();
+	});
+
+	describe("anonymous sharing, per note", () => {
+		it("only offers to share the pre-activity note when there is one", () => {
+			render(
+				<CompleteEventDialog event={OPEN_EVENT} token="test-token" showAnonymousSharing onClose={vi.fn()} onCompleted={vi.fn()} />,
+			);
+
+			expect(screen.queryByText("Share the pre-activity note anonymously as organisation feedback")).not.toBeInTheDocument();
+			expect(screen.getByText("Share the post-activity note anonymously as organisation feedback")).toBeInTheDocument();
+		});
+
+		it("shows both toggles, independently checkable, when there's a pre-activity note", async () => {
+			const withNote = { ...OPEN_EVENT, ingoingNote: "quick sync" };
+			const user = userEvent.setup();
+
+			render(
+				<CompleteEventDialog event={withNote} token="test-token" showAnonymousSharing onClose={vi.fn()} onCompleted={vi.fn()} />,
+			);
+
+			const shareIngoing = screen.getByText("Share the pre-activity note anonymously as organisation feedback")
+				.closest("label")!.querySelector("input")!;
+			const shareOutgoing = screen.getByText("Share the post-activity note anonymously as organisation feedback")
+				.closest("label")!.querySelector("input")!;
+
+			await user.click(shareIngoing);
+
+			expect(shareIngoing).toBeChecked();
+			expect(shareOutgoing).not.toBeChecked();
+		});
+
+		it("shares only the note that was checked", async () => {
+			const withNote = { ...OPEN_EVENT, ingoingNote: "quick sync" };
+			mockedEventsApi.completeEvent.mockResolvedValue({ ...withNote, status: "COMPLETED" });
+			const user = userEvent.setup();
+
+			render(
+				<CompleteEventDialog event={withNote} token="test-token" showAnonymousSharing onClose={vi.fn()} onCompleted={vi.fn()} />,
+			);
+
+			await user.click(screen.getByText("Share the pre-activity note anonymously as organisation feedback"));
+			await user.click(screen.getByRole("button", { name: "Complete" }));
+
+			await waitFor(() =>
+				expect(mockedEventsApi.updateEventSharing).toHaveBeenCalledWith("test-token", "event-1", {
+					shareIngoingNoteAnonymously: true,
+					shareOutgoingNoteAnonymously: false,
+				}),
+			);
+		});
+
+		it("never calls the sharing endpoint when neither toggle is checked", async () => {
+			mockedEventsApi.completeEvent.mockResolvedValue({ ...OPEN_EVENT, status: "COMPLETED" });
+			const user = userEvent.setup();
+
+			render(
+				<CompleteEventDialog event={OPEN_EVENT} token="test-token" showAnonymousSharing onClose={vi.fn()} onCompleted={vi.fn()} />,
+			);
+
+			await user.click(screen.getByRole("button", { name: "Complete" }));
+
+			await waitFor(() => expect(mockedEventsApi.completeEvent).toHaveBeenCalled());
+			expect(mockedEventsApi.updateEventSharing).not.toHaveBeenCalled();
+		});
 	});
 });

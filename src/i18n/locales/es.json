@@ -64,7 +64,8 @@
       "ingoingWas": "La energía inicial era {{value}}/5.",
       "outgoingEnergy": "Energía final",
       "note": "Nota ({{optional}})",
-      "shareAnonymously": "Compartir esta nota de forma anónima como comentario de la organización",
+      "shareIngoingNoteAnonymously": "Compartir la nota previa a la actividad de forma anónima como comentario de la organización",
+      "shareOutgoingNoteAnonymously": "Compartir la nota posterior a la actividad de forma anónima como comentario de la organización",
       "submit": "Completar",
       "submitting": "Guardando…",
       "couldntSubmit": "No se pudo completar esa actividad — inténtalo de nuevo."

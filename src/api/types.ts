@@ -80,7 +80,8 @@ export interface EventResponse {
 	ingoingNote: string | null;
 	outgoingEnergy: number | null;
 	outgoingNote: string | null;
-	shareAnonymously: boolean;
+	shareIngoingNoteAnonymously: boolean;
+	shareOutgoingNoteAnonymously: boolean;
 	startedAt: string;
 	completedAt: string | null;
 	/** Set only for an event brought in from a connected provider. */
@@ -282,7 +283,8 @@ export interface UpdateSharingRequest {
 }
 
 export interface UpdateEventSharingRequest {
-	shareAnonymously: boolean;
+	shareIngoingNoteAnonymously: boolean;
+	shareOutgoingNoteAnonymously: boolean;
 }
 
 export interface CoachFeedbackResponse {

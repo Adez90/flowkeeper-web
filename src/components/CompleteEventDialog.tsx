@@ -24,7 +24,8 @@ export function CompleteEventDialog({
 	const { t } = useTranslation();
 	const [outgoingEnergy, setOutgoingEnergy] = useState(3);
 	const [outgoingNote, setOutgoingNote] = useState("");
-	const [shareAnonymously, setShareAnonymously] = useState(false);
+	const [shareIngoingNoteAnonymously, setShareIngoingNoteAnonymously] = useState(false);
+	const [shareOutgoingNoteAnonymously, setShareOutgoingNoteAnonymously] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
@@ -42,8 +43,8 @@ export function CompleteEventDialog({
 				// to be finalized in the app.
 				completedAt: event.externalEndedAt ?? undefined,
 			});
-			if (shareAnonymously) {
-				await updateEventSharing(token, event.id, { shareAnonymously: true });
+			if (shareIngoingNoteAnonymously || shareOutgoingNoteAnonymously) {
+				await updateEventSharing(token, event.id, { shareIngoingNoteAnonymously, shareOutgoingNoteAnonymously });
 			}
 			onCompleted();
 		} catch {
@@ -82,10 +83,24 @@ export function CompleteEventDialog({
 					<textarea value={outgoingNote} onChange={(e) => setOutgoingNote(e.target.value)} rows={2} />
 				</label>
 
+				{showAnonymousSharing && event.ingoingNote && (
+					<label className="sharing-toggle">
+						<input
+							type="checkbox"
+							checked={shareIngoingNoteAnonymously}
+							onChange={(e) => setShareIngoingNoteAnonymously(e.target.checked)}
+						/>
+						{t("events.complete.shareIngoingNoteAnonymously")}
+					</label>
+				)}
 				{showAnonymousSharing && (
 					<label className="sharing-toggle">
-						<input type="checkbox" checked={shareAnonymously} onChange={(e) => setShareAnonymously(e.target.checked)} />
-						{t("events.complete.shareAnonymously")}
+						<input
+							type="checkbox"
+							checked={shareOutgoingNoteAnonymously}
+							onChange={(e) => setShareOutgoingNoteAnonymously(e.target.checked)}
+						/>
+						{t("events.complete.shareOutgoingNoteAnonymously")}
 					</label>
 				)}
 

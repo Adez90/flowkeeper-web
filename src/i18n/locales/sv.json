@@ -64,7 +64,8 @@
       "ingoingWas": "Energin vid start var {{value}}/5.",
       "outgoingEnergy": "Energi vid slut",
       "note": "Anteckning ({{optional}})",
-      "shareAnonymously": "Dela den här anteckningen anonymt som organisationsfeedback",
+      "shareIngoingNoteAnonymously": "Dela anteckningen före aktiviteten anonymt som organisationsfeedback",
+      "shareOutgoingNoteAnonymously": "Dela anteckningen efter aktiviteten anonymt som organisationsfeedback",
       "submit": "Slutför",
       "submitting": "Sparar…",
       "couldntSubmit": "Kunde inte slutföra aktiviteten — försök igen."
